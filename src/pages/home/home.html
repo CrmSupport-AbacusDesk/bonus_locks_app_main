@@ -132,12 +132,12 @@
             </div>
         </button>
         
-        <button *ngIf=" service.karigar_info.type != 'Plumber'" (click)="goToNearestDealers('Plumber')">
+        <button *ngIf=" service.karigar_info.type != 'Carpenter'" (click)="goToNearestDealers('Carpenter')">
             <div class="lf-btn">
                 <i class="material-icons">engineering</i>
             </div>
             <div class="rt-btn">
-                <p> Nearest Plumbers </p>
+                <p> Nearest Carpenters </p>
             </div>
         </button>
     </div>
@@ -164,7 +164,7 @@
 
 </ion-content>
 
-<ion-header *ngIf=" service.karigar_info.type == 'Plumber'" class="home-header">
+<ion-header *ngIf=" service.karigar_info.type == 'Carpenter'" class="home-header">
     <ion-navbar>
         <ion-title>
         </ion-title>      
@@ -178,13 +178,13 @@
             <img src="assets/imgs/share.svg">
         </button>
         <!-- *ngIf="karigar_detail.status=='Verified'" -->
-        <button  *ngIf=" service.karigar_info.type == 'Plumber' && karigar_detail.status=='Verified'" ion-button class="hs-menu cs-hdr-icons" color="light"  (click)="scan()">
+        <button  *ngIf=" service.karigar_info.type == 'Carpenter' && karigar_detail.status=='Verified'" ion-button class="hs-menu cs-hdr-icons" color="light"  (click)="scan()">
             <img src="assets/imgs/qr-code.svg">
         </button>
     </div>
 </div>
 
-<ion-content *ngIf=" service.karigar_info.type == 'Plumber'">
+<ion-content *ngIf=" service.karigar_info.type == 'Carpenter'">
     
     <ion-refresher (ionRefresh)="doRefresh($event)">
         <ion-refresher-content  pullingIcon="arrow-dropdown" pullingText="Pull to refresh"     refreshingSpinner="circles" refreshingText="Refreshing...">

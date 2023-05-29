@@ -8,7 +8,7 @@
     <form #f="ngForm" (ngSubmit)="f.form.valid && submit()">
         <div class="form">
             <ion-list no-lines class="padding10 pt0">
-                <div class="select-type" *ngIf="!data.exist_id">
+                <!-- <div class="select-type" *ngIf="!data.exist_id">
                     <ion-list-header class="heading mt0">
                         {{'Select Type'}}
                     </ion-list-header>
@@ -21,8 +21,9 @@
                             </ion-item>
                         </ng-container>
                     </ion-list>
-                </div>
-                <ng-container *ngIf="data.type">
+                </div> -->
+                <!-- *ngIf="data.type" -->
+                <ng-container>
                     <ion-item *ngIf="data.profile">
                         <div class="profile-circle">
                             <i class="material-icons" *ngIf="data.profile == undefined">camera_alt</i>
@@ -46,18 +47,17 @@
                     <div *ngIf="f.submitted && mobile_no.invalid" class="eror">
                         <p *ngIf="mobile_no.errors.required">{{'Field is Required'}}</p>
                     </div>
-
-                    <ion-item [ngClass]="{'error':f.submitted && country?.invalid}">
+             <!--    <ion-item [ngClass]="{'error':f.submitted && country?.invalid}">
                         <ion-label floating>Country<span>*</span></ion-label>
                         <ion-select name="country" [(ngModel)]="data.country" #country="ngModel" required>
                             <ion-option value="india">India</ion-option>
                             <ion-option value="nepal">Nepal</ion-option>
                         </ion-select>
-                    </ion-item>
+                    </ion-item> -->
                     <div *ngIf="f.submitted && country.invalid" class="eror">
                         <p *ngIf="country.errors.required">{{'Field is Required'}}</p>
                     </div>
-                    <ng-container *ngIf="data.type!='11' && data.country=='india'">
+                    <ng-container *ngIf="data.type!='11'">
                         <ion-item [ngClass]="{'error':f.submitted && paytm_mobile_no?.invalid}">
                             <ion-label floating>{{'Paytm Mobile Number'}}</ion-label>
                             <ion-input type="text" name="paytm_mobile_no" #paytm_mobile_no="ngModel" minlength="10"
@@ -98,8 +98,8 @@
                         <p *ngIf="address.errors.required">{{'Field is Required'}}</p>
                     </div>
 
-
-                    <ng-container *ngIf="data.country=='india'">
+                    <!-- *ngIf="data.country=='india'" -->
+                    <ng-container>
                         <ion-item [ngClass]="{'error':f.submitted && state?.invalid}">
                             <ion-label floating>State <span>*</span></ion-label>
                             <ion-select name="state" [(ngModel)]="data.state" #state="ngModel"
@@ -123,13 +123,13 @@
                             <p *ngIf="district.errors.required">{{'Field is Required'}}</p>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="data.country=='nepal'">
+                    <!-- <ng-container *ngIf="data.country=='nepal'">
                         <ion-item [ngClass]="{'error':f.submitted && state?.invalid}">
                             <ion-label floating>{{'State'}}</ion-label>
                             <ion-input type="text" name="state" [(ngModel)]="data.state" #state="ngModel"
                                 required></ion-input>
                         </ion-item>
-                    </ng-container>
+                    </ng-container> -->
                     <ion-item [ngClass]="{'error':f.submitted && city?.invalid}">
                         <ion-label floating>{{'City'}}</ion-label>
                         <ion-input type="text" name="city" [(ngModel)]="data.city" #city="ngModel"></ion-input>
@@ -281,8 +281,8 @@
                 </ng-container>
 
             </ion-list>
-
-            <div class="pl10 pr10" *ngIf="data.type">
+            <!-- *ngIf="data.type" -->
+            <div class="pl10 pr10" >
                 <button ion-button full color="primary" [disabled]="savingFlag == true">
                     {{data.exist_id ? 'Update' : 'Continue'}}
                 </button>

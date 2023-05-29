@@ -78,7 +78,6 @@ export class LoginPage {
     login_submit() {
         this.loading = 1
         this.spinner = true
-        if(this.registerType != 'Other'){
             if (this.validations_form.invalid) {
                 this.validations_form.get('phone').markAsTouched();
                 return;
@@ -99,76 +98,6 @@ export class LoginPage {
                         this.navCtrl.push(OtpverifyPage, { data: this.form, otp_data: response['data'], 'app_version': this.app_version  });
                         this.loading = 0
                         this.spinner = false
-                }
-                else {
-                    if(this.registerType != 'Other'){
-                        this.db.errorToast(response['statusMsg'])
-                        this.loading = 0
-                        this.spinner = false   
-                    }
-                    // if (this.registerType == 'Other') {
-                    //     if (response['statusCode'] == 404){
-                    //         this.navCtrl.push(RegistrationPage, { data: this.form, otp_data: response['data'], 'app_version': this.app_version });
-                    //     }
-                    //     else{
-                    //         this.db.errorToast(response['statusMsg'])
-                    //     }
-                    //     this.loading = 0
-                    //     this.spinner = false   
-                    // }  
-                }
-                
-            }, err => {
-                this.db.dismiss();
-                
-            });
-
-        }
-
-        if(this.registerType == 'Other'){
-            if (this.validations_form.invalid) {
-                this.validations_form.get('phone').markAsTouched();
-                return;
-            }
-            
-            if (this.form.phone == '5953356262' || this.form.phone == '8800132607' || this.form.phone == '8799730083') {
-                this.form.otp = 123456;
-            }
-            else {
-                this.form.otp = Math.floor(100000 + Math.random() * 900000);
-                // this.form.otp = 123456;
-            }
-            
-            this.form.registerType = this.registerType;
-            this.service.otp_send(this.form).then((response: any) => {
-                if (response['statusCode'] == 200) {
-                    if(response['data']['country']=='india'){
-                        this.db.successToast(response['statusMsg'])
-                        this.navCtrl.push(OtpverifyPage, { data: this.form, otp_data: response['data'], 'app_version': this.app_version  });
-                        this.loading = 0
-                        this.spinner = false
-                    }
-                    else if(response['data']['country']!='india'){
-                        this.data_value =this.form
-                        this.data_value['device_unique_id']  = this.device.uuid;
-                        this.data_value['app_version']  = this.app_version;
-                        this.data_value['device_info'] = this.device.model + ',' + this.device.platform + ',' + this.device.version + ',' + this.device.manufacturer;
-    
-                        this.serv.login_submit(this.data_value).then((result:any)=>{
-                            if(result)
-                            this.DeviceID()
-                            {
-                                this.loading = false
-                                 if(result.loggedInUserType=='Other')
-                                {
-                                    this.constant.setData();
-                                    this.navCtrl.setRoot(LoyaltyHomePage)
-                                }
-                            }
-                        });
-    
-                    }
-                  
                 }
                 else {
                     if(this.registerType != 'Other'){
@@ -193,7 +122,8 @@ export class LoginPage {
                 
             });
 
-        }
+
+      
         
     }
     bck() {

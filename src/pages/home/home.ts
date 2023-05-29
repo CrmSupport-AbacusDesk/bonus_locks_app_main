@@ -553,7 +553,7 @@ export class HomePage {
             {
                 // alert('hello')
             console.log(this.karigar_detail);
-            if(this.karigar_detail.type == "Plumber" && this.karigar_detail.referral_code!="")
+            if(this.karigar_detail.type == "Carpenter" && this.karigar_detail.referral_code!="")
             {
                 this.ref_code = ' and use my Code *'+this.karigar_detail.referral_code+'* to get points back in your wallet'
             }
