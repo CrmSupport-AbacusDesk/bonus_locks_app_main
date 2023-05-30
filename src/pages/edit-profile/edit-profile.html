@@ -31,10 +31,10 @@
 					
 					<ion-item class="cs-input" [ngClass]="{'error':f.submitted && mobile_no?.invalid}" >
 						<ion-label floating>Mobile No.</ion-label>
-						<ion-input type="tel" name="mobile_no" #mobile_no="ngModel" [(ngModel)]="data.mobile_no" required min="0" maxlength="10" minlength="10" (keypress)="MobileNumber($event)" [disabled]="data.type == 'Plumber' ? true : falses " ></ion-input>
+						<ion-input type="tel" name="mobile_no" #mobile_no="ngModel" [(ngModel)]="data.mobile_no" required min="0" maxlength="10" minlength="10" (keypress)="MobileNumber($event)" [disabled]="data.type == 'Carpenter' ? true : falses " ></ion-input>
 					</ion-item>
 					
-					<div *ngIf="data.type=='Plumber'">
+					<div *ngIf="data.type=='Carpenter'">
 						<ion-item  class="cs-date" >
 							<ion-label>Date of Birth</ion-label>
 							<ion-datetime displayFormat="DD/MM/YYYY" max={{today_date}} type="text"  name="dob" #dob="ngModel" [(ngModel)]="data.dob" >
@@ -63,11 +63,11 @@
 				</ion-list>
 			</div>
 			
-			<div *ngIf="data.type == 'Plumber'">
+			<div *ngIf="data.type == 'Carpenter'">
 				<h3>Document Information</h3>
 			</div>
 			
-			<div class="ragistration-fields" *ngIf="data.type == 'Plumber'">
+			<div class="ragistration-fields" *ngIf="data.type == 'Carpenter'">
 				<div class="cs-form">
 					<ion-list>
 						<ion-item class="cs-select" [ngClass]="{'error':f.submitted && document_type?.invalid}">
@@ -109,7 +109,7 @@
 			</div>
 			
 			<h3 *ngIf="data.type == 'Customer'">Address information</h3>
-			<h3 *ngIf="data.type == 'Plumber'">working address</h3>
+			<h3 *ngIf="data.type == 'Carpenter'">working address</h3>
 			
 			
 			<div class="cs-form">
@@ -146,15 +146,15 @@
 				
 			</div>		  
 			
-			<div class="check-box" *ngIf="data.type == 'Plumber'">
+			<div class="check-box" *ngIf="data.type == 'Carpenter'">
 				<ion-item>
 					<ion-label>Same as Working Address</ion-label>
 					<ion-checkbox color="dark" (ionChange)="onCheckShippingAddressSameAsAddressHandler($event)"></ion-checkbox>
 				</ion-item>
 				
 			</div>
-			<h3 class="change-hadding" *ngIf="data.type == 'Plumber'">Permanent Address</h3>
-			<div class="cs-form" *ngIf="data.type == 'Plumber'" >
+			<h3 class="change-hadding" *ngIf="data.type == 'Carpenter'">Permanent Address</h3>
+			<div class="cs-form" *ngIf="data.type == 'Carpenter'" >
 				<ion-list>
 					
 					

@@ -60,7 +60,7 @@ export class EditProfilePage {
     getDistrictList(state_name)
     {
       console.log(state_name);
-      this.service.post_rqst({'state_name':state_name},'app_master/getDistrict').subscribe( r =>
+      this.service.postrequest({'state_name':state_name},'app_master/getDistrict').subscribe( r =>
         {
           console.log(r);
           this.district_list=r['districts'];
