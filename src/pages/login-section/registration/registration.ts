@@ -60,8 +60,6 @@ export class RegistrationPage {
     public serv: LoginserviceProvider,
   ) {
     console.log(this.navParams);
-    this.data.type = '8';
-    this.data.influencer_type = 'Carpenter';
     this.appVersion = navParams.get('app_version');
     this.data['device_unique_id']  = this.device.uuid;
     this.data['app_version']  = this.appVersion;
