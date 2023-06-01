@@ -242,10 +242,10 @@ export class DashboardPage {
                                             // targetWidth: 400,
                                             // targetHeight: 400,
                                             // correctOrientation: true,
-                                            quality: 70,
+                                            quality: 50,
                                             destinationType: this.camera.DestinationType.DATA_URL,
-                                            targetWidth: 500,
-                                            targetHeight: 400,
+                                            targetWidth: window.innerWidth,
+                                            targetHeight: window.innerHeight,
                                             allowEdit: false
                                         }
                                         
