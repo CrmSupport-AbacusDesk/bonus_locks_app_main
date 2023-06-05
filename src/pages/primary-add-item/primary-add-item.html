@@ -149,8 +149,7 @@
                 </div>
                 <div class="lower ml2">
                     <p class="font10">GST Amount</p>
-                    <p class="font10">₹ {{row.gst_amount | number:'1.2-2'}} ({{row.gst_percent?row.gst_percent+' %':'0
-                        %'}})</p>
+                    <p class="font10">₹ {{row.gst_amount | number:'1.2-2'}} ({{row.gst_percent?row.gst_percent+' %':'0%'}})</p>
                 </div>
                 <div class="lower ml2">
                     <p class="font10">Net Amount</p>
@@ -192,10 +191,10 @@
                 <p>Sub Total After Cash Discount</p>
                 <p>{{sub_total_after_cd ? '₹' + ' ' + (sub_total_after_cd | number:'1.2-2') + ' ' + '/-': 'N/A'}} </p>
             </div> -->
-            <div class="time_show amount-listing">
+            <!-- <div class="time_show amount-listing">
                 <p>Insurance</p>
                 <p>{{ins_value | number:'1.2-2'}} (0.06 %)</p>
-            </div>
+            </div> -->
             <div class="time_show amount-listing">
                 <p>Sub Total</p>
                 <p>{{order_total ? '₹' + ' ' + (order_total | number:'1.2-2') + ' ' + '/-': 'N/A'}} </p>
