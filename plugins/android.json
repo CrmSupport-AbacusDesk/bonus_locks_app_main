@@ -32,6 +32,10 @@
     "cordova-plugin-app-version": {
       "PACKAGE_NAME": "com.abacusdesk.pearls"
     },
+    "cordova-plugin-camera": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.abacusdesk.pearls"
+    },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.abacusdesk.pearls"
     },
@@ -78,6 +82,9 @@
     },
     "cordova-plugin-telerik-imagepicker": {
       "ANDROID_SUPPORT_V7_VERSION": "27.+",
+      "PACKAGE_NAME": "com.abacusdesk.pearls"
+    },
+    "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.abacusdesk.pearls"
     },
     "cordova-plugin-x-socialsharing": {
