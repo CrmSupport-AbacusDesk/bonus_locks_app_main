@@ -251,7 +251,9 @@ export class PrimaryOrderAddPage {
     Lead_retailer_distributor: any = [];
 
     get_state_list(name) {
+        console.log('In state');
         this.Dist_state = this.data.type_name.state
+        console.log(this.Dist_state);
     }
 
     get_distributor() {
@@ -434,7 +436,7 @@ export class PrimaryOrderAddPage {
 
                     this.item_list = resp['result'];
                     for (let index = 0; index < this.item_list.length; index++) {
-                        this.item_list[index].display_name = this.item_list[index].product_code + " " + this.item_list[index].display_name
+                        this.item_list[index].display_name = this.item_list[index].product_code + " | " + this.item_list[index].display_name
                     }
                 } else {
                     this.service.errorToast(resp['statusMsg']);
@@ -477,7 +479,7 @@ export class PrimaryOrderAddPage {
                     // this.item_list = resp['result'];
                     this.item_list = this.item_list.concat(resp['result']);
                     for (let index = 0; index < this.item_list.length; index++) {
-                        this.item_list[index].display_name = this.item_list[index].product_code + " " + this.item_list[index].display_name
+                        this.item_list[index].display_name = this.item_list[index].product_code + " | " + this.item_list[index].display_name
                     }
                     setTimeout(() => {
                         event.component.items = this.item_list
