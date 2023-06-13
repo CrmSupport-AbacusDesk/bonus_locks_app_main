@@ -89,7 +89,7 @@
         <ng-container *ngIf="data.payment_mode!='Bank'">
           <div class="profile-card mt16">
             <div class="text-box">
-              <p>{{karigar_detail.country=='india'? 'Paytm Wallet No.':'Khalti Wallet No.'}}</p>
+              <p>{{karigar_detail.country=='india' || karigar_detail.country=='India' ? 'Paytm Wallet No.':'Khalti Wallet No.'}}</p>
               <h6>{{data.wallet_no ? data.wallet_no:data.wallet_no}}</h6>
             </div>
           </div>

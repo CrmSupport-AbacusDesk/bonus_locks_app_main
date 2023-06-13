@@ -456,12 +456,12 @@ export class PrimaryOrderAddPage {
                     this.product_detail = resp['result'];
                     this.brandList = this.product_detail['brand'];
                     this.colorList = this.product_detail['color'];
-                    if (this.brandList.length == 1) {
-                        this.data.brand = this.brandList[0];
-                    }
-                    if (this.colorList.length == 1) {
-                        this.data.color = this.colorList[0];
-                    }
+                    // if (this.brandList.length == 1) {
+                    //     this.data.brand = this.brandList[0];
+                    // }
+                    // if (this.colorList.length == 1) {
+                    //     this.data.color = this.colorList[0];
+                    // }
 
                 } else {
                     this.service.errorToast(resp['statusMsg'])

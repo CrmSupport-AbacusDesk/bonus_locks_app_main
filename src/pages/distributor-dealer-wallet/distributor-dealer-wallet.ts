@@ -20,6 +20,7 @@ export class DistributorDealerWalletPage {
   coupon_list:any=[];
   otherPoints:any=[];
   ledger_list:any =[];
+  drPoints:any =[];
   SafeResourceUrl;
   tokenInfo:any={};
   lang:any='';
@@ -47,14 +48,15 @@ export class DistributorDealerWalletPage {
   {
     this.filter.limit=10;
     this.filter.start=0;
-    this.service.addData({'filter' : this.filter},'AppScanHistory/networkLedger').then(result =>
+    this.service.addData({'filter' : this.filter},'AppScanHistory/influencerLedger').then(result =>
       {
         console.log('====================================');
         console.log(result);
         console.log('====================================');
         
         if(result['statusCode'] == 200){
-          this.ledger_list = result['network_ledger'];
+          this.ledger_list = result['influencer_ledger'];
+          this.drPoints = result['dr_points'];
           this.service.dismissLoading();
         }
         else{

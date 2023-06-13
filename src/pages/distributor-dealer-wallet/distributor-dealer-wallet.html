@@ -6,19 +6,18 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>Point History 1</ion-title>
+    <ion-title>Point History</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <div class="my-wallet">
-    <div class="pts-icon">
-      <i class="material-icons">account_balance_wallet </i>
-      Total Points
-    </div>
-    <div class="pts">
-      30000
-    </div>
+    <div class="pts-icon">Total Points</div>
+    <div class="pts">{{drPoints.total_dr_credit_points}}</div>
+  </div>
+  <div class="my-wallet">
+    <div class="pts-icon">Total Balance Points</div>
+    <div class="pts">{{drPoints.total_dr_balance_points}}</div>
   </div>
   
   <div class="transation-tabel">

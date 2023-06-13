@@ -6,7 +6,7 @@
     <ion-toolbar>
         <div class="search add-search">
             <div class="filter">
-                <ion-searchbar type='text' name="master" [(ngModel)]="filter.master" (ngModelChange)="get_all_checkin()"></ion-searchbar>
+                <ion-searchbar type='text' name="master" [(ngModel)]="filter.master" (ngModelChange)="get_all_checkin(constant.UserLoggedInData.id)"></ion-searchbar>
             </div>
         </div>
     </ion-toolbar>

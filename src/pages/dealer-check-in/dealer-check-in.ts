@@ -23,7 +23,7 @@ export class DealerCheckInPage {
         //     console.log(resp);
         //     this.user_id = resp;     
         this.constant.UserLoggedInData.id      
-            this.get_all_checkin(this.constant.UserLoggedInData.id);
+        this.get_all_checkin(this.constant.UserLoggedInData.id);
         // })
     }
     norec:any=''
@@ -39,9 +39,9 @@ export class DealerCheckInPage {
         this.serve.addData({user_id:id,"start":this.start,"limit":this.limit,"search":this.filter},"AppCustomerNetwork/getDealerCheckin")
         .then(resp=>{
             if(resp['statusCode']==200){
-            this.checkin_list = resp['checkin_list'];
-            this.serve.dismissLoading()
-            this.norec=1
+                this.checkin_list = resp['checkin_list'];
+                this.serve.dismissLoading()
+                this.norec=1
             }else{
                 this.serve.dismissLoading();
                 this.serve.errorToast(resp['statusMsg'])
@@ -49,7 +49,7 @@ export class DealerCheckInPage {
         }, error => {
             this.serve.Error_msg(error);
             this.serve.dismiss();
-          })
+        })
     }
     
     loadData(infiniteScroll)
@@ -74,6 +74,6 @@ export class DealerCheckInPage {
         }, error => {
             this.serve.Error_msg(error);
             this.serve.dismiss();
-          });
+        });
     }
 }
