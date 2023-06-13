@@ -12,7 +12,8 @@
 <ion-content style="background-color: #f8f8f8;">
     <div class="profile-container">
         <div class="background-white hero"></div>
-        <button class="edit" (click)="updateProfile()" *ngIf="karigar_detail.payout_kyc_status == '' || karigar_detail.payout_kyc_status == 'Reject' "> <i
+        <h1>{{karigar_detail.type != 15}}</h1>
+        <button class="edit" (click)="updateProfile()" *ngIf="(karigar_detail.payout_kyc_status == '' || karigar_detail.payout_kyc_status == 'Reject') && karigar_detail.type != 15 "> <i
                 class="material-icons">edit</i></button>
 
         <div class="user-profile">
@@ -56,7 +57,7 @@
                     <p>{{ 'Date of Birth'}}</p>
                     <h6>{{(karigar_detail.dob !='0000-00-00') ? (karigar_detail.dob| date:'d MMM,y'):('----')}}</h6>
                 </div>
-                <div class="text-box">
+                <div class="text-box" *ngIf="expression">
                     <p>{{ 'Date of Anniversary'}}</p>
                     <h6>{{(karigar_detail.doa !='0000-00-00') ? (karigar_detail.doa| date:'d MMM,y'):('----')}}</h6>
                 </div>
@@ -141,36 +142,40 @@
 
                     </div>
                 </div>
-                <div class="profile-card">
-                    <div class="text-center">
-                        <h2>{{'Dealer Detail'}}</h2>
+                <ng-container *ngIf="karigar_detail.type !=15">
+                    <div class="profile-card">
+                        <div class="text-center">
+                            <h2>{{'Dealer Detail'}}</h2>
+                        </div>
+                        <div class="text-box">
+                            <p>{{'Name'}}</p>
+                            <h6>{{karigar_detail.dealer_name ? karigar_detail.dealer_name :'----'}}</h6>
+                        </div>
+                        <div class="text-box">
+                            <p>{{'Mobile No.'}}</p>
+                            <h6>{{karigar_detail.dealer_mobile ? karigar_detail.dealer_mobile :'----'}}</h6>
+                        </div>
+                        <div class="text-box">
+                            <p>{{'Channel Partner Name'}}</p>
+                            <h6>{{karigar_detail.distributor_name ? karigar_detail.distributor_name :'----'}}</h6>
+                        </div>
                     </div>
-                    <div class="text-box">
-                        <p>{{'Name'}}</p>
-                        <h6>{{karigar_detail.dealer_name ? karigar_detail.dealer_name :'----'}}</h6>
+                    <div class="profile-card">
+                        <div class="text-center">
+                            <h2>{{ 'Referral Code Information' }}</h2>
+                            <a class="share" (click)="ShareApp()"><i class="material-icons">share</i></a>
+                        </div>
+    
+                        <div class="text-box">
+                            <p>{{'Referral Code'}}</p>
+                            <h6 style="text-transform: uppercase;">{{karigar_detail.referral_code ?
+                                karigar_detail.referral_code
+                                : 'N/A'}}</h6>
+                        </div>
                     </div>
-                    <div class="text-box">
-                        <p>{{'Mobile No.'}}</p>
-                        <h6>{{karigar_detail.dealer_mobile ? karigar_detail.dealer_mobile :'----'}}</h6>
-                    </div>
-                    <div class="text-box">
-                        <p>{{'Channel Partner Name'}}</p>
-                        <h6>{{karigar_detail.distributor_name ? karigar_detail.distributor_name :'----'}}</h6>
-                    </div>
-                </div>
-                <div class="profile-card">
-                    <div class="text-center">
-                        <h2>{{ 'Referral Code Information' }}</h2>
-                        <a class="share" (click)="ShareApp()"><i class="material-icons">share</i></a>
-                    </div>
-
-                    <div class="text-box">
-                        <p>{{'Referral Code'}}</p>
-                        <h6 style="text-transform: uppercase;">{{karigar_detail.referral_code ?
-                            karigar_detail.referral_code
-                            : 'N/A'}}</h6>
-                    </div>
-                </div>
+                </ng-container>
+                
+               
             </ng-container>
 
 

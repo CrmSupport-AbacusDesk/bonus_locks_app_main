@@ -149,8 +149,69 @@ export class LoyaltyHomePage {
     });
   }
 
+  lat:any;
+    long:any;
+  scan_tips()
+  {
+      this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
+      .then(() => {
+          let options = {
+              maximumAge: 10000, timeout: 15000, enableHighAccuracy: true
+          };
+          this.geolocation.getCurrentPosition(options)
+          .then((resp) => {
+              this.lat = resp.coords.latitude
+              this.long = resp.coords.longitude
+              console.log(this.lat + 'lat');
+              console.log(this.lat + 'long');
+
+              
+              if(this.lat == null && this.long == null){
+                  console.log("null lat",this.lat);
+                  
+              }
+              else{
+                  this.Scaning();
+                  //  let options: NativeGeocoderOptions = {
+                  //     useLocale: true,
+                  //     maxResults: 10
+                  //     };
+                  
+                  // this.nativeGeocoder.reverseGeocode(this.lat, this.long,options)
+                  // .then((result: NativeGeocoderReverseResult[]) => 
+                
+                  // this.address = this.generateAddress(result[0]),
+                 
+                  
+                  // ))
+                  
+                  // .catch((error: any) => console.log(error));
+                  
+              }
+              
+              
+          },
+          error => {
+              console.log('Error requesting location permissions', error);
+              if(error){
+                  let alert = this.alertCtrl.create({
+                      title:'Alert!',
+                      cssClass:'action-close',
+                      subTitle:"Enable to get your location so, can't scan",
+                      buttons: ['OK']
+                  });
+                  alert.present();  
+              }
+              
+          });
+      });
+  }
+
+
 
   Scaning() {
+    console.log('scanfuntion');
+    
     const options: BarcodeScannerOptions = {
       prompt: ""
     };
@@ -158,7 +219,8 @@ export class LoyaltyHomePage {
       this.qr_code = resp.text;
       if (resp.text != '') {
         this.service.presentLoading();
-        this.service.addData({ 'coupon_code': this.qr_code, }, 'AppCouponScan/couponCodeScan').then((r: any) => {
+        // 'lat':28.3976584 , 'lng':77.3097745
+        this.service.addData({ 'coupon_code': this.qr_code,'lat':this.lat , 'lng':this.long }, 'AppCouponScan/couponCodeScan').then((r: any) => {
           if (r['statusCode'] == 200 && r['bonus_point'] > 0) {
             this.service.successToast((r['coupon_point'] + r['bonus_point']) + " points has been added into your wallet");
             this.service.dismissLoading();
