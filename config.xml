@@ -1,6 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
+<<<<<<< HEAD
 <widget id="com.abacusdesk.bonus_locks" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Bonus Locks</name>
+=======
+<widget id="com.abacusdesk.pearls" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Bonus</name>
+>>>>>>> main
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content src="index.html" />
@@ -18,9 +23,13 @@
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
+    <preference name="FadeSplashScreenDuration" value="1000" />
+    <preference name="SplashScreenDelay" value="30000" />
     <preference name="SplashScreen" value="screen" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="FadeSplashScreen" value="true" />
+    <preference name="ShowSplashScreen" value="true" />
     <preference name="loadUrlTimeoutValue" value="60000" />
     <preference name="android-minSdkVersion" value="22" />
     <preference name="android-targetSdkVersion" value="32" />

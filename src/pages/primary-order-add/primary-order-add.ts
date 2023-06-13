@@ -251,7 +251,9 @@ export class PrimaryOrderAddPage {
     Lead_retailer_distributor: any = [];
 
     get_state_list(name) {
+        console.log('In state');
         this.Dist_state = this.data.type_name.state
+        console.log(this.Dist_state);
     }
 
     get_distributor() {
@@ -434,7 +436,7 @@ export class PrimaryOrderAddPage {
 
                     this.item_list = resp['result'];
                     for (let index = 0; index < this.item_list.length; index++) {
-                        this.item_list[index].display_name = this.item_list[index].product_code + " " + this.item_list[index].display_name
+                        this.item_list[index].display_name = this.item_list[index].product_code + " | " + this.item_list[index].display_name
                     }
                 } else {
                     this.service.errorToast(resp['statusMsg']);
@@ -477,7 +479,7 @@ export class PrimaryOrderAddPage {
                     // this.item_list = resp['result'];
                     this.item_list = this.item_list.concat(resp['result']);
                     for (let index = 0; index < this.item_list.length; index++) {
-                        this.item_list[index].display_name = this.item_list[index].product_code + " " + this.item_list[index].display_name
+                        this.item_list[index].display_name = this.item_list[index].product_code + " | " + this.item_list[index].display_name
                     }
                     setTimeout(() => {
                         event.component.items = this.item_list
@@ -589,7 +591,8 @@ export class PrimaryOrderAddPage {
         this.cash_discount_percent = parseFloat(this.data.type_name.cash_discount_percentage);
         this.cd_value = parseFloat(this.sub_total_before_cd) * this.cash_discount_percent / 100;
         this.sub_total_after_cd = parseFloat(this.sub_total_before_cd) - parseFloat(this.cd_value);
-        this.ins_value = parseFloat(this.sub_total_after_cd) * 0.06 / 100;
+        // this.ins_value = parseFloat(this.sub_total_after_cd) * 0.06 / 100;
+        this.ins_value = 0;
         this.order_total = parseFloat(this.sub_total_after_cd) + parseFloat(this.ins_value)
         this.total_gst_amount = parseFloat(this.order_total) * parseFloat(this.product_detail.gst) / 100;
         this.grand_total_before_tcs = (parseFloat(this.order_total) + parseFloat(this.total_gst_amount));
@@ -653,7 +656,8 @@ export class PrimaryOrderAddPage {
         this.sub_total_after_cd = this.sub_total_before_cd - (this.cd_value);
         console.log(this.sub_total_after_cd);
 
-        this.ins_value = this.sub_total_after_cd * 0.06 / 100;
+        // this.ins_value = this.sub_total_after_cd * 0.06 / 100;
+        this.ins_value = 0
 
         this.order_total = this.sub_total_after_cd + (this.ins_value)
 
