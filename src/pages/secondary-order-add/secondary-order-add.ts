@@ -516,7 +516,7 @@ export class SecondaryOrderAddPage {
         if (resp['statusCode'] == 200) {
           this.item_list = resp['result'];
           for (let index = 0; index < this.item_list.length; index++) {
-            this.item_list[index].display_name = this.item_list[index].product_code + " " + this.item_list[index].display_name
+            this.item_list[index].display_name = this.item_list[index].product_code + " | " + this.item_list[index].display_name
           }
         } else {
           this.service.errorToast(resp['statusMsg'])
@@ -555,20 +555,20 @@ export class SecondaryOrderAddPage {
 
 
   get_product_details(event) {
-    this.data.brand = '';
-    this.data.color = '';
+    // this.data.brand = '';
+    // this.data.color = '';
     this.service.addData({ 'product_id': event.id, 'brand': this.data.distributor_id.brand, 'order_type': 'secondary' }, "AppOrder/segmentItemsDetails")
       .then(resp => {
         if (resp['statusCode'] == 200) {
           this.product_detail = resp['result'];
           this.brandList = this.product_detail['brand'];
           this.colorList = this.product_detail['color'];
-          if (this.brandList.length == 1) {
-            this.data.brand = this.brandList[0];
-          }
-          if (this.colorList.length == 1) {
-            this.data.color = this.colorList[0];
-          }
+          // if (this.brandList.length == 1) {
+          //   this.data.brand = this.brandList[0];
+          // }
+          // if (this.colorList.length == 1) {
+          //   this.data.color = this.colorList[0];
+          // }
 
         } else {
           this.service.errorToast(resp['statusMsg'])
@@ -704,8 +704,8 @@ export class SecondaryOrderAddPage {
 
           if (this.product_list.length < 1) {
             this.data.product_id = '';
-            this.data.brand = '';
-            this.data.color = '';
+            // this.data.brand = '';
+            // this.data.color = '';
             this.service.errorToast(resp['statusMsg']);
           }
           this.addToListButton = true;
@@ -723,7 +723,7 @@ export class SecondaryOrderAddPage {
   addToList() {
     for (let i = 0; i < this.product_list.length; i++) {
       if (this.product_list[i]['qty'] && this.product_list[i]['product_price']) {
-        let existIndex = this.add_list.findIndex(row => (row.product_id == this.product_list[i]['product_id'] && row.brand == this.data.brand && row.color == this.data.color));
+        let existIndex = this.add_list.findIndex(row => (row.product_id == this.product_list[i]['product_id']));
         if (existIndex != -1) {
           this.add_list.splice(existIndex, 1)
         }
@@ -732,8 +732,8 @@ export class SecondaryOrderAddPage {
         this.product_list[i]['segment_id'] = this.product_detail.category_id;
         this.product_list[i]['segment_name'] = this.product_detail.category;
         this.product_list[i]['amount'] = parseFloat(this.product_list[i]['qty']) * parseFloat(this.product_list[i]['net_price']);
-        this.product_list[i]['color'] = this.data.color;
-        this.product_list[i]['brand'] = this.data.brand;
+        // this.product_list[i]['color'] = this.data.color;
+        // this.product_list[i]['brand'] = this.data.brand;
         this.product_list[i]['discount_amount'] = parseFloat(this.product_list[i]['discounted_price']) * parseFloat(this.product_list[i]['qty']);
         this.product_list[i]['discounted_price'] = parseFloat(this.product_list[i]['discounted_price']);
 
@@ -783,8 +783,8 @@ export class SecondaryOrderAddPage {
       this.new_grand_total = parseFloat(this.netamount)
 
     }
-    this.data.brand = '';
-    this.data.color = '';
+    // this.data.brand = '';
+    // this.data.color = '';
     this.product_list = [];
     this.data.product_id = {};
     this.addToListButton = true;

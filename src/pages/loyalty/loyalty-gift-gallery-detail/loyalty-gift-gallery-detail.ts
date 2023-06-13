@@ -29,35 +29,54 @@ export class LoyaltyGiftGalleryDetailPage {
   influencer_point: any = {};
   data: any = {};
   contact: any = {};
-
-
+  userTypeID: any;
+  
+  
   constructor(public navCtrl: NavController, public navParams: NavParams, public service: MyserviceProvider, public loadingCtrl: LoadingController, private app: App, public storage: Storage, public db: DbserviceProvider, public constant: ConstantProvider, public toastCtrl: ToastController) {
     this.gift_id = this.navParams.get('id');
     this.uploadUrl = constant.upload_url1 + 'gift_gallery/';
     this.service.presentLoading();
+    console.log(this.constant);
+    
+    this.userTypeID = this.constant.UserLoggedInData.type;
+    console.log('Retailer ID - ' , this.userTypeID);
+    
     this.getGiftDetail(this.gift_id);
   }
-
+  
   ionViewDidLoad() {
+    
+    // this.storage.get('user_type').then((userType) => {
+    //   this.userType = userType;
+    //   if (userType == 'OFFICE') {
+    //     this.data.networkType = 3;
+    //     //   this.get_network_list(1)
+    //   }
+    //   console.log(this.userType);
+    
+    // });
   }
-
+  
   ionViewWillEnter() {
   }
-
-
+  
+  
   getGiftDetail(gift_id) {
     this.service.addData({ 'id': gift_id }, 'AppGiftGallery/giftGalleryDetail').then((result) => {
       if (result['statusCode'] == 200) {
         this.service.dismissLoading();
         this.gift_detail = result['gift_master_list'];
+        console.log(this.gift_detail);
+        
         this.influencer_point = result['detail'];
-
+        console.log(this.influencer_point);
+        
         if(this.influencer_point.country=='india'){
           this.data.wallet_no = this.influencer_point.paytm_mobile_no.toString();
         }
         this.data.cash_point = this.gift_detail.range_start;
         this.data.cash_value = Number(this.gift_detail.range_start) * Number(this.gift_detail.point_range_value);
-
+        
         if (this.influencer_point.kyc_status != 'Verified') {
           this.contactDetails();
         }
@@ -66,14 +85,14 @@ export class LoyaltyGiftGalleryDetailPage {
         this.service.errorToast(result['statusMsg']);
         this.service.dismissLoading();
       }
-
-
+      
+      
     }, error => {
       this.service.Error_msg(error);
       this.service.dismissLoading();
     });
   }
-
+  
   getValue(value) {
     if (parseFloat(value) > parseFloat(this.influencer_point.wallet_point)) {
       this.service.errorToast('Insufficient Balance');
@@ -83,8 +102,8 @@ export class LoyaltyGiftGalleryDetailPage {
       this.data.cash_value = value * this.gift_detail.point_range_value;
     }
   }
-
-
+  
+  
   contactDetails() {
     this.service.addData({}, 'AppContactUs/contactDetail').then((result) => {
       if (result['statusCode'] == 200) {
@@ -95,25 +114,26 @@ export class LoyaltyGiftGalleryDetailPage {
       }
     });
   }
-
+  
   SendRequest() {
-
+    console.log(this.data);
+    
     if (this.gift_detail.gift_type == 'Cash') {
       if (this.data.cash_point == undefined) {
         this.service.errorToast('Please enter redeem points value');
         return
       }
-
-      if (!this.data.payment_mode && this.influencer_point.country.trim().toLowerCase() == 'india') {
+      
+      if (!this.data.payment_mode && (this.influencer_point.country && this.influencer_point.country.toLowerCase() == 'india')) {
         this.service.errorToast('Please Select Payment Mode First');
         return
       }
-
+      
       if ( parseInt(this.data.wallet_no.length)!=10 && this.data.payment_mode!='Bank' ) {
         this.service.errorToast('Please Enter 10 Digit Mobile No.');
         return
       }
-
+      
       if (parseFloat(this.data.cash_point) > parseFloat(this.influencer_point.wallet_point)) {
         this.service.errorToast('Insufficient point in your wallet');
         return
@@ -126,24 +146,24 @@ export class LoyaltyGiftGalleryDetailPage {
       this.service.errorToast('Insufficient point in your wallet');
       return
     }
-
+    
     if (this.gift_detail.gift_type == 'Gift') {
       this.navCtrl.push(LoyaltyRedeemRequestPage, { 'karigar_id': this.influencer_point.id, 'gift_id': this.gift_id, "mode": "reedeemPoint", 'offer_balance': this.offer_balance, 'gift_type': 'Gift', 'payment_mode': this.data.payment_mode, 'wallet_no': this.data.wallet_no })
     }
     // else{
     // }
   }
-
+  
   mobileNoCheck(event) {
     const pattern = /[0-9\+\-\ ]/;
     let inputChar = String.fromCharCode(event.charCode);
     if (event.keyCode != 8 && !pattern.test(inputChar)) { event.preventDefault(); }
-
+    
   }
-
+  
   updateBankDetail() {
     this.influencer_point.edit_profile = 'edit_profile';
     this.navCtrl.push(RegistrationPage, { 'data': this.influencer_point, "mode": 'edit_page' })
   }
-
+  
 }

@@ -119,177 +119,171 @@
             
             <td *ngIf="data.networkType != '3' " class="w60 text-right">&#x20B9; {{pop.product_price}}
             </td>
-            <td *ngIf="pop.dr_disc != 0" class="w60 text-right">{{pop.dr_disc ? pop.dr_disc :
-                pop.discount_percent}}%</td>
-                <td *ngIf="pop.dr_disc == 0" class="w60 text-right">{{pop.dr_disc != 0 ? pop.dr_disc :
-                    '---'}}</td>
-                    <!-- <td *ngIf="data.networkType != '3' " class="w60 text-right">&#x20B9; {{pop.net_price}}</td> -->
-                    <td *ngIf="data.networkType == '3'" class="w60 text-center"><input type="number" name="rate"
-                        [(ngModel)]="pop.product_price" #size="ngModel" placeholder="RATE."></td>
-                        
-                        <!-- <td class="w60 text-right">&#x20B9; {{pop.qty * pop.net_price ? pop.qty * pop.net_price : '0'}} </td>         -->
-                    </tr>
-                </table>
-            </div>
+            <td *ngIf="pop.dr_disc != 0" class="w60 text-right">{{pop.dr_disc ? pop.dr_disc : pop.discount_percent}}%</td>
+            <td *ngIf="pop.dr_disc == 0" class="w60 text-right">{{pop.dr_disc != 0 ? pop.dr_disc : '---'}}</td>
+            <!-- <td *ngIf="data.networkType != '3' " class="w60 text-right">&#x20B9; {{pop.net_price}}</td> -->
+            <td *ngIf="data.networkType == '3'" class="w60 text-center"><input type="number" name="rate" [(ngModel)]="pop.product_price" #size="ngModel" placeholder="RATE."></td>
             
-            
-        </ion-list>
-        
-        <div class="mt16" *ngIf="product_list.length && colorList.length>0">
-            <button ion-button class="cs-btn" [disabled]="addToListButton" (click)="addToList()">Add To
-                List</button>
-            </div>
-            <div class="mt16" *ngIf="product_list.length && colorList.length ==0">
-                <button ion-button class="cs-btn" [disabled]="addToListButton" (click)="addToList()">Add To
-                    List</button>
-                </div>
-                
-                
-                
-                
-                <div class="cs-heading1 pl0" *ngIf="add_list.length">
-                    <p>PRODUCT INFORMATION</p>
-                </div>
-                
-                <div class="list-box mt10" *ngFor="let row of add_list;let i=index">
-                    <div class="mid mt0" style="display: flex;justify-content: space-between;">
-                        <div class="content-info">
-                            <div class="right-info">
-                                <p style="color:rgb(0, 119, 255)">{{row.segment_name}}</p>
-                                <div class="mt2 mb2" style="display:flex;flex-direction:row">
-                                    <p class="pr2" style="color:rgb(255, 153, 0)">#{{i+1}} </p>
-                                    <p> {{row.product_name}} ({{row.product_code}}) {{row.brand && (row.brand) }}
-                                        {{row.color && (row.color)}}</p>
-                                    </div>
-                                    <p *ngIf="this.data.feature_apply == 'Yes'">Feature- {{row.product_size}}</p>
-                                </div>
-                            </div>
-                            <div class="tag-info">
-                                <button><i class="material-icons red-clr" (click)="DeleteItem(i)">delete_sweep</i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="three_boxes">
-                            <div class="lower ">
-                                <p class="font10">Qty</p>
-                                <p class="font10">{{row.qty}}</p>
-                            </div>
-                            <div class="lower ml2">
-                                <p class="font10">Price</p>
-                                <p class="font10">₹ {{row.product_price ? (row.product_price | number:'1.2-2') : row.price}}</p>
-                            </div>
-                            
-                            <div class="lower ml2">
-                                <p class="font10">Discount %</p>
-                                <p *ngIf="row.discounted_price != 0" class="font10">{{row.discounted_price != 0 ? (row.discounted_price | number:'1.2-2') : '--'}}({{row.dr_disc ? row.dr_disc +' '+'%' :null}})</p>
-                                <p *ngIf="row.discounted_price == 0" class="font10">{{row.discounted_price != 0 ? (row.discounted_price | number:'1.2-2') : '--'}}</p>
-                            </div>
-                            <div class="lower ml2">
-                                <p class="font10">Net Price</p>
-                                <p class="font10">₹ {{row.net_price | number:'1.2-2'}}</p>
-                            </div>
-                        </div>
+            <!-- <td class="w60 text-right">&#x20B9; {{pop.qty * pop.net_price ? pop.qty * pop.net_price : '0'}} </td>         -->
+        </tr>
+    </table>
+</div>
 
-                        <div class="three_boxes">
-                            <div class="lower">
-                                <p class="font10">Sub total</p>
-                                <p class="font10">₹ {{row.amount | number:'1.2-2'}}</p>
-                            </div>
-                            <div class="lower ml2">
-                                <p class="font10">GST Amount</p>
-                                <p class="font10">₹ {{row.gst_amount | number:'1.2-2'}} ({{row.gst_percent?row.gst_percent+'
-                                    %':'0 %'}})</p>
-                                </div>
-                                <div class="lower ml2">
-                                    <p class="font10">Net Amount</p>
-                                    <p class="font10">₹ {{row.total_amount | number:'1.2-2'}}</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div *ngIf="add_list.length > 0">
-                            
-                            <div class="time_show amount-listing">
-                                <p>Total Item</p>
-                                <p>{{add_list.length}}</p>
-                            </div>
-                            <div class="time_show amount-listing">
-                                <p>Total Item Qty</p>
-                                <p>{{total_qty}}</p>
-                            </div>
-                            <div class="time_show amount-listing">
-                                <p>Total Order Price</p>
-                                <p>{{total_Order_amount ? '₹' + ' ' + (total_Order_amount | number:'1.2-2') + ' ' + '/-': 'N/A'}}
-                                </p>
-                            </div>
-                            <div class="time_show amount-listing">
-                                <p>Total Discount Amount</p>
-                                <p>{{order_discount ? '₹' + ' ' + (order_discount | number:'1.2-2') + ' ' + '/-': 'N/A'}} </p>
-                            </div>
-                            
-                            <!-- <div class="time_show amount-listing">
-                                <p>Subtotal</p>
-                                <p>{{sub_total_before_cd ? '₹' + ' ' + (sub_total_before_cd | number:'1.2-2') + ' ' + '/-': 'N/A'}}
-                                </p>
-                            </div> -->
-                            <div class="time_show amount-listing">
-                                <p>Cash Discount</p>
-                                <p>{{cd_value | number:'1.2-2'}} ({{this.data.type_name.cash_discount_percentage }}%)</p>
-                            </div>
-                            <!-- <div class="time_show amount-listing">
-                                <p>Sub Total After Cash Discount</p>
-                                <p>{{sub_total_after_cd ? '₹' + ' ' + (sub_total_after_cd | number:'1.2-2') + ' ' + '/-': 'N/A'}}
-                                </p>
-                            </div> -->
-                            <div class="time_show amount-listing">
-                                <p>Insurance</p>
-                                <p>{{ins_value | number:'1.2-2'}} (0.06%)</p>
-                            </div>
-                            <div class="time_show amount-listing">
-                                <p>Sub Total</p>
-                                <p>{{order_total ? '₹' + ' ' + (order_total | number:'1.2-2') + ' ' + '/-': 'N/A'}} </p>
-                            </div>
-                            
-                            <div class="time_show amount-listing">
-                                <p>Total GST Amount</p>
-                                <p>₹ {{total_gst_amount | number:'1.2-2'}} /-</p>
-                            </div>
-                            <!-- <div class="time_show amount-listing">
-                                <p>Grand Total</p>
-                                <p>₹ {{grand_total_before_tcs | number:'1.2-2'}} /-</p>
-                            </div> -->
-                            
-                            <div class="time_show amount-listing">
-                                <p>TCS</p>
-                                <p>{{tcs_value | number:'1.2-2'}} ({{this.data.type_name.tcs_percentage}}%)</p>
-                            </div>
-                            <div class="time_show amount-listing">
-                                <p>Grand Total</p>
-                                <p>₹ {{order_grand_total | number:'1.2-2'}} /-</p>
-                            </div>
-                        </div>
-                        
-                        
-                        <ion-list *ngIf="add_list.length">
-                            <ion-item class="cs-textarea1 ">
-                                <ion-label floating><span>Any Remarks</span></ion-label>
-                                <ion-textarea name="remark" [(ngModel)]="data.remark"></ion-textarea>
-                            </ion-item>
-                        </ion-list>
-                        
-                        
-                        <div class="flex-btn" *ngIf="add_list.length > 0 && data.type_name">
-                            <!-- <button *ngIf="!order_data && !order_item" ion-button [disabled]="btndisable" class="Buttons"
-                                (click)="user_data.order_status='Draft';save_orderalert('draft');">
-                                <ion-spinner *ngIf="btnDisableDraft"></ion-spinner>
-                                Draft
-                            </button> -->
-                            <button ion-button [disabled]="btndisable" class="Buttons"
-                            (click)="user_data.order_status='Pending';save_orderalert('save');">
-                            <ion-spinner *ngIf="btnDisableSave"></ion-spinner>
-                            Save
-                        </button>
-                    </div>
+
+</ion-list>
+
+<div class="mt16" *ngIf="product_list.length && colorList.length>0">
+    <button ion-button class="cs-btn" [disabled]="addToListButton" (click)="addToList()">Add To List</button>
+</div>
+<div class="mt16" *ngIf="product_list.length && colorList.length ==0">
+    <button ion-button class="cs-btn" [disabled]="addToListButton" (click)="addToList()">Add To List</button>
+</div>
+
+
+
+
+<div class="cs-heading1 pl0" *ngIf="add_list.length">
+    <p>PRODUCT INFORMATION</p>
+</div>
+
+<div class="list-box mt10" *ngFor="let row of add_list;let i=index">
+    <div class="mid mt0" style="display: flex;justify-content: space-between;">
+        <div class="content-info">
+            <div class="right-info">
+                <p style="color:rgb(0, 119, 255)">{{row.segment_name}}</p>
+                <div class="mt2 mb2" style="display:flex;flex-direction:row">
+                    <p class="pr2" style="color:rgb(255, 153, 0)">#{{i+1}} </p>
+                    <p> {{row.product_name}} ({{row.product_code}})</p>
                 </div>
+                <p *ngIf="this.data.feature_apply == 'Yes'">Feature- {{row.product_size}}</p>
             </div>
-        </ion-content>
+        </div>
+        <div class="tag-info">
+            <button><i class="material-icons red-clr" (click)="DeleteItem(i)">delete_sweep</i></button>
+        </div>
+    </div>
+    
+    <div class="three_boxes">
+        <div class="lower ">
+            <p class="font10">Qty</p>
+            <p class="font10">{{row.qty}}</p>
+        </div>
+        <div class="lower ml2">
+            <p class="font10">Price</p>
+            <p class="font10">₹ {{row.product_price ? (row.product_price | number:'1.2-2') : row.price}}</p>
+        </div>
+        
+        <div class="lower ml2">
+            <p class="font10">Discount %</p>
+            <p *ngIf="row.discounted_price != 0" class="font10">{{row.discounted_price != 0 ? (row.discounted_price | number:'1.2-2') : '--'}}({{row.dr_disc ? row.dr_disc +' '+'%' :null}})</p>
+            <p *ngIf="row.discounted_price == 0" class="font10">{{row.discounted_price != 0 ? (row.discounted_price | number:'1.2-2') : '--'}}</p>
+        </div>
+        <div class="lower ml2">
+            <p class="font10">Net Price</p>
+            <p class="font10">₹ {{row.net_price | number:'1.2-2'}}</p>
+        </div>
+    </div>
+    
+    <div class="three_boxes">
+        <div class="lower">
+            <p class="font10">Sub total</p>
+            <p class="font10">₹ {{row.amount | number:'1.2-2'}}</p>
+        </div>
+        <div class="lower ml2">
+            <p class="font10">GST Amount</p>
+            <p class="font10">₹ {{row.gst_amount | number:'1.2-2'}} ({{row.gst_percent?row.gst_percent+'
+                %':'0 %'}})</p>
+            </div>
+            <div class="lower ml2">
+                <p class="font10">Net Amount</p>
+                <p class="font10">₹ {{row.total_amount | number:'1.2-2'}}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div *ngIf="add_list.length > 0">
+        
+        <div class="time_show amount-listing">
+            <p>Total Item</p>
+            <p>{{add_list.length}}</p>
+        </div>
+        <div class="time_show amount-listing">
+            <p>Total Item Qty</p>
+            <p>{{total_qty}}</p>
+        </div>
+        <div class="time_show amount-listing">
+            <p>Total Order Price</p>
+            <p>{{total_Order_amount ? '₹' + ' ' + (total_Order_amount | number:'1.2-2') + ' ' + '/-': 'N/A'}}
+            </p>
+        </div>
+        <div class="time_show amount-listing">
+            <p>Total Discount Amount</p>
+            <p>{{order_discount ? '₹' + ' ' + (order_discount | number:'1.2-2') + ' ' + '/-': 'N/A'}} </p>
+        </div>
+        
+        <!-- <div class="time_show amount-listing">
+            <p>Subtotal</p>
+            <p>{{sub_total_before_cd ? '₹' + ' ' + (sub_total_before_cd | number:'1.2-2') + ' ' + '/-': 'N/A'}}
+            </p>
+        </div> -->
+        <div class="time_show amount-listing">
+            <p>Cash Discount</p>
+            <p>{{cd_value | number:'1.2-2'}} ({{this.data.type_name.cash_discount_percentage }}%)</p>
+        </div>
+        <!-- <div class="time_show amount-listing">
+            <p>Sub Total After Cash Discount</p>
+            <p>{{sub_total_after_cd ? '₹' + ' ' + (sub_total_after_cd | number:'1.2-2') + ' ' + '/-': 'N/A'}}
+            </p>
+        </div> -->
+        <div class="time_show amount-listing">
+            <p>Insurance</p>
+            <p>{{ins_value | number:'1.2-2'}} (0.06%)</p>
+        </div>
+        <div class="time_show amount-listing">
+            <p>Sub Total</p>
+            <p>{{order_total ? '₹' + ' ' + (order_total | number:'1.2-2') + ' ' + '/-': 'N/A'}} </p>
+        </div>
+        
+        <div class="time_show amount-listing">
+            <p>Total GST Amount</p>
+            <p>₹ {{total_gst_amount | number:'1.2-2'}} /-</p>
+        </div>
+        <!-- <div class="time_show amount-listing">
+            <p>Grand Total</p>
+            <p>₹ {{grand_total_before_tcs | number:'1.2-2'}} /-</p>
+        </div> -->
+        
+        <div class="time_show amount-listing">
+            <p>TCS</p>
+            <p>{{tcs_value | number:'1.2-2'}} ({{this.data.type_name.tcs_percentage}}%)</p>
+        </div>
+        <div class="time_show amount-listing">
+            <p>Grand Total</p>
+            <p>₹ {{order_grand_total | number:'1.2-2'}} /-</p>
+        </div>
+    </div>
+    
+    
+    <ion-list *ngIf="add_list.length">
+        <ion-item class="cs-textarea1 ">
+            <ion-label floating><span>Any Remarks</span></ion-label>
+            <ion-textarea name="remark" [(ngModel)]="data.remark"></ion-textarea>
+        </ion-item>
+    </ion-list>
+    
+    
+    <div class="flex-btn" *ngIf="add_list.length > 0 && data.type_name">
+        <!-- <button *ngIf="!order_data && !order_item" ion-button [disabled]="btndisable" class="Buttons"
+            (click)="user_data.order_status='Draft';save_orderalert('draft');">
+            <ion-spinner *ngIf="btnDisableDraft"></ion-spinner>
+            Draft
+        </button> -->
+        <button ion-button [disabled]="btndisable" class="wp100"
+        (click)="user_data.order_status='Pending';save_orderalert('save');">
+        <ion-spinner *ngIf="btnDisableSave"></ion-spinner>
+        Save
+    </button>
+</div>
+</div>
+</div>
+</ion-content>
