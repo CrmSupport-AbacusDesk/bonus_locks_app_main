@@ -258,6 +258,10 @@ import { DistributorDealerWalletPageModule } from '../pages/distributor-dealer-w
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExpenseAddNewPageModule } from '../pages/expense-add-new/expense-add-new.module';
 import { ImagePicker } from '@ionic-native/image-picker';
+import { InstallationListPage } from '../pages/installation/installation-list/installation-list';
+import { InstallationListPageModule } from '../pages/installation/installation-list/installation-list.module';
+import { InstallationDetailPageModule } from '../pages/installation/installation-detail/installation-detail.module';
+import { AddInstallationPageModule } from '../pages/installation/add-installation/add-installation.module';
 
 // import { GoogleMaps } from '@ionic-native/google-maps';
 @NgModule({
@@ -493,9 +497,10 @@ import { ImagePicker } from '@ionic-native/image-picker';
         UserTargetPageModule,
         PartyTargetPageModule,
         OrderStatusChangePageModule,
-        DistributorDealerWalletPageModule
-        
-
+        DistributorDealerWalletPageModule,
+        InstallationListPageModule,
+        InstallationDetailPageModule,
+        AddInstallationPageModule
     ],
     bootstrap: [IonicApp],
     entryComponents: [
@@ -514,7 +519,7 @@ import { ImagePicker } from '@ionic-native/image-picker';
         // VisitingCardModalPage,
         // ContractorModalPage,
         AnnouncementListPage,
-        UploadFilePage
+        UploadFilePage,
 
         // CancelationPolicyPage
         // ExecutivePopoverPage

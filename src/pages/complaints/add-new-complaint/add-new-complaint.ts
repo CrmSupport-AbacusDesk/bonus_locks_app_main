@@ -9,6 +9,8 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PointLocationPage } from '../../point-location/point-location';
+import { MyserviceProvider } from '../../../providers/myservice/myservice';
+import { ComplaintHistoryPage } from '../complaint-history/complaint-history';
 // import { IonicSelectableComponent } from 'ionic-selectable';/
 
 /**
@@ -31,14 +33,22 @@ export class AddNewComplaintPage {
   categoryArr:any = [];
   subCategoryArr:any=[]
   productArr:any=[];
+  districtList:any=[];
+  stateList:any=[];
+  form:any={}
+  savingFlag: boolean = false;
+
+
   // fileChooser: any;
   data:any={};
-  constructor(public navCtrl: NavController, public navParams: NavParams,public actionSheetController: ActionSheetController, private camera: Camera ,public service:DbserviceProvider,public loadingCtrl:LoadingController , public alertCtrl:AlertController, private mediaCapture: MediaCapture ,private transfer: FileTransfer, public diagnostic  : Diagnostic, public androidPermissions: AndroidPermissions,public dom:DomSanitizer) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,public actionSheetController: ActionSheetController, private camera: Camera ,public service:DbserviceProvider,public serve : MyserviceProvider ,public loadingCtrl:LoadingController , public alertCtrl:AlertController, private mediaCapture: MediaCapture ,private transfer: FileTransfer, public diagnostic  : Diagnostic, public androidPermissions: AndroidPermissions,public dom:DomSanitizer) {
     this.data.type  =this.navParams.get('type');
     console.log(this.navParams.data.type)
     console.log(this.navParams.get('type'))
     console.log(this.data.type);
     this.getcategoryData();
+    this.get_states();
+
   }
 
   ionViewDidLoad() {
@@ -466,13 +476,7 @@ image:any='';
           if( d.status == 'Wrong' ){
             this.loading.dismiss();
             this.showSuccess("Somthing went Wrong!");
-
           }
-
-          
-
-   
-
             console.log(data);
         
             // this.loading.dismissAll();
@@ -509,51 +513,64 @@ image:any='';
       });
       this.loading.present();
     }
+
+
+    get_states() {
+      // this.serve.presentLoading()
+      this.serve.addData({}, "AppCustomerNetwork/getStates")
+        .then(resp => {
+          if (resp['statusCode'] == 200) {
+            this.serve.dismissLoading()
+            this.stateList = resp['state_list'];
+          } else {
+            this.serve.dismissLoading()
+            this.serve.errorToast(resp['statusMsg']);
+          }
+        }, error => {
+          this.serve.Error_msg(error);
+          this.serve.dismiss();
+        })
+    }
+
+    get_district(state) {
+      this.serve.addData({ "state_name":state }, "AppCustomerNetwork/getDistrict")
+      .then(resp => {
+          if(resp['statusCode'] == 200){
+              this.districtList = resp['district_list'];    
+          }else{
+              this.serve.errorToast(resp['statusMsg']);
+          }
+      },
+      err => {
+          this.serve.errorToast('Something Went Wrong!')
+      })
+  }
+
+  saveComplaint() {
+    this.savingFlag = true;
+    if (!this.form.id) {
+      if (!this.form.assign_dr_id) {
+        this.serve.errorToast('Please Select Distributor!')
+      }
+    }
+    this.form.type_id = 3;
+    this.serve.addData({ "data": this.form }, "AppCustomerNetwork/addDealer")
+      .then(resp => {
+        if (resp['statusCode'] == 200) {
+          this.savingFlag = false;
+          this.serve.successToast(resp['statusMsg']);
+          this.navCtrl.popTo(ComplaintHistoryPage);
+
+        } else {
+          this.savingFlag = false;
+          this.serve.errorToast(resp['statusMsg']);
+        }
+      }, error => {
+        this.savingFlag = false;
+        this.serve.Error_msg(error);
+        this.serve.dismiss();
+      })
+  }
     
 
 }
-
-
-// takePhoto()
-// {
-//   console.log("i am in camera function");
-//   const options: CameraOptions = {
-//     quality: 70,
-//     destinationType: this.camera.DestinationType.FILE_URI,
-//     mediaType: this.camera.MediaType.ALLMEDIA,
-//     targetWidth : 500,
-//     targetHeight : 400
-//   }
-  
-//   console.log(options);
-//   this.camera.getPicture(options).then((imageData) => {
-//     this.image = imageData;
-//     console.log(this.image);
-//     if(this.image)
-//     {
-//         this.fileChange(this.image);
-//     }
-//   }, (err) => {
-//   });
-// }
-
-// getImage() 
-// {
-//   const options: CameraOptions = {
-//     quality: 70,
-//     destinationType: this.camera.DestinationType.FILE_URI,
-//     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-//     mediaType: this.camera.MediaType.ALLMEDIA,
-//     saveToPhotoAlbum:false
-//   }
-//   console.log(options);
-//   this.camera.getPicture(options).then((imageData) => {
-//     this.image=imageData;
-//     console.log(this.image);
-//     if(this.image)
-//     {
-//         this.fileChange(this.image);
-//     }
-//   }, (err) => {
-//   });
-// }
