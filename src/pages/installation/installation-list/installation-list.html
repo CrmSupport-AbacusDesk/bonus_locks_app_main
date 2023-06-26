@@ -1,0 +1,119 @@
+<!--
+  Generated template for the InstallationListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>Installation</ion-title>
+    <ion-buttons end *ngIf="">
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+  <ng-container *ngIf="LoginType =='Employee'">
+    <div class="fix-container">
+      <div class="attendance-list flat-list">
+        <div class="center-block">
+          <div class="circle"></div>
+          <h1></h1>
+          <p></p>
+          <a class="cell-phone" href="tel:6876768767"><i class="material-icons">phone</i></a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="showRelatedTab!=false">
+    <div class="capsule-tabs" style="border-bottom: 0px;">
+      <ul>
+        <li [ngClass]="{'active':complaint_type == 'Pending'}"
+          (click)="complaint_type = 'Pending';complaintList()">
+          <p>Pending<span>2</span></p>
+        </li>
+        <li [ngClass]="{'active':complaint_type == 'Approved'}"
+          (click)="complaint_type = 'Approved';complaintList()">
+          <p>Approved<span>2</span></p>
+        </li>
+
+        <li [ngClass]="{'active':complaint_type == 'Reject'}"
+          (click)="complaint_type = 'Reject';complaintList()">
+          <p>Rejected<span>3</span></p>
+        </li>
+      </ul>
+    </div>
+
+
+
+
+    <div class="pl16 pr16 mt15 mb50">
+
+      <div class="attendance-list" *ngFor="let row of total_order" (click)="goOnOrderDetailFromDrLogin(row.id)">
+        <div class="slab slab-bg">
+          <div class="slab-day">
+            <p></p>
+            <span>Date</span>
+          </div>
+          <div class="slab-day">
+            <p></p>
+            <span>Order Id</span>
+          </div>
+        </div>
+
+        <div class="center-block">
+          <div class="circle"></div>
+          <h1></h1>
+          <p>Created by</p>
+        </div>
+
+
+        <div class="center-block pl0 pr0">
+          <h1></h1>
+          <p>Dealer Name</p>
+        </div>
+
+        <div class="slab mt5">
+          <div class="slab-day">
+            <p></p>
+            <span>Total Item</span>
+          </div>
+          <div class="slab-day">
+            <p class="bold"></p>
+            <span>Total Item Qty</span>
+          </div>
+          <div class="slab-day">
+            <p class="bold"></p>
+            <span>Amount</span>
+          </div>
+        </div>
+        <div class="next-forword">
+          <i class="material-icons">chevron_right</i>
+        </div>
+      </div>
+    </div>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    <ion-fab right bottom>
+      <button ion-fab color="primary" (click)="add_page()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-fab>
+    <div class="nothing-here" style="height: 60%;">
+      <div class="outer">
+        <div class="innear">
+          <img src="assets/imgs/no_found.svg" alt="">
+          <p>No Data Available</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ion-content>

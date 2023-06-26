@@ -48,6 +48,8 @@ import { Storage } from '@ionic/storage';
 import { SelectRegistrationTypePage } from '../select-registration-type/select-registration-type';
 import { OpenNativeSettings } from '@ionic-native/open-native-settings';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { ComplaintHistoryPage } from '../complaints/complaint-history/complaint-history';
+import { InstallationListPage } from '../installation/installation-list/installation-list';
 
 @IonicPage()
 @Component({
@@ -163,6 +165,18 @@ export class DealerHomePage {
         goToSurvey() {
             this.navCtrl.push(SurveyListPage)
         }
+
+        goToComplaint() {
+            this.navCtrl.push(ComplaintHistoryPage)
+        }
+        goToInstallation() {
+            this.navCtrl.push(InstallationListPage)
+        }
+        goToWarranty() {
+            this.navCtrl.push(SurveyListPage)
+        }
+
+        
         
         goToVideo() {
             this.navCtrl.push(LoyaltyVideoPage)

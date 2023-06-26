@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, Loading, LoadingController } from 'ionic-angular';
 import { ComplaintDetailPage} from '../../complaints/complaint-detail/complaint-detail';
 import { DbserviceProvider } from '../../../providers/dbservice/dbservice';
+import { AddNewComplaintPage } from '../add-new-complaint/add-new-complaint';
 
 
 /**
@@ -107,6 +108,10 @@ export class ComplaintHistoryPage {
           buttons: ['OK']
         });
         alert.present();
+      }
+
+      add_order() {
+        this.navCtrl.push(AddNewComplaintPage);
       }
       
     }
