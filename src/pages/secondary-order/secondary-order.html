@@ -59,6 +59,7 @@
 
 
     <div class="pl16 pr16 mt15 mb50" *ngIf="total_order?.length && !search.date">
+      
 
       <div class="attendance-list" *ngFor="let row of total_order" (click)="goOnOrderDetailFromDrLogin(row.id)">
         <div class="slab slab-bg">

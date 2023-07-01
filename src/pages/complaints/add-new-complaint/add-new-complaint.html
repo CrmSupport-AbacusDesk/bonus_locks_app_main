@@ -1,4 +1,4 @@
-<ion-header class="main-header remove">
+<ion-header>
     <ion-navbar>
         <ion-title>Add New Complaint</ion-title>
     </ion-navbar>
@@ -20,7 +20,8 @@
                 
                 <ion-item [ngClass]="{'error':f.submitted && mobile?.invalid}" style="background: transparent !important;">
                     <ion-label floating><span>Mobile Number</span> </ion-label>
-                    <ion-input type="text" name="mobile" #mobile="ngModel" [(ngModel)]="form.mobile" required></ion-input>
+                    <ion-input type="text" name="mobile" #mobile="ngModel" [(ngModel)]="form.mobile" minlength="10"
+                    maxlength="10" required></ion-input>
                 </ion-item>
                 <div *ngIf="f.submitted &&mobile.invalid" class="eror">
                     <p *ngIf="mobile.errors.required">{{'Mobile Number is Required'}}</p>

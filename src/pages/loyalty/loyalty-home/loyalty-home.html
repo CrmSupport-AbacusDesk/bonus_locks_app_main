@@ -100,6 +100,29 @@
                 {{'Redeem Points'}}
             </div>
 
+            <!-- <div class="outline-btn" (click)="goToWarranty()">
+                <i class="material-icons">fact_check</i>
+                {{'Warranty'}}
+            </div> -->
+
+
+            <div class="outline-btn" (click)="goToComplaint()">
+                <i class="material-icons">support_agent</i>
+                {{'Complaint'}}
+            </div>
+
+            <div class="outline-btn" (click)="goToInstallation()">
+                <i class="material-icons">construction</i>
+                {{'Installation'}}
+            </div>
+
+            <!-- <div class="outline-btn" (click)="goToInstallation()">
+                <i class="material-icons">ballot</i>
+                {{'Inspection'}}
+            </div> -->
+
+            
+
             <div class="outline-btn" (click)="goToTracker();"
                 *ngIf="pointRight.scanning_rights == 'Yes' || pointRight.point_transfer_rights == 'Yes' ">
                 <i class="material-icons">fmd_good</i>

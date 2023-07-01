@@ -156,42 +156,36 @@
 
     <div class="pl16 pr16 mt15 mb50">
 
-      <div class="attendance-list" *ngFor="let row of total_order" (click)="goOnOrderDetailFromDrLogin(row.id)">
-        <div class="slab slab-bg">
+      <div class="attendance-list" (click)="goCompalintDetail()">
+        <div class="slab slab-bg" style="display: flex; justify-content: space-between;">
           <div class="slab-day">
-            <p></p>
+            <p>2023-06-15 16:47:53</p>
             <span>Date</span>
           </div>
           <div class="slab-day">
-            <p></p>
-            <span>Order Id</span>
+            <p>#comp123</p>
+            <span>Complaint Id</span>
           </div>
         </div>
 
         <div class="center-block">
           <div class="circle"></div>
-          <h1></h1>
+          <h1>Dealer</h1>
           <p>Created by</p>
-        </div>
-
-
-        <div class="center-block pl0 pr0">
-          <h1></h1>
-          <p>Dealer Name</p>
         </div>
 
         <div class="slab mt5">
           <div class="slab-day">
-            <p>67</p>
-            <span>Total Item</span>
+            <p>RAJ</p>
+            <span>Customer Name</span>
           </div>
           <div class="slab-day">
-            <p class="bold">4</p>
-            <span>Total Item Qty</span>
+            <p class="bold">1234567890</p>
+            <span>Customer Mobile No.</span>
           </div>
           <div class="slab-day">
-            <p class="bold">1234</p>
-            <span>Amount</span>
+            <p class="bold">Pending</p>
+            <span>Complaint Status</span>
           </div>
         </div>
         <div class="next-forword">
@@ -204,7 +198,7 @@
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
     <ion-fab right bottom>
-      <button ion-fab color="primary" (click)="add_order()">
+      <button ion-fab color="primary" (click)="addComplaint()">
         <ion-icon name="add"></ion-icon>
       </button>
     </ion-fab>
