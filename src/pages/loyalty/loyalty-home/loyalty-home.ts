@@ -27,6 +27,8 @@ import { AnnouncementNoticesListPage } from '../../announcement-notices-list/ann
 import { ViewProfilePage } from '../../view-profile/view-profile';
 import { ProductsPage } from '../../products/products';
 import { LoyaltyGiftGalleryDetailPage } from '../loyalty-gift-gallery-detail/loyalty-gift-gallery-detail';
+import { ComplaintHistoryPage } from '../../complaints/complaint-history/complaint-history';
+import { InstallationListPage } from '../../installation/installation-list/installation-list';
 
 
 @IonicPage()
@@ -46,371 +48,382 @@ export class LoyaltyHomePage {
   filter: any = {};
   giftMasterList: any = [];
   contact: any = {}
-
+  
   constructor(public navCtrl: NavController, public events: Events, public modalCtrl: ModalController,
     public storage: Storage, public alertCtrl: AlertController, private barcodeScanner: BarcodeScanner,
     public service: MyserviceProvider, public loadingCtrl: LoadingController, public db: DbserviceProvider,
     public constant: ConstantProvider, public navParams: NavParams, public platform: Platform,
     public openNativeSettings: OpenNativeSettings, public locationAccuracy: LocationAccuracy, public geolocation: Geolocation) {
-    this.uploadurl = constant.upload_url1 + 'influencer_doc/';
-    this.bannerURL = constant.upload_url1 + 'banner/';
-  }
-
-  ionViewWillEnter() {
-    this.influencerDetail();
-    this.contactDetails();
-  }
-
-
-
-  doRefresh(refresher) {
-    this.influencerDetail();
-    refresher.complete();
-  }
-
-
-  contactDetails() {
-    this.service.presentLoading();
-    this.service.addData({}, 'AppContactUs/contactDetail').then((result) => {
-      if (result['statusCode'] == 200) {
-        this.contact = result['contact_detail'];
-        this.service.dismissLoading();
-      }
-      else {
-        this.service.errorToast(result['statusMsg']);
-        this.service.dismissLoading();
-      }
-    });
-  }
-  pointRight: any = {};
-
-  influencerDetail() {
-    this.skLoading = true
-    this.service.addData({ dr_id: this.constant.UserLoggedInData.id, type: this.constant.UserLoggedInData.type }, 'login/login_data').then((res) => {
-      if (res['statusCode'] == 200) {
-        this.skLoading = false
-        this.influencer_detail = res['loginData']['login_data'];
-        this.pointRight = res['loginData'];
-        this.getGiftList('');
-      } else {
-        this.skLoading = false
-        this.service.errorToast(res['statusMsg'])
-      }
-      if (this.pointRight.login_status == 'Inactive') {
-        this.storage.set('token', '');
-        this.storage.set('role', '');
-        this.storage.set('displayName', '');
-        this.storage.set('role_id', '');
-        this.storage.set('name', '');
-        this.storage.set('type', '');
-        this.storage.set('token_value', '');
-        this.storage.set('userId', '');
-        this.storage.set('token_info', '');
-        this.constant.UserLoggedInData = {};
-        this.constant.UserLoggedInData.userLoggedInChk = false;
-        this.events.publish('data', '1', Date.now());
-        this.navCtrl.setRoot(SelectRegistrationTypePage);
-      }
-      this.bannerDetail();
-    }, err => {
-    })
-  }
-
-
-
-
-
-  bannerDetail() {
-    this.service.addData({}, 'AppInfluencer/bannerList').then((result) => {
-      if (result['statusCode'] == 200) {
-        this.appbanner = result['banner_list'];
-      }
-      else {
-        this.service.errorToast(result['statusMsg']);
-      }
-    });
-  }
-
-  getGiftList(search) {
-    this.filter.limit = 50;
-    this.filter.start = 0;
-    this.filter.search = search;
-    this.filter.redeemable = '';
-    // this.service.presentLoading();
-    this.service.addData({ 'filter': this.filter }, 'AppGiftGallery/giftGalleryList').then((result) => {
-      if (result['statusCode'] == 200) {
-        this.giftMasterList = result['gift_master_list'];
-      }
-      else {
-        this.service.errorToast(result['statusMsg']);
-      }
-    }, error => {
-      this.service.Error_msg(error);
-    });
-  }
-
-  lat:any;
+      this.uploadurl = constant.upload_url1 + 'influencer_doc/';
+      this.bannerURL = constant.upload_url1 + 'banner/';
+    }
+    
+    ionViewWillEnter() {
+      this.influencerDetail();
+      this.contactDetails();
+    }
+    
+    
+    
+    doRefresh(refresher) {
+      this.influencerDetail();
+      refresher.complete();
+    }
+    
+    
+    contactDetails() {
+      this.service.presentLoading();
+      this.service.addData({}, 'AppContactUs/contactDetail').then((result) => {
+        if (result['statusCode'] == 200) {
+          this.contact = result['contact_detail'];
+          this.service.dismissLoading();
+        }
+        else {
+          this.service.errorToast(result['statusMsg']);
+          this.service.dismissLoading();
+        }
+      });
+    }
+    pointRight: any = {};
+    
+    influencerDetail() {
+      this.skLoading = true
+      this.service.addData({ dr_id: this.constant.UserLoggedInData.id, type: this.constant.UserLoggedInData.type }, 'login/login_data').then((res) => {
+        if (res['statusCode'] == 200) {
+          this.skLoading = false
+          this.influencer_detail = res['loginData']['login_data'];
+          this.pointRight = res['loginData'];
+          this.getGiftList('');
+        } else {
+          this.skLoading = false
+          this.service.errorToast(res['statusMsg'])
+        }
+        if (this.pointRight.login_status == 'Inactive') {
+          this.storage.set('token', '');
+          this.storage.set('role', '');
+          this.storage.set('displayName', '');
+          this.storage.set('role_id', '');
+          this.storage.set('name', '');
+          this.storage.set('type', '');
+          this.storage.set('token_value', '');
+          this.storage.set('userId', '');
+          this.storage.set('token_info', '');
+          this.constant.UserLoggedInData = {};
+          this.constant.UserLoggedInData.userLoggedInChk = false;
+          this.events.publish('data', '1', Date.now());
+          this.navCtrl.setRoot(SelectRegistrationTypePage);
+        }
+        this.bannerDetail();
+      }, err => {
+      })
+    }
+    
+    
+    
+    
+    
+    bannerDetail() {
+      this.service.addData({}, 'AppInfluencer/bannerList').then((result) => {
+        if (result['statusCode'] == 200) {
+          this.appbanner = result['banner_list'];
+        }
+        else {
+          this.service.errorToast(result['statusMsg']);
+        }
+      });
+    }
+    
+    getGiftList(search) {
+      this.filter.limit = 50;
+      this.filter.start = 0;
+      this.filter.search = search;
+      this.filter.redeemable = '';
+      // this.service.presentLoading();
+      this.service.addData({ 'filter': this.filter }, 'AppGiftGallery/giftGalleryList').then((result) => {
+        if (result['statusCode'] == 200) {
+          this.giftMasterList = result['gift_master_list'];
+        }
+        else {
+          this.service.errorToast(result['statusMsg']);
+        }
+      }, error => {
+        this.service.Error_msg(error);
+      });
+    }
+    
+    lat:any;
     long:any;
-  scan_tips()
-  {
+    scan_tips()
+    {
       this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
       .then(() => {
-          let options = {
-              maximumAge: 10000, timeout: 15000, enableHighAccuracy: true
-          };
-          this.geolocation.getCurrentPosition(options)
-          .then((resp) => {
-              this.lat = resp.coords.latitude
-              this.long = resp.coords.longitude
-              console.log(this.lat + 'lat');
-              console.log(this.lat + 'long');
-
-              
-              if(this.lat == null && this.long == null){
-                  console.log("null lat",this.lat);
-                  
-              }
-              else{
-                  this.Scaning();
-                  //  let options: NativeGeocoderOptions = {
-                  //     useLocale: true,
-                  //     maxResults: 10
-                  //     };
-                  
-                  // this.nativeGeocoder.reverseGeocode(this.lat, this.long,options)
-                  // .then((result: NativeGeocoderReverseResult[]) => 
-                
-                  // this.address = this.generateAddress(result[0]),
-                 
-                  
-                  // ))
-                  
-                  // .catch((error: any) => console.log(error));
-                  
-              }
-              
-              
-          },
-          error => {
-              console.log('Error requesting location permissions', error);
-              if(error){
-                  let alert = this.alertCtrl.create({
-                      title:'Alert!',
-                      cssClass:'action-close',
-                      subTitle:"Enable to get your location so, can't scan",
-                      buttons: ['OK']
-                  });
-                  alert.present();  
-              }
-              
-          });
-      });
-  }
-
-
-
-  Scaning() {
-    console.log('scanfuntion');
-    
-    const options: BarcodeScannerOptions = {
-      prompt: ""
-    };
-    this.barcodeScanner.scan(options).then(resp => {
-      this.qr_code = resp.text;
-      if (resp.text != '') {
-        this.service.presentLoading();
-        // 'lat':28.3976584 , 'lng':77.3097745
-        this.service.addData({ 'coupon_code': this.qr_code,'lat':this.lat , 'lng':this.long }, 'AppCouponScan/couponCodeScan').then((r: any) => {
-          if (r['statusCode'] == 200 && r['bonus_point'] > 0) {
-            this.service.successToast((r['coupon_point'] + r['bonus_point']) + " points has been added into your wallet");
-            this.service.dismissLoading();
-            setTimeout(() => {
-              this.Scaning()
-            }, 800);
+        let options = {
+          maximumAge: 10000, timeout: 15000, enableHighAccuracy: true
+        };
+        this.geolocation.getCurrentPosition(options)
+        .then((resp) => {
+          this.lat = resp.coords.latitude
+          this.long = resp.coords.longitude
+          console.log(this.lat + 'lat');
+          console.log(this.lat + 'long');
+          
+          
+          if(this.lat == null && this.long == null){
+            console.log("null lat",this.lat);
+            
           }
-          else if (r['statusCode'] == 200) {
-            this.service.successToast(r['coupon_point'] + " points has been added into your wallet");
-            this.service.dismissLoading();
-            setTimeout(() => {
-              this.Scaning();
-            }, 800);
+          else{
+            this.Scaning();
+            //  let options: NativeGeocoderOptions = {
+            //     useLocale: true,
+            //     maxResults: 10
+            //     };
+            
+            // this.nativeGeocoder.reverseGeocode(this.lat, this.long,options)
+            // .then((result: NativeGeocoderReverseResult[]) => 
+            
+            // this.address = this.generateAddress(result[0]),
+            
+            
+            // ))
+            
+            // .catch((error: any) => console.log(error));
+            
           }
-          else {
-            this.service.dismissLoading();
-            let Message = r['statusMsg']
+          
+          
+        },
+        error => {
+          console.log('Error requesting location permissions', error);
+          if(error){
             let alert = this.alertCtrl.create({
-              enableBackdropDismiss: false,
-              title: 'Alert !',
-              message: Message,
-              cssClass: 'alert-modal',
-              buttons: [
-                {
-                  text: 'Cancel',
-                  handler: () => {
-                  }
-                },
-                {
-                  text: 'Try Again',
-                  handler: () => {
-                    this.Scaning()
-                  }
-                }
-              ]
+              title:'Alert!',
+              cssClass:'action-close',
+              subTitle:"Enable to get your location so, can't scan",
+              buttons: ['OK']
             });
-            alert.present();
+            alert.present();  
           }
-        }, err => {
-          this.service.dismissLoading();
-          this.service.Error_msg(err)
+          
         });
+      });
+    }
+    
+    
+    
+    Scaning() {
+      console.log('scanfuntion');
+      
+      const options: BarcodeScannerOptions = {
+        prompt: ""
+      };
+      this.barcodeScanner.scan(options).then(resp => {
+        this.qr_code = resp.text;
+        if (resp.text != '') {
+          this.service.presentLoading();
+          // 'lat':28.3976584 , 'lng':77.3097745
+          this.service.addData({ 'coupon_code': this.qr_code,'lat':this.lat , 'lng':this.long }, 'AppCouponScan/couponCodeScan').then((r: any) => {
+            if (r['statusCode'] == 200 && r['bonus_point'] > 0) {
+              this.service.successToast((r['coupon_point'] + r['bonus_point']) + " points has been added into your wallet");
+              this.service.dismissLoading();
+              setTimeout(() => {
+                this.Scaning()
+              }, 800);
+            }
+            else if (r['statusCode'] == 200) {
+              this.service.successToast(r['coupon_point'] + " points has been added into your wallet");
+              this.service.dismissLoading();
+              setTimeout(() => {
+                this.Scaning();
+              }, 800);
+            }
+            else {
+              this.service.dismissLoading();
+              let Message = r['statusMsg']
+              let alert = this.alertCtrl.create({
+                enableBackdropDismiss: false,
+                title: 'Alert !',
+                message: Message,
+                cssClass: 'alert-modal',
+                buttons: [
+                  {
+                    text: 'Cancel',
+                    handler: () => {
+                    }
+                  },
+                  {
+                    text: 'Try Again',
+                    handler: () => {
+                      this.Scaning()
+                    }
+                  }
+                ]
+              });
+              alert.present();
+            }
+          }, err => {
+            this.service.dismissLoading();
+            this.service.Error_msg(err)
+          });
+        }
+        else {
+        }
+      }, err => {
+        console.log(err)
+        this.service.dismissLoading()
+        this.presentConfirm('Turn On Camera permisssion !', 'please go to <strong>Settings</strong> -> Camera to turn on <strong>Camera permission</strong>')
+      })
+    }
+    presentConfirm(title, msg) {
+      let alert = this.alertCtrl.create({
+        enableBackdropDismiss: false,
+        title: title,
+        message: msg,
+        cssClass: 'alert-modal',
+        
+        buttons: [
+          {
+            text: 'Cancel',
+            handler: () => {
+            }
+          },
+          {
+            text: 'Settings',
+            handler: () => {
+              this.openSettings()
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+    
+    
+    alertPresent(msg) {
+      let alert = this.alertCtrl.create({
+        title: '',
+        subTitle: msg + `<a href=tel:${this.contact.contact_number}>${this.contact.contact_number}</a>`,
+        buttons: [
+          {
+            text: 'Okay',
+            handler: () => {
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+    openSettings() {
+      this.openNativeSettings.open("application_details")
+    }
+    
+    goOnPointeListPage() {
+      this.navCtrl.push(LoyaltyPointHistoryPage)
+    }
+    
+    goToBonusPoint() {
+      this.navCtrl.push(BonusPointPage)
+    }
+    goToSurvey() {
+      this.navCtrl.push(SurveyListPage)
+    }
+    goToProfile() {
+      this.navCtrl.push(LoyaltyProfilePage)
+    }
+    
+    goToAbout() {
+      this.navCtrl.push(LoyaltyAboutPage)
+    }
+    goToContact() {
+      this.navCtrl.push(LoyaltyContactPage)
+    }
+    goToVideo() {
+      this.navCtrl.push(LoyaltyVideoPage)
+    }
+    goToTracker() {
+      this.navCtrl.push(LoyaltyGiftTrackerPage)
+    }
+    
+    goToComplaint() {
+      this.navCtrl.push(ComplaintHistoryPage)
+    }
+    
+    goToInstallation() {
+      this.navCtrl.push(InstallationListPage)
+    }
+    // goToWarranty() {
+    //   this.navCtrl.push(SurveyListPage)
+    // }
+    
+    goSiteListPage(moduleName, scanRight, pointsRight, type) {
+      this.navCtrl.push(SiteListPage, { 'userType': "Influencer", 'moduleName': moduleName, 'scanRight': scanRight, 'type': type, 'pointsRight': pointsRight })
+    }
+    
+    goToGift() {
+      if (this.influencer_detail.status == 'Pending') {
+        this.alertPresent("Your current profile status is  <strong class=Pending>“Pending”</strong>. You can see the Redeem Points only if your profile status is <strong class=Approved>“Approved”</strong>. To know more, you can call us at ",)
+        return
+      }
+      else if (this.influencer_detail.status == 'Reject') {
+        this.alertPresent("Your current profile status is  <strong class=Reject>“Reject”</strong>. You can see the gift gallery only if your profile status is <strong class=Approved>“Approved”</strong>. To know more, you can call us at ");
+        return;
       }
       else {
+        this.alertPresent("Your current profile status is  <strong class=Suspect>“Suspect”</strong>. You can see the Redeem Points only if your profile status is <strong class=Approved>“Approved”</strong>. To know more, you can call us at ")
+        return
       }
-    }, err => {
-      console.log(err)
-      this.service.dismissLoading()
-      this.presentConfirm('Turn On Camera permisssion !', 'please go to <strong>Settings</strong> -> Camera to turn on <strong>Camera permission</strong>')
-    })
-  }
-  presentConfirm(title, msg) {
-    let alert = this.alertCtrl.create({
-      enableBackdropDismiss: false,
-      title: title,
-      message: msg,
-      cssClass: 'alert-modal',
-
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: () => {
-          }
-        },
-        {
-          text: 'Settings',
-          handler: () => {
-            this.openSettings()
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
-
-
-  alertPresent(msg) {
-    let alert = this.alertCtrl.create({
-      title: '',
-      subTitle: msg + `<a href=tel:${this.contact.contact_number}>${this.contact.contact_number}</a>`,
-      buttons: [
-        {
-          text: 'Okay',
-          handler: () => {
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
-  openSettings() {
-    this.openNativeSettings.open("application_details")
-  }
-
-  goOnPointeListPage() {
-    this.navCtrl.push(LoyaltyPointHistoryPage)
-  }
-
-  goToBonusPoint() {
-    this.navCtrl.push(BonusPointPage)
-  }
-  goToSurvey() {
-    this.navCtrl.push(SurveyListPage)
-  }
-  goToProfile() {
-    this.navCtrl.push(LoyaltyProfilePage)
-  }
-
-  goToAbout() {
-    this.navCtrl.push(LoyaltyAboutPage)
-  }
-  goToContact() {
-    this.navCtrl.push(LoyaltyContactPage)
-  }
-  goToVideo() {
-    this.navCtrl.push(LoyaltyVideoPage)
-  }
-  goToTracker() {
-    this.navCtrl.push(LoyaltyGiftTrackerPage)
-  }
-
-  goSiteListPage(moduleName, scanRight, pointsRight, type) {
-    this.navCtrl.push(SiteListPage, { 'userType': "Influencer", 'moduleName': moduleName, 'scanRight': scanRight, 'type': type, 'pointsRight': pointsRight })
-  }
-
-  goToGift() {
-    if (this.influencer_detail.status == 'Pending') {
-      this.alertPresent("Your current profile status is  <strong class=Pending>“Pending”</strong>. You can see the Redeem Points only if your profile status is <strong class=Approved>“Approved”</strong>. To know more, you can call us at ",)
-      return
+      
     }
-    else if (this.influencer_detail.status == 'Reject') {
-      this.alertPresent("Your current profile status is  <strong class=Reject>“Reject”</strong>. You can see the gift gallery only if your profile status is <strong class=Approved>“Approved”</strong>. To know more, you can call us at ");
-      return;
+    
+    goToDetail() {
+      if (this.giftMasterList.length == 0) {
+        this.alertPresent("No Gift Available ")
+        return
+      }
+      else if (this.giftMasterList.length == 1) {
+        this.navCtrl.push(LoyaltyGiftGalleryDetailPage, { 'id': this.giftMasterList[0].id })
+      } else {
+        this.navCtrl.push(LoyaltyGiftGalleryPage)
+      }
     }
-    else {
-      this.alertPresent("Your current profile status is  <strong class=Suspect>“Suspect”</strong>. You can see the Redeem Points only if your profile status is <strong class=Approved>“Approved”</strong>. To know more, you can call us at ")
-      return
+    
+    
+    goToCoupon() {
+      if (this.influencer_detail.status == 'Pending') {
+        this.alertPresent("Your current profile status is  <strong class=Pending>“Pending”</strong>. You can only enter the coupon codes when your profile status is <strong class=Approved>“Approved”</strong>. To know more, you can call us at ")
+        return
+      }
+      
+      else if (this.influencer_detail.status == 'Reject') {
+        this.alertPresent("Your current profile status is  <strong class=Reject>“Reject”</strong>. You can only enter the coupon codes when your profile status is <strong class=Approved>“Approved”</strong>. To know more, you can call us at ")
+        return
+      }
+      else if (this.influencer_detail.status == 'Suspect') {
+        this.alertPresent("Your current profile status is  <strong class=Suspect>“Suspect”</strong>. You can only enter the coupon codes when your profile status is <strong class=Approved>“Approved”</strong>. To know more, you can call us at ")
+        return
+      }
+      else {
+        this.navCtrl.push(LoyaltyEnterCouponCodePage, { 'type': '' })
+      }
     }
-
-  }
-
-  goToDetail() {
-    if (this.giftMasterList.length == 0) {
-      this.alertPresent("No Gift Available ")
-      return
+    
+    goOnDigitalcatPage() {
+      this.navCtrl.push(LoyaltyCataloguePage)
     }
-    else if (this.giftMasterList.length == 1) {
-      this.navCtrl.push(LoyaltyGiftGalleryDetailPage, { 'id': this.giftMasterList[0].id })
-    } else {
-      this.navCtrl.push(LoyaltyGiftGalleryPage)
+    
+    goToSupport() {
+      this.navCtrl.push(SupportListPage);
     }
-  }
-
-
-  goToCoupon() {
-    if (this.influencer_detail.status == 'Pending') {
-      this.alertPresent("Your current profile status is  <strong class=Pending>“Pending”</strong>. You can only enter the coupon codes when your profile status is <strong class=Approved>“Approved”</strong>. To know more, you can call us at ")
-      return
+    
+    announcementModal() {
+      this.navCtrl.push(AnnouncementNoticesListPage);
     }
-
-    else if (this.influencer_detail.status == 'Reject') {
-      this.alertPresent("Your current profile status is  <strong class=Reject>“Reject”</strong>. You can only enter the coupon codes when your profile status is <strong class=Approved>“Approved”</strong>. To know more, you can call us at ")
-      return
+    imageModal(src) {
+      this.modalCtrl.create(ViewProfilePage, { "Image": src }).present();
     }
-    else if (this.influencer_detail.status == 'Suspect') {
-      this.alertPresent("Your current profile status is  <strong class=Suspect>“Suspect”</strong>. You can only enter the coupon codes when your profile status is <strong class=Approved>“Approved”</strong>. To know more, you can call us at ")
-      return
+    
+    goOnProductPage() {
+      this.navCtrl.push(ProductsPage, { 'mode': 'home' });
     }
-    else {
-      this.navCtrl.push(LoyaltyEnterCouponCodePage, { 'type': '' })
-    }
+    
   }
-
-  goOnDigitalcatPage() {
-    this.navCtrl.push(LoyaltyCataloguePage)
-  }
-
-  goToSupport() {
-    this.navCtrl.push(SupportListPage);
-  }
-
-  announcementModal() {
-    this.navCtrl.push(AnnouncementNoticesListPage);
-  }
-  imageModal(src) {
-    this.modalCtrl.create(ViewProfilePage, { "Image": src }).present();
-  }
-
-  goOnProductPage() {
-    this.navCtrl.push(ProductsPage, { 'mode': 'home' });
-  }
-
-}

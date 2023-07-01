@@ -4,9 +4,9 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header class="main-header remove">
+<ion-header>
   <ion-navbar>
-    <ion-title> {{complaint_detail.complaint_type }} Request Detail</ion-title>
+    <ion-title>Complaint Detail</ion-title>
 
     <!-- <div class="header-icons"  >
 			<button ion-button class="cs-hd-img mr16" (click)="cancelComplaint('amount')">
@@ -29,7 +29,6 @@
         <h4>OTP</h4>
         <p><span>:</span> {{complaint_detail.otp}}</p>
       </li>
-      
       <li>
         <h4 *ngIf="complaint_detail.nature_problem != 'Installation'"> Nature Problem</h4>
         <h4 *ngIf="complaint_detail.nature_problem == 'Installation'"> Remark</h4>

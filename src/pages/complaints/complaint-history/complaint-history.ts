@@ -110,8 +110,12 @@ export class ComplaintHistoryPage {
         alert.present();
       }
 
-      add_order() {
+      addComplaint() {
         this.navCtrl.push(AddNewComplaintPage);
+      }
+
+      goCompalintDetail() {
+        this.navCtrl.push(ComplaintDetailPage)
       }
       
     }
