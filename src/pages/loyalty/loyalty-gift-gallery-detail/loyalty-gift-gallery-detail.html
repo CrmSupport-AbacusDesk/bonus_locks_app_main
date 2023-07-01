@@ -48,20 +48,33 @@
                     </ion-select>
                 </ion-item>
                 
-                <ion-item *ngIf="data.payment_mode=='Paytm'">
+                <!-- <ion-item *ngIf="data.payment_mode=='Paytm'">
                     <ion-label floating>{{'Enter Paytm No.'}}<span>*</span></ion-label>
                     <ion-input type="text" name="wallet_no" #wallet_no="ngModel" [(ngModel)]="data.wallet_no" minlength="10"
                     maxlength="10" (keypress)="mobileNoCheck($event)"></ion-input>
-                </ion-item>
+                </ion-item> -->
                 
-                <ion-item *ngIf="influencer_point.country=='nepal'">
+                <!-- <ion-item *ngIf="influencer_point.country=='nepal'">
                     <ion-label floating>{{'Enter Khalti No.'}}<span>*</span></ion-label>
                     <ion-input type="text" name="wallet_no" #wallet_no="ngModel" [(ngModel)]="data.wallet_no" minlength="10"
                     maxlength="10" (keypress)="mobileNoCheck($event)"></ion-input>
-                </ion-item>
+                </ion-item> -->
             </ion-list>
         </div>
-        <ng-container *ngIf="data.payment_mode =='Bank' && (influencer_point.payout_kyc_status == '' ||  influencer_point.payout_kyc_status == 'Reject')">
+        <ng-container *ngIf="data.payment_mode =='Bank' && !influencer_point.account_no && !influencer_point.ifsc_code">
+            <div class="error-bg kyc-pending">
+                <ng-container>
+                    Your Bank Detail Is Not Updated. Please Update Bank Detail<a class="kyc-reject-text"
+                    (click)="updateBankDetail()"> Update Now</a>
+                </ng-container>
+                <!-- <ng-container *ngIf="influencer_point.payout_kyc_status == 'Reject'">
+                    Your Bank Detail Is Rejected Due To <strong>{{influencer_point.payout_kyc_pending_reason.replaceAll('_', ' ') | titlecase}}</strong> . Please Update Bank Detail<a class="kyc-reject-text"
+                    (click)="updateBankDetail()">Update Now</a>
+                </ng-container> -->
+            </div>
+        </ng-container>
+
+        <!-- <ng-container *ngIf="data.payment_mode =='Bank' && (influencer_point.payout_kyc_status == '' ||  influencer_point.payout_kyc_status == 'Reject')">
             <div class="error-bg" [ngClass]="{'kyc-reject': influencer_point.payout_kyc_status == '' || influencer_point.payout_kyc_status == 'Reject'}">
                 <ng-container *ngIf="influencer_point.payout_kyc_status == ''">
                     Your Bank Detail Is Not Updated. Please Update Bank Detail<a class="kyc-reject-text"
@@ -72,14 +85,18 @@
                     (click)="updateBankDetail()">Update Now</a>
                 </ng-container>
             </div>
-        </ng-container>
-        <ng-container *ngIf="data.payment_mode =='Bank' && (influencer_point.payout_kyc_status == 'Pending')">
+        </ng-container> -->
+        <!-- <ng-container *ngIf="data.payment_mode =='Bank' && (influencer_point.payout_kyc_status == 'Pending')">
             <div class="error-bg" [ngClass]="{'kyc-pending': influencer_point.payout_kyc_status == 'Pending'}">
                 Your KYC status is {{influencer_point.kyc_status}}. After KYC is Verified send redeem request. For more information contact us at {{contact.contact_number}}
             </div>
-        </ng-container>
+        </ng-container> -->
         
-        <button ion-button round block color="secondary" [disabled]="userTypeID != '3' && (influencer_point.country=='india'  ? (data.payment_mode=='Bank' ?  (influencer_point.payout_kyc_status!='Approved') : !data.wallet_no.length) : !data.wallet_no)" (click)="SendRequest()">
+        <!-- <button ion-button round block color="secondary" [disabled]="userTypeID != '3' && (influencer_point.country=='india'  ? (data.payment_mode=='Bank' ?  (influencer_point.payout_kyc_status!='Approved') : !data.wallet_no.length) : !data.wallet_no)" (click)="SendRequest()">
+            Send Redeem Request
+        </button> -->
+
+        <button ion-button round block color="secondary" [disabled]="userTypeID != '3' || !data.payment_mode || !influencer_point.account_no || !influencer_point.ifsc_code" (click)="SendRequest()">
             Send Redeem Request
         </button>
     </div>

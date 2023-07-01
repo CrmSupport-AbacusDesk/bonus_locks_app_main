@@ -71,9 +71,10 @@ export class LoyaltyGiftGalleryDetailPage {
         this.influencer_point = result['detail'];
         console.log(this.influencer_point);
         
-        if(this.influencer_point.country=='india'){
-          this.data.wallet_no = this.influencer_point.paytm_mobile_no.toString();
-        }
+        // if(this.influencer_point.country=='india' || this.influencer_point.country=='India'){
+        //   this.data.wallet_no = this.influencer_point.paytm_mobile_no.toString();
+        // }
+        this.data.payment_mode = 'Bank';
         this.data.cash_point = this.gift_detail.range_start;
         this.data.cash_value = Number(this.gift_detail.range_start) * Number(this.gift_detail.point_range_value);
         
@@ -124,15 +125,15 @@ export class LoyaltyGiftGalleryDetailPage {
         return
       }
       
-      if (!this.data.payment_mode && (this.influencer_point.country && this.influencer_point.country.toLowerCase() == 'india')) {
+      if (!this.data.payment_mode && (this.influencer_point.country && (this.influencer_point.country.toLowerCase() == 'india' || this.influencer_point.country.toLowerCase() == 'India'))) {
         this.service.errorToast('Please Select Payment Mode First');
         return
       }
       
-      if ( parseInt(this.data.wallet_no.length)!=10 && this.data.payment_mode!='Bank' ) {
-        this.service.errorToast('Please Enter 10 Digit Mobile No.');
-        return
-      }
+      // if ( parseInt(this.data.wallet_no.length)!=10 && this.data.payment_mode!='Bank' ) {
+      //   this.service.errorToast('Please Enter 10 Digit Mobile No.');
+      //   return
+      // }
       
       if (parseFloat(this.data.cash_point) > parseFloat(this.influencer_point.wallet_point)) {
         this.service.errorToast('Insufficient point in your wallet');
@@ -140,6 +141,7 @@ export class LoyaltyGiftGalleryDetailPage {
       }
       else {
         this.navCtrl.push(LoyaltyRedeemRequestPage, { 'karigar_id': this.influencer_point.id, 'gift_id': this.gift_id, "mode": "reedeemPoint", 'offer_balance': this.offer_balance, 'cash_point': this.data.cash_point, 'gift_type': 'Cash', 'cash_value': this.data.cash_value, 'payment_mode': this.data.payment_mode || 'Khalti', 'wallet_no': this.data.wallet_no })
+        // this.navCtrl.push(LoyaltyRedeemRequestPage, { 'karigar_id': this.influencer_point.id, 'gift_id': this.gift_id, "mode": "reedeemPoint", 'offer_balance': this.offer_balance, 'cash_point': this.data.cash_point, 'gift_type': 'Cash', 'cash_value': this.data.cash_value, 'payment_mode': this.data.payment_mode || 'Khalti', 'wallet_no': this.data.wallet_no })
       }
     }
     if (parseFloat(this.influencer_point.wallet_point) < parseFloat(this.gift_detail.gift_point)) {

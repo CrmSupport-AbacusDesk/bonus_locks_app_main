@@ -28,12 +28,15 @@ export class ProfilePage {
   loading:Loading;
   today_point:any='';
   last_point:any='';
+  upload_url: any = ''
   
   constructor(public navCtrl: NavController, public navParams: NavParams, public serve: MyserviceProvider,
     public service:DbserviceProvider,public loadingCtrl:LoadingController, public storage: Storage,
     public events: Events,public actionSheetController: ActionSheetController,
     private camera: Camera,public alertCtrl:AlertController,
     public modalCtrl: ModalController,public sanitizer: DomSanitizer,public constant : ConstantProvider){
+      this.upload_url = constant.retailer_doc;
+
       if(this.service.connection=='offline')
       {
         this.service.showOfflineAlert()
