@@ -6,6 +6,7 @@ import { DbserviceProvider } from '../../../providers/dbservice/dbservice';
 import { MyserviceProvider } from '../../../providers/myservice/myservice';
 import { RegistrationPage } from '../../login-section/registration/registration';
 import { LoyaltyRedeemRequestPage } from '../loyalty-redeem-request/loyalty-redeem-request';
+import {DealerDocumentsPage} from '../../login-section/dealer-documents/dealer-documents';
 
 
 @IonicPage()
@@ -16,6 +17,7 @@ import { LoyaltyRedeemRequestPage } from '../loyalty-redeem-request/loyalty-rede
 export class LoyaltyGiftGalleryDetailPage {
   gift_id: any = '';
   gift_detail: any = {};
+  gift_detail2: any = {};
   balance_point: any = '';
   loading: Loading;
   star: any = '';
@@ -30,7 +32,8 @@ export class LoyaltyGiftGalleryDetailPage {
   data: any = {};
   contact: any = {};
   userTypeID: any;
-  
+  dr_id:any;
+  type:any;
   
   constructor(public navCtrl: NavController, public navParams: NavParams, public service: MyserviceProvider, public loadingCtrl: LoadingController, private app: App, public storage: Storage, public db: DbserviceProvider, public constant: ConstantProvider, public toastCtrl: ToastController) {
     this.gift_id = this.navParams.get('id');
@@ -42,6 +45,9 @@ export class LoyaltyGiftGalleryDetailPage {
     console.log('Retailer ID - ' , this.userTypeID);
     
     this.getGiftDetail(this.gift_id);
+
+
+  
   }
   
   ionViewDidLoad() {
@@ -66,8 +72,11 @@ export class LoyaltyGiftGalleryDetailPage {
       if (result['statusCode'] == 200) {
         this.service.dismissLoading();
         this.gift_detail = result['gift_master_list'];
-        console.log(this.gift_detail);
-        
+        this.gift_detail2 = result['detail'];
+        this.dr_id = this.gift_detail2.id;
+        console.log(this.dr_id,' dealer id')
+        this.type = this.gift_detail2.type;
+        console.log(this.type,'type')
         this.influencer_point = result['detail'];
         console.log(this.influencer_point);
         
@@ -166,6 +175,12 @@ export class LoyaltyGiftGalleryDetailPage {
   updateBankDetail() {
     this.influencer_point.edit_profile = 'edit_profile';
     this.navCtrl.push(RegistrationPage, { 'data': this.influencer_point, "mode": 'edit_page' })
+  }
+  
+  updateDocs (){
+    console.log('open Dealer Document uploader page')
+    this.navCtrl.push(DealerDocumentsPage, {'dr_id': this.dr_id ,'type':'3' })
+    
   }
   
 }
