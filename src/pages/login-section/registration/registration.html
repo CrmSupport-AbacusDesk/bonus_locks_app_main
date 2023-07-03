@@ -8,7 +8,7 @@
     <form #f="ngForm" (ngSubmit)="f.form.valid && submit()">
         <div class="form">
             <ion-list no-lines class="padding10 pt0">
-                <div class="select-type" *ngIf="!data.exist_id">
+                <!-- <div class="select-type" *ngIf="!data.exist_id">
                     <ion-list-header class="heading mt0">
                         {{'Select Type'}}
                     </ion-list-header>
@@ -21,7 +21,7 @@
                             </ion-item>
                         </ng-container>
                     </ion-list>
-                </div>
+                </div> -->
                 
                 <ng-container *ngIf="data.type">
                     <ion-item *ngIf="data.profile">

@@ -67,12 +67,22 @@
                     Your Bank Detail Is Not Updated. Please Update Bank Detail<a class="kyc-reject-text"
                     (click)="updateBankDetail()"> Update Now</a>
                 </ng-container>
+             
                 <!-- <ng-container *ngIf="influencer_point.payout_kyc_status == 'Reject'">
                     Your Bank Detail Is Rejected Due To <strong>{{influencer_point.payout_kyc_pending_reason.replaceAll('_', ' ') | titlecase}}</strong> . Please Update Bank Detail<a class="kyc-reject-text"
                     (click)="updateBankDetail()">Update Now</a>
                 </ng-container> -->
             </div>
         </ng-container>
+        <ng-container *ngIf="this.userTypeID == '3'">
+            <div class="error-bg kyc-pending">
+                <ng-container *ngIf="this.userTypeID == '3'">
+                    Your Bank Detail Is Not Updated. Please Update Bank Detail<a class="kyc-reject-text"
+                    (click)="updateDocs()"> Update Now</a>
+                </ng-container>
+            </div>
+        </ng-container>
+   
 
         <!-- <ng-container *ngIf="data.payment_mode =='Bank' && (influencer_point.payout_kyc_status == '' ||  influencer_point.payout_kyc_status == 'Reject')">
             <div class="error-bg" [ngClass]="{'kyc-reject': influencer_point.payout_kyc_status == '' || influencer_point.payout_kyc_status == 'Reject'}">

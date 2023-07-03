@@ -173,6 +173,7 @@ import { ExpenseStatusModalPageModule } from '../pages/expense-status-modal/expe
 import { MobileLoginPageModule } from '../pages/login-section/mobile-login/mobile-login.module';
 import { OtpPageModule } from '../pages/login-section/otp/otp.module';
 import { RegistrationPageModule } from '../pages/login-section/registration/registration.module';
+import {DealerDocumentsPageModule} from '../pages/login-section/dealer-documents/dealer-documents.module'
 import { VisitingCardModalPageModule } from '../pages/visiting-card/visiting-card-modal/visiting-card-modal.module';
 import { FollowupDetailPageModule } from '../pages/followup-detail/followup-detail.module';
 import { RequirementPageModule } from '../pages/requirement/requirement.module';
@@ -291,6 +292,7 @@ import { AddInstallationPageModule } from '../pages/installation/add-installatio
         VisitingCardModalPageModule,
         OtpPageModule,
         RegistrationPageModule,
+        DealerDocumentsPageModule,
         MobileLoginPageModule,
         ExpenseStatusModalPageModule,
         ExpensePopoverPageModule,
