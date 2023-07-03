@@ -14,12 +14,12 @@ import { ComplaintHistoryPage } from '../complaint-history/complaint-history';
 // import { IonicSelectableComponent } from 'ionic-selectable';/
 
 /**
- * 
- * Generated class for the AddNewComplaintPage page.
- *,
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+* 
+* Generated class for the AddNewComplaintPage page.
+*,
+* See https://ionicframework.com/docs/components/#navigation for more info on
+* Ionic pages and navigation.
+*/
 
 @IonicPage()
 @Component({
@@ -27,36 +27,32 @@ import { ComplaintHistoryPage } from '../complaint-history/complaint-history';
   templateUrl: 'add-new-complaint.html',
 })
 export class AddNewComplaintPage {
-  complaint_data:any = {};
+  form:any = {};
   loading:Loading;
-  isCameraEnabled 		: boolean 	= false;
-  categoryArr:any = [];
-  subCategoryArr:any=[]
+  isCameraEnabled:boolean= false;
   productArr:any=[];
   districtList:any=[];
   stateList:any=[];
-  form:any={}
   savingFlag: boolean = false;
-
-
-  // fileChooser: any;
+  
+  
+  fileChooser: any;
   data:any={};
   constructor(public navCtrl: NavController, public navParams: NavParams,public actionSheetController: ActionSheetController, private camera: Camera ,public service:DbserviceProvider,public serve : MyserviceProvider ,public loadingCtrl:LoadingController , public alertCtrl:AlertController, private mediaCapture: MediaCapture ,private transfer: FileTransfer, public diagnostic  : Diagnostic, public androidPermissions: AndroidPermissions,public dom:DomSanitizer) {
     this.data.type  =this.navParams.get('type');
     console.log(this.navParams.data.type)
     console.log(this.navParams.get('type'))
     console.log(this.data.type);
-    this.getcategoryData();
     this.get_states();
-
+    
   }
-
+  
   ionViewDidLoad() {
-    this.getGeo();
+    // this.getGeo();
     console.log('ionViewDidLoad AddNewComplaintPage');
     this.isCameraAvailable();
   }
-
+  
   showAlert(text) {
     let alert = this.alertCtrl.create({
       title:'Alert!',
@@ -66,86 +62,29 @@ export class AddNewComplaintPage {
     });
     alert.present();
   }
-  getcategoryData()
-  {
-    this.service.post_rqst({},'app_karigar/getCategory').subscribe(r=>
-      {
-        console.log(r)
-        
-        this.categoryArr = r.categoryData;
-      },err=>
-      {
-        
-      })
-  }
-  getSubcategoryData(category)
-  {
-    console.log(category.main_category);
-    this.service.post_rqst({category:category.main_category},'app_karigar/getSubCategory').subscribe(r=>
-      {
-        console.log(r)
-        
-        this.subCategoryArr = r.subCategoryData;
-      },err=>
-      {
-        
-      })
-  }
-  getProductData(subcategory)
-  {
-    console.log(subcategory.id);
-    this.service.post_rqst({subcategory:subcategory.id},'app_karigar/getProduct').subscribe(r=>
-      {
-        console.log(r)
-        
-        this.productArr = r.productData;
-      },err=>
-      {
-        
-      })
-  }
-  getGeo()
-  {
-    
-    this.presentLoading() ;
-    this.service.post_rqst( {'id' : this.service.karigar_id },'app_karigar/getGeoLocation').subscribe( r  =>
-      {
-
-        this.loading.dismiss();
-        
-          if( r.status == 'NOT FOUND' ){
-            this.showAlert('Please Update GEO location!');
-            this.navCtrl.push(PointLocationPage);
-            return;
-          }
-
-
-          
-      });
-    }
-
+  
   isCameraAvailable()
   {
-     this.diagnostic.isCameraPresent()
-     .then((isAvailable : any) =>
-     {
-        this.isCameraEnabled = true;
-     })
-     .catch((error :any) =>
-     {
-        console.dir('Camera is:' + error);
-     });
+    this.diagnostic.isCameraPresent()
+    .then((isAvailable : any) =>
+    {
+      this.isCameraEnabled = true;
+    })
+    .catch((error :any) =>
+    {
+      console.dir('Camera is:' + error);
+    });
   }
   
- 
-
+  
+  
   captureMedia()
   {
     if(this.videoId)
     {
-        this.captureImageVideo();
+      this.captureImageVideo();
     }
-   else
+    else
     {
       let actionsheet = this.actionSheetController.create({
         title:"Upload",
@@ -160,15 +99,15 @@ export class AddNewComplaintPage {
             this.captureImageVideo();
           }
         },
-        {
-          cssClass: 'sheet-m1',
-          text: 'Video',
-          icon:'image',
-          handler: () => {
-            console.log("Video Clicked");
-            this.onGetCaptureVideoPermissionHandler();
-          }
-        },
+        // {
+        //   cssClass: 'sheet-m1',
+        //   text: 'Video',
+        //   icon:'image',
+        //   handler: () => {
+        //     console.log("Video Clicked");
+        //     this.onGetCaptureVideoPermissionHandler();
+        //   }
+        // },
         {
           cssClass: 'cs-cancel',
           text: 'Cancel',
@@ -181,320 +120,321 @@ export class AddNewComplaintPage {
       ]
     });
     actionsheet.present();
-
-    }
-  
+    
   }
+  
+}
 
+showLimit() {
+  console.log('Image Data', this.image_data)
+  let alert = this.alertCtrl.create({
+    title: 'Alert',
+    subTitle: "You can upload only 5 bill images",
+    cssClass: 'alert-modal',
 
-  captureImageVideo()
-  {
-    let actionsheet = this.actionSheetController.create({
-      title:"Complaint Media",
-      cssClass: 'cs-actionsheet',
-      
-      buttons:[{
-        cssClass: 'sheet-m',
-        text: 'Camera',
-        icon:'camera',
-        handler: () => {
-          console.log("Camera Clicked");
-          
-            this.takePhoto();
-        }
-      },
-      {
-        cssClass: 'sheet-m1',
-        text: 'Gallery',
-        icon:'image',
-        handler: () => {
-          console.log("Gallery Clicked");         
-            this.getImage();
-        }
-      },
-      {
-        cssClass: 'cs-cancel',
-        text: 'Cancel',
-        role: 'cancel',
-        icon:'cancel',
-        handler: () => {
-          console.log('Cancel clicked');
-        }
+    buttons: [{
+      text: 'Cancel',
+      role: 'cancel',
+      handler: () => {
+
       }
+    }
     ]
   });
-  actionsheet.present();
-  }
+  alert.present();
+}
+
+
+captureImageVideo()
+{
+  let actionsheet = this.actionSheetController.create({
+    title:"Complaint Media",
+    cssClass: 'cs-actionsheet',
+    
+    buttons:[{
+      cssClass: 'sheet-m',
+      text: 'Camera',
+      icon:'camera',
+      handler: () => {
+        console.log("Camera Clicked");
+        
+        this.takePhoto();
+      }
+    },
+    {
+      cssClass: 'sheet-m1',
+      text: 'Gallery',
+      icon:'image',
+      handler: () => {
+        console.log("Gallery Clicked");         
+        this.getImage();
+      }
+    },
+    {
+      cssClass: 'cs-cancel',
+      text: 'Cancel',
+      role: 'cancel',
+      icon:'cancel',
+      handler: () => {
+        console.log('Cancel clicked');
+      }
+    }
+  ]
+});
+actionsheet.present();
+}
 
 
 
 image:any='';
-  takePhoto()
-  {
-    console.log("i am in camera function");
-    const options: CameraOptions = {
-      quality: 70,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      targetWidth : 500,
-      targetHeight : 400
-    }
-    
-    console.log(options);
-    this.camera.getPicture(options).then((imageData) => {
-      this.image = 'data:image/jpeg;base64,' + imageData;
-      // this.image=  imageData;
-      // this.image= imageData.substr(imageData.lastIndexOf('/') + 1);
-      console.log(this.image);
-      if(this.image)
-      {
-          this.fileChange(this.image);
-      }
-    }, (err) => {
-    });
+takePhoto()
+{
+  console.log("i am in camera function");
+  const options: CameraOptions = {
+    quality: 70,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    targetWidth : 500,
+    targetHeight : 400
   }
-  getImage() 
-  {
-    const options: CameraOptions = {
-      quality: 70,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-      saveToPhotoAlbum:false
-    }
-    console.log(options);
-    this.camera.getPicture(options).then((imageData) => {
-      this.image= 'data:image/jpeg;base64,' + imageData;
-      // this.image=  imageData;
-      // this.image= imageData.substr(imageData.lastIndexOf('/') + 1);
-      console.log(this.image);
-      if(this.image)
-      {
-          this.fileChange(this.image);
-      }
-    }, (err) => {
-    });
-  }
-
-  videoId: any;
-  flag_upload = true;
-  flag_play = true;
-  getVideo()
-   {
-    // this.fileChooser.open()
-    // .then(uri => {
-    // this.videoId = uri;
-    // this.flag_play = false;
-    // this.flag_upload = false;
-    // })
-    // .catch(e => console.log(e));
-    }
-
-
- 
-
-  image_data:any=[];
- 
-
-  fileChange(img)
- {
-
-     this.image_data.push(img);
-      console.log(this.image_data);
-      this.image = '';
- }
   
-  remove_image(i:any)
-  {
-    this.image_data.splice(i,1);
-  }
-
-  genrateCompliant(){
-
-    // if(this.data.type=='Installation')
-    // {
-      this.complaint_data.type=this.data.type;
-    //   // this.complaint_data.nature_problem = 'Installation of '+this.data.product_name+' of category '+this.data.main_category;
-    //   this.complaint_data.subcat=this.data.category_name;
-    //   this.complaint_data.cat=this.data.main_category;
-    //   this.complaint_data.product=this.data.product_name;
-    // }
-    // else{
-    //   this.complaint_data.type=this.data.type;
-    //   this.complaint_data.subcat='';
-    //   this.complaint_data.cat='';
-    //   this.complaint_data.product='';
-    // }
-
-    this.complaint_data.image = this.image_data?this.image_data:[];
-    console.log( this.videoId );
-    
-    if((!this.complaint_data.image.length && !this.videoId) && (this.data.type!='Installation')){
-      alert('Please choose at least one image or video');
-      return;
+  console.log(options);
+  this.camera.getPicture(options).then((imageData) => {
+    this.image = 'data:image/jpeg;base64,' + imageData;
+    // this.image=  imageData;
+    // this.image= imageData.substr(imageData.lastIndexOf('/') + 1);
+    console.log(this.image);
+    if(this.image)
+    {
+      this.fileChange(this.image);
     }
-    this.complaint_data.customer_id = this.service.karigar_id;
-    this.complaint_data.created_by = '0';
-    console.log(this.complaint_data);
-    
-    this.service.post_rqst( {'complaint':this.complaint_data },'app_karigar/addComplaint').subscribe(result =>
-      {
-        console.log(result);
-
-        this.loading.dismiss();
-        this.showSuccess("Complaint Added Successfully!");
-        this.navCtrl.setRoot(TabsPage,{index:'0'});
-
-        console.log( this.videoId );
-        
- 
-        
-      });
-      
+  }, (err) => {
+  });
+}
+getImage() 
+{
+  const options: CameraOptions = {
+    quality: 70,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+    saveToPhotoAlbum:false
   }
+  console.log(options);
+  this.camera.getPicture(options).then((imageData) => {
+    this.image= 'data:image/jpeg;base64,' + imageData;
+    // this.image=  imageData;
+    // this.image= imageData.substr(imageData.lastIndexOf('/') + 1);
+    console.log(this.image);
+    if(this.image)
+    {
+      this.fileChange(this.image);
+    }
+  }, (err) => {
+  });
+}
 
+videoId: any;
+flag_upload = true;
+flag_play = true;
+// getVideo()
+// {
+//   this.fileChooser.open()
+//   .then(uri => {
+//     this.videoId = uri;
+//     this.flag_play = false;
+//     this.flag_upload = false;
+//   })
+//   .catch(e => console.log(e));
+// }
+
+
+
+
+image_data:any=[];
+
+
+fileChange(img)
+{
+  
+  this.image_data.push({"image":img});
+  console.log(this.image_data);
+  this.image = '';
+}
+
+remove_image(i:any)
+{
+  this.image_data.splice(i,1);
+}
+
+checkMobile() {      
+  if (this.form.mobile.length == 10) {
+    this.serve.addData({ 'mobile':this.form.mobile },"AppServiceTask/customerCheck").then((result) => {
+      console.log(result);
+      if (result.statusMsg == "Exist") {
+        this.form=result
+      }
+    });
+  }
+}
+
+saveComplaint(){
+  this.form.image = this.image_data?this.image_data:[];
+  console.log(this.form);
+  
+  this.serve.addData( {"data": this.form },'AppServiceTask/serviceComplaintAdd').then(result =>
+    {
+      console.log(result);
+      
+      this.loading.dismiss();
+      this.showSuccess("Complaint Added Successfully!");
+      this.navCtrl.setRoot(TabsPage,{index:'0'});
+    });
+    
+  }
+  
   formData = new FormData();
-
+  
   submit()
   {
     this.presentLoading();
     if(this.videoId){
       this.uploadVideo();
     }else{
-      this.genrateCompliant();
+      this.saveComplaint();
     }
-
+    
     
   }
-
-
-    onGetCaptureVideoPermissionHandler() {
-
-      console.log('start');
+  
+  
+  onGetCaptureVideoPermissionHandler() {
     
-      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(
-        result => {
-          if (result.hasPermission) {
-            
-                   console.log('hello111');
-                
-                   this.capturevideo();
-
-          } else {
-            this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(result => {
-              if (result.hasPermission) {
-
-                  console.log('hello222');
-                         
-                   this.capturevideo();
-                     
-              }
-            });
-          }
-        },
-        err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
+    console.log('start');
+    
+    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(
+      result => {
+        if (result.hasPermission) {
+          
+          console.log('hello111');
+          
+          this.capturevideo();
+          
+        } else {
+          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(result => {
+            if (result.hasPermission) {
+              
+              console.log('hello222');
+              
+              this.capturevideo();
+              
+            }
+          });
+        }
+      },
+      err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
       );
       
-
-
-       
+      
+      
+      
     }
-
+    
     capturevideo()
     {
-            let options: CaptureVideoOptions = { limit: 1 };
-            this.mediaCapture.captureVideo(options)
-            .then((videodata: MediaFile[]) => {
-              console.log(videodata);
-              
-            var i, path, len,name;
-            for (i = 0, len = videodata.length; i < len; i += 1) 
-            {
-                  path = videodata[i].fullPath;
-                  name = videodata[i].name;
-                  // do something interesting with the file
-            }
-            this.videoId = path;
-            this.flag_play = false;
-            this.flag_upload = false;
-            console.log(videodata);
-
-         
-            });
-     }
-
-     remove_video()
-     {
-       this.videoId='';
-     }
-     video_data:any=[];
-
-     videoChange(video)
-     {
-       this.video_data.push(video);
-       console.log(this.video_data);
-       
-   
-     }
-
-
-
+      let options: CaptureVideoOptions = { limit: 1 };
+      this.mediaCapture.captureVideo(options)
+      .then((videodata: MediaFile[]) => {
+        console.log(videodata);
+        
+        var i, path, len,name;
+        for (i = 0, len = videodata.length; i < len; i += 1) 
+        {
+          path = videodata[i].fullPath;
+          name = videodata[i].name;
+          // do something interesting with the file
+        }
+        this.videoId = path;
+        this.flag_play = false;
+        this.flag_upload = false;
+        console.log(videodata);
+        
+        
+      });
+    }
+    
+    remove_video()
+    {
+      this.videoId='';
+    }
+    video_data:any=[];
+    
+    videoChange(video)
+    {
+      this.video_data.push(video);
+      console.log(this.video_data);
+      
+      
+    }
+    
+    
+    
     uploadVideo() 
     {
-
+      
       const fileTransfer: FileTransferObject = this.transfer.create();
       let options1: FileUploadOptions = 
       {
-            fileKey: 'video_upload_file',
-            fileName: this.videoId,
-            headers: {},
-            mimeType: "multipart/form-data",
-            params: { },
-            chunkedMode: false
+        fileKey: 'video_upload_file',
+        fileName: this.videoId,
+        headers: {},
+        mimeType: "multipart/form-data",
+        params: { },
+        chunkedMode: false
       }
       console.log(this.videoId);
       console.log(options1);
       console.log('start');
       
-
-
+      
+      
       fileTransfer.upload(this.videoId,"http://phpstack-83335-1970078.cloudwaysapps.com/dd_api/app/uploadVideos.php", options1)
       .then((data :any) => {
-
+        
         var d = JSON.parse(data.response)
         console.log(data.response);
         console.log(data.response.status);
-
-          if(d.status == 'Success' ){
-              this.complaint_data.video_name = d.video_name; 
-              this.genrateCompliant();
-          }
-
-          if( d.status== 'Failed' ){
-            this.loading.dismiss();
-            this.showSuccess("Uploading Failed!");
-
-          }
-          if( d.status == 'Wrong' ){
-            this.loading.dismiss();
-            this.showSuccess("Somthing went Wrong!");
-          }
-            console.log(data);
         
-            // this.loading.dismissAll();
-            this.flag_upload = true;
-            // this.showToast('middle', 'Video is uploaded Successfully!');
-      }, (err) => {
-      // error
-          console.log("vid err");
-          console.log(JSON.stringify(err));
+        if(d.status == 'Success' ){
+          this.form.video_name = d.video_name; 
+          this.saveComplaint();
+        }
+        
+        if( d.status== 'Failed' ){
+          this.loading.dismiss();
+          this.showSuccess("Uploading Failed!");
           
-          alert('err'+ JSON.stringify(err));
+        }
+        if( d.status == 'Wrong' ){
+          this.loading.dismiss();
+          this.showSuccess("Somthing went Wrong!");
+        }
+        console.log(data);
+        
+        // this.loading.dismissAll();
+        this.flag_upload = true;
+        // this.showToast('middle', 'Video is uploaded Successfully!');
+      }, (err) => {
+        // error
+        console.log("vid err");
+        console.log(JSON.stringify(err));
+        
+        alert('err'+ JSON.stringify(err));
       });
       // this.presentLoading();
-
-  
-    }
       
-  
+      
+    }
+    
+    
     showSuccess(text)
     {
       let alert = this.alertCtrl.create({
@@ -504,7 +444,7 @@ image:any='';
       });
       alert.present();
     }
-
+    
     presentLoading() 
     {
       this.loading = this.loadingCtrl.create({
@@ -513,64 +453,40 @@ image:any='';
       });
       this.loading.present();
     }
-
-
+    
+    
     get_states() {
       // this.serve.presentLoading()
       this.serve.addData({}, "AppCustomerNetwork/getStates")
-        .then(resp => {
-          if (resp['statusCode'] == 200) {
-            this.serve.dismissLoading()
-            this.stateList = resp['state_list'];
-          } else {
-            this.serve.dismissLoading()
-            this.serve.errorToast(resp['statusMsg']);
-          }
-        }, error => {
-          this.serve.Error_msg(error);
-          this.serve.dismiss();
-        })
-    }
-
-    get_district(state) {
-      this.serve.addData({ "state_name":state }, "AppCustomerNetwork/getDistrict")
-      .then(resp => {
-          if(resp['statusCode'] == 200){
-              this.districtList = resp['district_list'];    
-          }else{
-              this.serve.errorToast(resp['statusMsg']);
-          }
-      },
-      err => {
-          this.serve.errorToast('Something Went Wrong!')
-      })
-  }
-
-  saveComplaint() {
-    this.savingFlag = true;
-    if (!this.form.id) {
-      if (!this.form.assign_dr_id) {
-        this.serve.errorToast('Please Select Distributor!')
-      }
-    }
-    this.form.type_id = 3;
-    this.serve.addData({ "data": this.form }, "AppCustomerNetwork/addDealer")
       .then(resp => {
         if (resp['statusCode'] == 200) {
-          this.savingFlag = false;
-          this.serve.successToast(resp['statusMsg']);
-          this.navCtrl.popTo(ComplaintHistoryPage);
-
+          this.serve.dismissLoading()
+          this.stateList = resp['state_list'];
         } else {
-          this.savingFlag = false;
+          this.serve.dismissLoading()
           this.serve.errorToast(resp['statusMsg']);
         }
       }, error => {
-        this.savingFlag = false;
         this.serve.Error_msg(error);
         this.serve.dismiss();
       })
-  }
+    }
     
-
-}
+    get_district(state) {
+      this.serve.addData({ "state_name":state }, "AppCustomerNetwork/getDistrict")
+      .then(resp => {
+        if(resp['statusCode'] == 200){
+          this.districtList = resp['district_list'];    
+        }else{
+          this.serve.errorToast(resp['statusMsg']);
+        }
+      },
+      err => {
+        this.serve.errorToast('Something Went Wrong!')
+      })
+    }
+    
+    
+    
+    
+  }

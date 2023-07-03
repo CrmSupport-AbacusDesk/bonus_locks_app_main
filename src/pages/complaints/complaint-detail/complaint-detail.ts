@@ -4,6 +4,7 @@ import { DbserviceProvider } from '../../../providers/dbservice/dbservice';
 import { ViewProfilePage } from '../../view-profile/view-profile';
 import { DomSanitizer  } from '@angular/platform-browser';
 import { CancelComplaintPage } from '../../cancel-complaint/cancel-complaint';
+import { MyserviceProvider } from '../../../providers/myservice/myservice';
 /**
  * Generated class for the ComplaintDetailPage page.
  *
@@ -25,7 +26,16 @@ export class ComplaintDetailPage {
   star:any='';
   amount:any={};
 
-  constructor( public sanitizer: DomSanitizer  , public navCtrl: NavController, public navParams: NavParams,public service:DbserviceProvider,public loadingCtrl:LoadingController ,public modalCtrl: ModalController,public alertCtrl:AlertController ) {
+  constructor( public sanitizer: DomSanitizer  , public navCtrl: NavController, public navParams: NavParams,public serve:DbserviceProvider,public loadingCtrl:LoadingController ,public modalCtrl: ModalController,public alertCtrl:AlertController,public db: MyserviceProvider) {
+
+    if (this.navParams.get("id")) {
+      this.complaint_id = this.navParams.get("id");
+      if (this.complaint_id) {
+          
+          
+          this.getComplaintDetail(this.complaint_id);
+      }
+  }
   }
 
 
@@ -52,7 +62,7 @@ export class ComplaintDetailPage {
   getComplaintDetail(id)
   {
    
-    this.service.post_rqst( {'complaints_id':id},'app_karigar/getComplaintbyId').subscribe(response =>
+    this.db.addData( {'complaint_id':id},'AppServiceTask/serviceComplaintDetail').then(response =>
       {
         console.log(response);
         this.loading.dismiss();
@@ -62,7 +72,7 @@ export class ComplaintDetailPage {
         this.star = response['complaintDetails']['star'];               
         
         for (let i = 0; i < this.complaint_media.length; i++) {
-            this.complaint_media[i].file_name =  this.sanitizer.bypassSecurityTrustResourceUrl( this.service.url+'app/uploads/'+this.complaint_media[i].file_name  );
+            this.complaint_media[i].file_name =  this.sanitizer.bypassSecurityTrustResourceUrl( this.serve.url+'app/uploads/'+this.complaint_media[i].file_name  );
           
         }
 
@@ -74,7 +84,7 @@ export class ComplaintDetailPage {
 		{
 			this.presentLoading();
 			console.log(star);
-			this.service.post_rqst({'star':star,'customer_id':this.service.karigar_id ,'plumber_id':this.complaint_detail.plumberId,'complaint_id':this.complaint_detail.complaintId},'app_karigar/plumberRatingByCustomer').subscribe(r=>{
+			this.serve.post_rqst({'star':star,'customer_id':this.serve.karigar_id ,'plumber_id':this.complaint_detail.plumberId,'complaint_id':this.complaint_detail.complaintId},'app_karigar/plumberRatingByCustomer').subscribe(r=>{
         console.log(r);
 				this.getComplaintDetail(this.complaint_detail.complaintId);
 				
@@ -102,7 +112,7 @@ export class ComplaintDetailPage {
 
     saveAmount()
     {
-      this.service.post_rqst( {'complaints_id':this.complaint_id,'amount':this.amount.payment},'app_karigar/customerPaidAmount').subscribe(result =>
+      this.serve.post_rqst( {'complaints_id':this.complaint_id,'amount':this.amount.payment},'app_karigar/customerPaidAmount').subscribe(result =>
         {
           console.log(result); 
           if(result['status']=="success")

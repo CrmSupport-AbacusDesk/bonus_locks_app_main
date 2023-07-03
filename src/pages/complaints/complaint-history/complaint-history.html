@@ -134,18 +134,18 @@
   <ng-container *ngIf="showRelatedTab!=false">
     <div class="capsule-tabs" style="border-bottom: 0px;">
       <ul>
-        <li [ngClass]="{'active':complaint_type == 'Pending'}" (click)="complaint_type = 'Pending';complaintList()">
+        <li [ngClass]="{'active':complaint_type == 'Pending'}" (click)="complaint_type = 'Pending';getComplaintHistory()">
           <p>Pending<span>2</span></p>
         </li>
-        <li [ngClass]="{'active':complaint_type == 'Approved'}" (click)="complaint_type = 'Approved';complaintList()">
+        <li [ngClass]="{'active':complaint_type == 'Approved'}" (click)="complaint_type = 'Approved';getComplaintHistory()">
           <p>Approved<span>2</span></p>
         </li>
 
-        <li [ngClass]="{'active':complaint_type == 'Closed'}" (click)="complaint_type = 'Closed';complaintList()">
+        <li [ngClass]="{'active':complaint_type == 'Closed'}" (click)="complaint_type = 'Closed';getComplaintHistory()">
           <p>Closed<span>3</span></p>
         </li>
 
-        <li [ngClass]="{'active':complaint_type == 'Cancel'}" (click)="complaint_type = 'Cancel';complaintList()">
+        <li [ngClass]="{'active':complaint_type == 'Cancel'}" (click)="complaint_type = 'Cancel';getComplaintHistory()">
           <p>Cancel<span>3</span></p>
         </li>
       </ul>
@@ -155,36 +155,36 @@
 
 
     <div class="pl16 pr16 mt15 mb50">
-
-      <div class="attendance-list" (click)="goCompalintDetail()">
+      
+      <div class="attendance-list" *ngFor="let row of complaint_list; let i=index" (click)="goCompalintDetail(row.id)">
         <div class="slab slab-bg" style="display: flex; justify-content: space-between;">
           <div class="slab-day">
-            <p>2023-06-15 16:47:53</p>
+            <p>{{row.date_created| date:'d MMM y hh:mm a'}}</p>
             <span>Date</span>
           </div>
           <div class="slab-day">
-            <p>#comp123</p>
+            <p>#comp-{{row.id}}</p>
             <span>Complaint Id</span>
           </div>
         </div>
 
         <div class="center-block">
           <div class="circle"></div>
-          <h1>Dealer</h1>
+          <h1>{{row.created_by_type}}</h1>
           <p>Created by</p>
         </div>
 
         <div class="slab mt5">
           <div class="slab-day">
-            <p>RAJ</p>
+            <p>{{row.customer_name}}</p>
             <span>Customer Name</span>
           </div>
           <div class="slab-day">
-            <p class="bold">1234567890</p>
+            <p class="bold">{{row.customer_mobile}}</p>
             <span>Customer Mobile No.</span>
           </div>
           <div class="slab-day">
-            <p class="bold">Pending</p>
+            <p class="bold">{{row.complaint_status}}</p>
             <span>Complaint Status</span>
           </div>
         </div>
@@ -202,7 +202,7 @@
         <ion-icon name="add"></ion-icon>
       </button>
     </ion-fab>
-    <div class="nothing-here" style="height: 60%;">
+    <div class="nothing-here" style="height: 60%;" *ngIf="!complaint_list.length">
       <div class="outer">
         <div class="innear">
           <img src="assets/imgs/no_found.svg" alt="">

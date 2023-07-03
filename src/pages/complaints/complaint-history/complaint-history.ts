@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController, Loading, LoadingC
 import { ComplaintDetailPage} from '../../complaints/complaint-detail/complaint-detail';
 import { DbserviceProvider } from '../../../providers/dbservice/dbservice';
 import { AddNewComplaintPage } from '../add-new-complaint/add-new-complaint';
+import { MyserviceProvider } from '../../../providers/myservice/myservice';
 
 
 /**
@@ -22,15 +23,24 @@ export class ComplaintHistoryPage {
   loading:Loading;
   filter:any={};
   flag:any='';
-  complaint_count:any='';
+  complaint_count:any=[];
   data:any={};
-  constructor(public navCtrl: NavController, public navParams: NavParams,public service:DbserviceProvider,public alertCtrl:AlertController,public loadingCtrl:LoadingController)
+  start: any;
+  dr_id: any;
+  complaint_type: any = 'Pending'
+
+
+  constructor(public navCtrl: NavController, public navParams: NavParams,public service:DbserviceProvider,public alertCtrl:AlertController,public loadingCtrl:LoadingController,public db: MyserviceProvider)
   {
     console.log(this.navParams);
     this.data.type  =this.navParams.data.type;
     console.log(this.data.type);
     this.presentLoading();
-    this.getComplaintHistory(this.data.type)
+    this.getComplaintHistory()
+
+    if (this.navParams.get('dr_id')) {
+      this.dr_id = this.navParams.get('dr_id');
+    }
     
   }
   
@@ -56,49 +66,42 @@ export class ComplaintHistoryPage {
   doRefresh(refresher) 
   {
     console.log('Begin async operation', refresher);
-    this.getComplaintHistory(this.data.type); 
+    this.getComplaintHistory(); 
     refresher.complete();
   }
   
-  getComplaintHistory(type)
+  getComplaintHistory()
   {
-    console.log(type)
+    // console.log(type)
     this.flag=0;
     this.filter.limit = 0;
-    this.service.post_rqst( {'customer_id':this.service.karigar_id ,'filter':this.filter,type:{type:type}},'app_karigar/getComplaintList').subscribe(response =>
+    this.db.addData( {'dr_id': this.dr_id, 'limit': this.filter, start: this.start,'Status': this.complaint_type},'AppServiceTask/serviceComplaintList').then((result) =>
       {
-        console.log(response);
+        console.log(result);
         this.loading.dismiss();
-        this.complaint_list = response['complaintList'];
-        this.complaint_count = response['complaint_count'];
-        console.log(this.complaint_list);
-        
-        // this.showSuccess("Profile Photo Updated")   
+        this.complaint_list = result['result'];
+        this.complaint_count = result['tab_count'];
+        console.log(this.complaint_list); 
+        console.log(this.complaint_count); 
+      });
+    }
+
+    loadData(infiniteScroll) {
+      this.start = this.complaint_list.length
+      this.db.addData({ 'dr_id': this.dr_id, 'limit': this.filter, 'start': this.start, 'Status': this.complaint_type }, 'AppServiceTask/serviceComplaintList').then(resp => {
+        if (['result']['tab_count'] == '') {
+          this.flag = 1;
+        }
+        else {
+          setTimeout(() => {
+            this.complaint_list = this.complaint_list.concat(resp['result']['tab_count']);
+            infiniteScroll.complete();
+          }, 1000);
+        }
       });
     }
     
-    loadData(infiniteScroll)
-    {
-      console.log('loading');
-      
-      this.filter.limit=this.complaint_list.length;
-      this.service.post_rqst({'customer_id':this.service.karigar_id ,'filter' : this.filter},'app_karigar/getComplaintList').subscribe( r =>
-        {
-          console.log(r);
-          if(r['complaintList']=='')
-          {
-            this.flag=1;
-          }
-          else
-          {
-            setTimeout(()=>{
-              this.complaint_list=this.complaint_list.concat(r['complaintList']);
-              console.log('Asyn operation has stop')
-              infiniteScroll.complete();
-            },1000);
-          }
-        });
-      }
+    
       
       showSuccess(text)
       {
@@ -114,8 +117,8 @@ export class ComplaintHistoryPage {
         this.navCtrl.push(AddNewComplaintPage);
       }
 
-      goCompalintDetail() {
-        this.navCtrl.push(ComplaintDetailPage)
+      goCompalintDetail(id) {
+        this.navCtrl.push(ComplaintDetailPage,{ id: id})
       }
       
     }
