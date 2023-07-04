@@ -5,12 +5,14 @@ import { ViewProfilePage } from '../../view-profile/view-profile';
 import { DomSanitizer  } from '@angular/platform-browser';
 import { CancelComplaintPage } from '../../cancel-complaint/cancel-complaint';
 import { MyserviceProvider } from '../../../providers/myservice/myservice';
+import { InspectionPage } from '../../inspection/inspection';
+import { ConstantProvider } from '../../../providers/constant/constant';
 /**
- * Generated class for the ComplaintDetailPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+* Generated class for the ComplaintDetailPage page.
+*
+* See https://ionicframework.com/docs/components/#navigation for more info on
+* Ionic pages and navigation.
+*/
 
 @IonicPage()
 @Component({
@@ -20,36 +22,44 @@ import { MyserviceProvider } from '../../../providers/myservice/myservice';
 export class ComplaintDetailPage {
   complaint_id:any='';
   complaint_detail:any={};
+  complaint_remark:any=[];
+  complaint_images:any=[];
   complaint_media:any=[];
   loading:Loading;
-	rating_star:any='';
+  rating_star:any='';
   star:any='';
   amount:any={};
+  bannerURL: any;
 
-  constructor( public sanitizer: DomSanitizer  , public navCtrl: NavController, public navParams: NavParams,public serve:DbserviceProvider,public loadingCtrl:LoadingController ,public modalCtrl: ModalController,public alertCtrl:AlertController,public db: MyserviceProvider) {
+  
+  
+  constructor( public sanitizer: DomSanitizer  , public navCtrl: NavController, public navParams: NavParams,public serve:DbserviceProvider,public loadingCtrl:LoadingController ,public modalCtrl: ModalController,public alertCtrl:AlertController,public db: MyserviceProvider, public constant: ConstantProvider) {
 
+    this.bannerURL = constant.upload_url1 + 'service_task/';
+
+    
     if (this.navParams.get("id")) {
       this.complaint_id = this.navParams.get("id");
       if (this.complaint_id) {
-          
-          
-          this.getComplaintDetail(this.complaint_id);
+        
+        
+        this.getComplaintDetail(this.complaint_id);
       }
+    }
   }
-  }
-
-
+  
+  
   photoURL(url) {
     return this.sanitizer.bypassSecurityTrustUrl(url);
   }
-
+  
   ionViewDidLoad() {
     console.log('ionViewDidLoad ComplaintDetailPage');
     this.presentLoading();
     this.complaint_id = this.navParams.get('id');
     this.getComplaintDetail(this.complaint_id);
   }
-
+  
   presentLoading() 
   {
     this.loading = this.loadingCtrl.create({
@@ -58,84 +68,57 @@ export class ComplaintDetailPage {
     });
     this.loading.present();
   }
-
+  
   getComplaintDetail(id)
   {
-   
+    
     this.db.addData( {'complaint_id':id},'AppServiceTask/serviceComplaintDetail').then(response =>
       {
         console.log(response);
-        this.loading.dismiss();
-        this.complaint_detail = response['complaintDetails'];
-        this.complaint_media = response['complaintDetails']['image'] ;
-        this.rating_star = response['complaintDetails']['rating'];               
-        this.star = response['complaintDetails']['star'];               
+        // this.loading.dismiss();
+        this.complaint_detail = response['result'];
+        console.log(this.complaint_detail);
+        this.complaint_remark = response['result']['log'];
+        this.complaint_images = response['result']['image'];
+        console.log(this.complaint_remark);
         
-        for (let i = 0; i < this.complaint_media.length; i++) {
-            this.complaint_media[i].file_name =  this.sanitizer.bypassSecurityTrustResourceUrl( this.serve.url+'app/uploads/'+this.complaint_media[i].file_name  );
+
+        
+
+        // this.complaint_media = response['complaintDetails']['image'] ;              
+        // for (let i = 0; i < this.complaint_media.length; i++) {
+        //   this.complaint_media[i].file_name =  this.sanitizer.bypassSecurityTrustResourceUrl( this.serve.url+'app/uploads/'+this.complaint_media[i].file_name  );
           
-        }
-
+        // }
+        
       });
- 
-  }
+      
+    }
+    showSuccess(text)
+    {
+      let alert = this.alertCtrl.create({
+        title:'Success!',
+        cssClass:'action-close',
+        subTitle: text,
+        buttons: ['OK']
+      });
+      alert.present();
+    }
 
-  rating(star)
-		{
-			this.presentLoading();
-			console.log(star);
-			this.serve.post_rqst({'star':star,'customer_id':this.serve.karigar_id ,'plumber_id':this.complaint_detail.plumberId,'complaint_id':this.complaint_detail.complaintId},'app_karigar/plumberRatingByCustomer').subscribe(r=>{
-        console.log(r);
-				this.getComplaintDetail(this.complaint_detail.complaintId);
-				
-			});
+    cancelComplaint(test)
+    {
+
+    }
+    goToInspection() {
+      this.navCtrl.push(InspectionPage);
+    }
+
+    imageModal(src)
+    {
+        console.log(src);
+        
+        this.modalCtrl.create(ViewProfilePage, {"Image": src}).present();
     }
     
-    viewComplaintImage(i)
-    {
-      this.modalCtrl.create(ViewProfilePage, {"Image": this.complaint_media[i].file_name}).present();
-    }
-
-    cancelComplaint(label)
-    {
-      let complaintModal = this.modalCtrl.create(CancelComplaintPage,{'id': this.complaint_detail.complaintId,'label':label});
-
-      complaintModal.onDidDismiss(data => {
-          console.log(data);
-          this.getComplaintDetail(this.complaint_detail.complaintId)
-         
-
-        });
-        complaintModal.present();
-
-    }
-
-    saveAmount()
-    {
-      this.serve.post_rqst( {'complaints_id':this.complaint_id,'amount':this.amount.payment},'app_karigar/customerPaidAmount').subscribe(result =>
-        {
-          console.log(result); 
-          if(result['status']=="success")
-              {
-                this.showSuccess("Amount Added Successfully!");
-
-              }
-          //  this.closeModal();
-          // this.navCtrl.setRoot(TabsPage,{index:'0'});
-          this.getComplaintDetail(this.complaint_detail.complaintId)
-          
-        });
-    }
-
-    showSuccess(text)
-            {
-              let alert = this.alertCtrl.create({
-                title:'Success!',
-                cssClass:'action-close',
-                subTitle: text,
-                buttons: ['OK']
-              });
-              alert.present();
-            }
-
-}
+  }
+  

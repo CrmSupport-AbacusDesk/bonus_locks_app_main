@@ -11,6 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { PointLocationPage } from '../../point-location/point-location';
 import { MyserviceProvider } from '../../../providers/myservice/myservice';
 import { ComplaintHistoryPage } from '../complaint-history/complaint-history';
+import { ComplaintDetailPage } from '../complaint-detail/complaint-detail';
 // import { IonicSelectableComponent } from 'ionic-selectable';/
 
 /**
@@ -28,6 +29,7 @@ import { ComplaintHistoryPage } from '../complaint-history/complaint-history';
 })
 export class AddNewComplaintPage {
   form:any = {};
+  customerData:any = {};
   loading:Loading;
   isCameraEnabled:boolean= false;
   productArr:any=[];
@@ -40,9 +42,6 @@ export class AddNewComplaintPage {
   data:any={};
   constructor(public navCtrl: NavController, public navParams: NavParams,public actionSheetController: ActionSheetController, private camera: Camera ,public service:DbserviceProvider,public serve : MyserviceProvider ,public loadingCtrl:LoadingController , public alertCtrl:AlertController, private mediaCapture: MediaCapture ,private transfer: FileTransfer, public diagnostic  : Diagnostic, public androidPermissions: AndroidPermissions,public dom:DomSanitizer) {
     this.data.type  =this.navParams.get('type');
-    console.log(this.navParams.data.type)
-    console.log(this.navParams.get('type'))
-    console.log(this.data.type);
     this.get_states();
     
   }
@@ -268,9 +267,13 @@ remove_image(i:any)
 checkMobile() {      
   if (this.form.mobile.length == 10) {
     this.serve.addData({ 'mobile':this.form.mobile },"AppServiceTask/customerCheck").then((result) => {
-      console.log(result);
-      if (result.statusMsg == "Exist") {
-        this.form=result
+      if (result['statusMsg'] == "Exist") {
+        this.customerData=result['data']
+        console.log(this.customerData);
+        this.form=this.customerData
+        this.form.mobile=this.customerData.customer_mobile
+        this.form.name=this.customerData.customer_name
+        this.get_district(this.form.state);
       }
     });
   }
@@ -282,11 +285,10 @@ saveComplaint(){
   
   this.serve.addData( {"data": this.form },'AppServiceTask/serviceComplaintAdd').then(result =>
     {
-      console.log(result);
-      
+      console.log(result); 
       this.loading.dismiss();
       this.showSuccess("Complaint Added Successfully!");
-      this.navCtrl.setRoot(TabsPage,{index:'0'});
+      this.navCtrl.setRoot(ComplaintHistoryPage);
     });
     
   }

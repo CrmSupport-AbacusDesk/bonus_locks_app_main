@@ -263,7 +263,8 @@ import { InstallationListPage } from '../pages/installation/installation-list/in
 import { InstallationListPageModule } from '../pages/installation/installation-list/installation-list.module';
 import { InstallationDetailPageModule } from '../pages/installation/installation-detail/installation-detail.module';
 import { AddInstallationPageModule } from '../pages/installation/add-installation/add-installation.module';
-
+import { InspectionPageModule } from '../pages/inspection/inspection.module';
+import { InspectionPage } from '../pages/inspection/inspection';
 // import { GoogleMaps } from '@ionic-native/google-maps';
 @NgModule({
     declarations: [
@@ -502,7 +503,8 @@ import { AddInstallationPageModule } from '../pages/installation/add-installatio
         DistributorDealerWalletPageModule,
         InstallationListPageModule,
         InstallationDetailPageModule,
-        AddInstallationPageModule
+        AddInstallationPageModule,
+        InspectionPageModule
     ],
     bootstrap: [IonicApp],
     entryComponents: [
@@ -510,6 +512,7 @@ import { AddInstallationPageModule } from '../pages/installation/add-installatio
         HomePage,
         TabsPage,
         CongratulationsPage,
+        InspectionPage,
         // MobileLoginPage,
         // OtpPage,
         // SelectRegistrationTypePage,
