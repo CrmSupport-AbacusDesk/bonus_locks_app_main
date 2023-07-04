@@ -12,12 +12,6 @@
         
         <div class="edit">
             <ion-list>
-                <!-- <ion-item class="cs-textarea1" [ngClass]="{'error':f.submitted && nature_of_problem?.invalid}" style="background: transparent !important;">
-                    <ion-label floating *ngIf="data.type=='Service'"><span>Nature Problem</span></ion-label>
-                    <ion-label floating *ngIf="data.type!='Service'"><span>Remark</span></ion-label>
-                    <ion-textarea type="text" name="nature_of_problem" #nature_of_problem="ngModel" [(ngModel)]="complaint_data.nature_of_problem" required></ion-textarea>
-                </ion-item> -->
-                
                 <ion-item [ngClass]="{'error':f.submitted && mobile?.invalid}" style="background: transparent !important;">
                     <ion-label floating><span>Mobile Number</span> </ion-label>
                     <ion-input type="text" name="mobile" #mobile="ngModel" [(ngModel)]="form.mobile" minlength="10"
@@ -32,7 +26,7 @@
                     <ion-input type="text" name="name" #name="ngModel" [(ngModel)]="form.name" required></ion-input>
                 </ion-item>
                 <div *ngIf="f.submitted &&name.invalid" class="eror">
-                    <p *ngIf="name.errors.required">{{'Name Number is Required'}}</p>
+                    <p *ngIf="name.errors.required">{{'Mobile Number is Required'}}</p>
                 </div>
                 
                 <ion-item [ngClass]="{'error':f.submitted && state?.invalid}">
@@ -46,7 +40,7 @@
                 </div>
                 <ion-item [ngClass]="{'error':f.submitted && district?.invalid}">
                     <ion-label floating>District <strong class="red-text">*</strong></ion-label>
-                    <ion-select name="district" #district="ngModel" [(ngModel)]="form.district" (ionChange)="getCityList()" required> 
+                    <ion-select name="district" #district="ngModel" [(ngModel)]="form.district" required> 
                         <ion-option *ngFor="let row of districtList" value="{{row.district_name}}">{{row.district_name}}
                         </ion-option>
                     </ion-select>
@@ -68,7 +62,7 @@
                     <ion-label floating>City</ion-label>
                     <ion-input type="text" name="city" #city="ngModel" [(ngModel)]="form.city" ></ion-input>
                 </ion-item>
-
+                
                 <ion-item class="cs-textarea1" [ngClass]="{'error':f.submitted && address?.invalid}" style="background: transparent !important;">
                     <ion-label floating><span>Address</span></ion-label>
                     <ion-textarea type="text" name="address" #address="ngModel" [(ngModel)]="form.address" required></ion-textarea>
@@ -76,7 +70,7 @@
                 <div *ngIf="f.submitted &&address.invalid" class="eror">
                     <p *ngIf="address.errors.required">{{'Field is Required'}}</p>
                 </div>
-
+                
                 <ion-item class="cs-textarea1" [ngClass]="{'error':f.submitted && nature_of_problem?.invalid}" style="background: transparent !important;">
                     <ion-label floating><span>Nature Of Problem</span></ion-label>
                     <ion-textarea type="text" name="nature_of_problem" #nature_of_problem="ngModel" [(ngModel)]="form.nature_of_problem" required></ion-textarea>

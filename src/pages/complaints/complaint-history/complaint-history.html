@@ -4,110 +4,10 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<!-- <ion-header class="main-header remove">
-  <ion-navbar>
-    <ion-title>Request History</ion-title>
-  </ion-navbar>
-
-  <div *ngIf="complaint_count!='0'">
-      <div class="filter-select">
-        <ion-list>
-          <ion-item>
-            <ion-select  name="status" [(ngModel)]="filter.status"  (ngModelChange)="getComplaintHistory()" >
-              <ion-option value="">All</ion-option>
-              <ion-option value="Pending">Pending</ion-option>
-              <ion-option value="Closed">Closed</ion-option>
-              <ion-option value="Cancel">Cancel</ion-option>
-            </ion-select>
-          </ion-item>
-        </ion-list>
-        <div class="found">
-          <h3>{{complaint_list.length}}/{{complaint_count}}</h3>
-        </div>
-      </div>
-  </div>
-</ion-header> -->
-
-
-
-<!-- <ion-content >
-  
-  <div *ngIf="!complaint_list.length" class="data-not">
-    <img  src="assets/imgs/data-not-found.png">
-    
-  </div>
-  
-  
-  <div *ngIf="complaint_list.length" class="main-div">
-    
-    
-    
-    <ion-refresher (ionRefresh)="doRefresh($event)">
-      <ion-refresher-content  pullingIcon="arrow-dropdown"
-      pullingText="Pull to refresh"
-      refreshingSpinner="circles"
-      refreshingText="Refreshing...">
-    </ion-refresher-content>
-  </ion-refresher>
-  
-  <div class="main-history">
-    <div class="boxs">
-      <ul>
-        <li  *ngFor="let complaint of complaint_list; let i=index" (click)="onComplaintdetail(complaint.complaintId)" [ngClass]="{'border-color':complaint.plumberName !=null}">
-          <div class="otp">
-            <a>COM#{{complaint.complaintId}}</a>
-            <p>OTP : {{complaint.otp}}</p>
-          </div>
-          
-          <div class="problme">
-            
-            <h3><span>Nature Problem </span>: {{complaint.nature_problem}}</h3>
-            <a>
-              <p>{{complaint.compalintDate | date:'d MMMM y' }}</p>
-              <h4 class="{{complaint.status}}">{{complaint.status | titlecase}}</h4>
-            </a>
-            
-          </div>
-          
-          <div class="wait" *ngIf="complaint.plumberName ==null && complaint.status=='Pending'">
-            <h4>Waiting For Carpenter Assign . . .</h4>
-          </div>
-          
-          <div class="contect" *ngIf="complaint.plumberName !=null">            
-            <h3>Carpenter Information</h3>
-            <a>
-              <i class="material-icons ">assignment_ind</i>
-              <p class="pr32">{{complaint.plumberName}}</p>
-            </a>
-            <a href="tel:{{complaint.plumberMobileNo}}">
-              <i class="material-icons">call</i>
-              <p>{{complaint.plumberMobileNo}}</p>
-            </a>
-          </div>
-        </li>
-        
-        
-      </ul>
-    </div>
-  </div>
-  
-  
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)"  *ngIf="flag!=1">
-    <ion-infinite-scroll-content
-    loadingSpinner="bubbles"
-    loadingText="Loading more data...">
-  </ion-infinite-scroll-content>
-</ion-infinite-scroll>
-
-</div>
-
-</ion-content> -->
-
-
 <ion-header>
   <ion-navbar>
     <ion-title>Complaint</ion-title>
-    <ion-buttons end *ngIf="">
+    <ion-buttons end >
       <button ion-button icon-only (click)="presentPopover($event)">
         <ion-icon name="more"></ion-icon>
       </button>
@@ -117,75 +17,63 @@
 
 
 <ion-content>
-
-  <ng-container *ngIf="LoginType =='Employee'">
-    <div class="fix-container">
-      <div class="attendance-list flat-list">
-        <div class="center-block">
-          <div class="circle"></div>
-          <h1></h1>
-          <p></p>
-          <a class="cell-phone" href="tel:6876768767"><i class="material-icons">phone</i></a>
-        </div>
-      </div>
-    </div>
-  </ng-container>
-
+  
   <ng-container *ngIf="showRelatedTab!=false">
     <div class="capsule-tabs" style="border-bottom: 0px;">
       <ul>
+        <li [ngClass]="{'active':complaint_type == 'All'}" (click)="complaint_type = 'All';getComplaintHistory()">
+          <p>All<span>{{count.all_count}}</span></p>
+        </li>
         <li [ngClass]="{'active':complaint_type == 'Pending'}" (click)="complaint_type = 'Pending';getComplaintHistory()">
-          <p>Pending<span>2</span></p>
+          <p>Pending<span>{{count.pending_count}}</span></p>
         </li>
-        <li [ngClass]="{'active':complaint_type == 'Approved'}" (click)="complaint_type = 'Approved';getComplaintHistory()">
-          <p>Approved<span>2</span></p>
-        </li>
-
         <li [ngClass]="{'active':complaint_type == 'Closed'}" (click)="complaint_type = 'Closed';getComplaintHistory()">
-          <p>Closed<span>3</span></p>
+          <p>Closed<span>{{count.closed_count}}</span></p>
         </li>
-
+        
         <li [ngClass]="{'active':complaint_type == 'Cancel'}" (click)="complaint_type = 'Cancel';getComplaintHistory()">
-          <p>Cancel<span>3</span></p>
+          <p>Cancel<span>{{count.reject_count}}</span></p>
         </li>
       </ul>
     </div>
-
-
-
-
+    
+    
+    
+    
     <div class="pl16 pr16 mt15 mb50">
       
       <div class="attendance-list" *ngFor="let row of complaint_list; let i=index" (click)="goCompalintDetail(row.id)">
         <div class="slab slab-bg" style="display: flex; justify-content: space-between;">
           <div class="slab-day">
-            <p>{{row.date_created| date:'d MMM y hh:mm a'}}</p>
+            <p>{{row.date_created | date :  "dd.MM.y" }}</p>
             <span>Date</span>
           </div>
           <div class="slab-day">
             <p>#comp-{{row.id}}</p>
             <span>Complaint Id</span>
           </div>
-        </div>
-
-        <div class="center-block">
-          <div class="circle"></div>
-          <h1>{{row.created_by_type}}</h1>
-          <p>Created by</p>
-        </div>
-
-        <div class="slab mt5">
-          <div class="slab-day">
-            <p>{{row.customer_name}}</p>
-            <span>Customer Name</span>
-          </div>
-          <div class="slab-day">
-            <p class="bold">{{row.customer_mobile}}</p>
-            <span>Customer Mobile No.</span>
-          </div>
           <div class="slab-day">
             <p class="bold">{{row.complaint_status}}</p>
             <span>Complaint Status</span>
+          </div>
+        </div>
+        
+        <div class="center-block">
+          <div class="circle">{{row.customer_name?.substring(0,1).toUpperCase()}}</div>
+          <span>{{row.customer_name}}</span>
+          <p>{{row.customer_mobile}}</p>
+        </div>
+        
+        <div class="slab mt5">
+          <div class="slab-day">
+            <p>{{ row.city | titlecase }} , {{row.district | titlecase }} , {{row.state | titlecase}} , {{row.pincode}}</p>
+            <span>Customer Address</span>
+          </div>
+        </div>
+        <div class="slab mt5">
+          <div class="slab-day">
+            <p>{{row.nature_of_problem}}</p>
+            <span>Nature Of Problem</span>
           </div>
         </div>
         <div class="next-forword">
