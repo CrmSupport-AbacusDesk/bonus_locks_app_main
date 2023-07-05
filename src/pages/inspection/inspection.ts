@@ -1,7 +1,13 @@
 import { Component } from '@angular/core';
-import { Events, IonicPage, LoadingController, ModalController, NavController, NavParams, Platform, ToastController, ViewController } from 'ionic-angular';
+import { ActionSheetController, AlertController, Events, IonicPage, LoadingController, ModalController, NavController, NavParams, Platform, ToastController, ViewController } from 'ionic-angular';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
 import { DbserviceProvider } from '../../providers/dbservice/dbservice';
+import { Camera,CameraOptions } from '@ionic-native/camera';
+import { MediaCapture } from '@ionic-native/media-capture';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ComplaintDetailPage } from '../complaints/complaint-detail/complaint-detail';
 
 /**
 * Generated class for the InspectionPage page.
@@ -20,65 +26,346 @@ export class InspectionPage {
   segment_list:any=[]
   segment_detail:any=[]
   segment_sub_list:any=[]
+  formData:any = {};
+  isCameraEnabled:boolean= false;
+  loading:any={};
+  id: any;
   
-  
-  constructor(public navCtrl: NavController,public db: MyserviceProvider,) {
+  constructor(public navCtrl: NavController,public db: MyserviceProvider,public actionSheetController: ActionSheetController, private camera: Camera,public alertCtrl:AlertController, private mediaCapture: MediaCapture,public diagnostic  : Diagnostic, public androidPermissions: AndroidPermissions,public dom:DomSanitizer,public serve : MyserviceProvider ,public loadingCtrl:LoadingController,public navParams: NavParams ) {
     this.get_segment();
-    this.get_sub_segment();
-    this.get_sub_segmentDetail();
+    console.log(this.navParams);
+    this.id  =this.navParams.data.id;
+    console.log(this.id);
   }
-  
   ionViewDidLoad() {
-    console.log('ionViewDidLoad InspectionPage');
+    // this.getGeo();
+    console.log('ionViewDidLoad AddNewComplaintPage');
+    this.isCameraAvailable();
+  }
+  
+  showAlert(text) {
+    let alert = this.alertCtrl.create({
+      title:'Alert!',
+      cssClass:'action-close',
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+  
+  isCameraAvailable()
+  {
+    this.diagnostic.isCameraPresent()
+    .then((isAvailable : any) =>
+    {
+      this.isCameraEnabled = true;
+    })
+    .catch((error :any) =>
+    {
+      console.dir('Camera is:' + error);
+    });
   }
   
   
-  get_segment() {
-    this.db.addData({}, "AppCustomerNetwork/segmentList")
-    .then(resp => {
-      if (resp['statusCode'] == 200) {
-        this.segment_list = resp['result'];
-        console.log(this.segment_list);
+  
+  captureMedia()
+  {
+    if(this.videoId)
+    {
+      this.captureImageVideo();
+    }
+    else
+    {
+      let actionsheet = this.actionSheetController.create({
+        title:"Upload",
+        cssClass: 'cs-actionsheet',
         
-      } else {
-        this.db.errorToast(resp['statusMsg'])
+        buttons:[{
+          cssClass: 'sheet-m',
+          text: 'Image',
+          icon:'camera',
+          handler: () => {
+            console.log("Image Clicked");
+            this.captureImageVideo();
+          }
+        },
+        // {
+        //   cssClass: 'sheet-m1',
+        //   text: 'Video',
+        //   icon:'image',
+        //   handler: () => {
+        //     console.log("Video Clicked");
+        //     this.onGetCaptureVideoPermissionHandler();
+        //   }
+        // },
+        {
+          cssClass: 'cs-cancel',
+          text: 'Cancel',
+          role: 'cancel',
+          icon:'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionsheet.present();
+    
+  }
+  
+}
+
+showLimit() {
+  console.log('Image Data', this.image_data)
+  let alert = this.alertCtrl.create({
+    title: 'Alert',
+    subTitle: "You can upload only 5 bill images",
+    cssClass: 'alert-modal',
+    
+    buttons: [{
+      text: 'Cancel',
+      role: 'cancel',
+      handler: () => {
+        
+      }
+    }
+  ]
+});
+alert.present();
+}
+
+
+captureImageVideo()
+{
+  let actionsheet = this.actionSheetController.create({
+    title:"Complaint Media",
+    cssClass: 'cs-actionsheet',
+    
+    buttons:[{
+      cssClass: 'sheet-m',
+      text: 'Camera',
+      icon:'camera',
+      handler: () => {
+        console.log("Camera Clicked");
+        
+        this.takePhoto();
       }
     },
-    err => {
-    })
-  }
-  
-  get_sub_segment() {
-    this.db.addData({'cat_id': 2}, "AppCustomerNetwork/subSegmentList")
-    .then(resp => {
-      if (resp['statusCode'] == 200) {
-        this.segment_sub_list = resp['result'];
-        console.log(this.segment_sub_list);
-        
-      } else {
-        this.db.errorToast(resp['statusMsg'])
+    {
+      cssClass: 'sheet-m1',
+      text: 'Gallery',
+      icon:'image',
+      handler: () => {
+        console.log("Gallery Clicked");         
+        this.getImage();
       }
     },
-    err => {
-    })
-  }
-  
-  get_sub_segmentDetail() {
-    this.db.addData({'sub_cat_id':3}, "AppCustomerNetwork/segmentItems")
-    .then(resp => {
-      if (resp['statusCode'] == 200) {
-        this.segment_detail = resp['result'];
-        console.log(this.segment_detail);
-        
-      } else {
-        this.db.errorToast(resp['statusMsg'])
+    {
+      cssClass: 'cs-cancel',
+      text: 'Cancel',
+      role: 'cancel',
+      icon:'cancel',
+      handler: () => {
+        console.log('Cancel clicked');
       }
-    },
-    err => {
-    })
+    }
+  ]
+});
+actionsheet.present();
+}
+
+
+
+image:any='';
+takePhoto()
+{
+  console.log("i am in camera function");
+  const options: CameraOptions = {
+    quality: 70,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    targetWidth : 500,
+    targetHeight : 400
+  }
+  
+  console.log(options);
+  this.camera.getPicture(options).then((imageData) => {
+    this.image = 'data:image/jpeg;base64,' + imageData;
+    // this.image=  imageData;
+    // this.image= imageData.substr(imageData.lastIndexOf('/') + 1);
+    console.log(this.image);
+    if(this.image)
+    {
+      this.fileChange(this.image);
+    }
+  }, (err) => {
+  });
+}
+getImage() 
+{
+  const options: CameraOptions = {
+    quality: 70,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+    saveToPhotoAlbum:false
+  }
+  console.log(options);
+  this.camera.getPicture(options).then((imageData) => {
+    this.image= 'data:image/jpeg;base64,' + imageData;
+    // this.image=  imageData;
+    // this.image= imageData.substr(imageData.lastIndexOf('/') + 1);
+    console.log(this.image);
+    if(this.image)
+    {
+      this.fileChange(this.image);
+    }
+  }, (err) => {
+  });
+}
+
+videoId: any;
+flag_upload = true;
+flag_play = true;
+// getVideo()
+// {
+//   this.fileChooser.open()
+//   .then(uri => {
+//     this.videoId = uri;
+//     this.flag_play = false;
+//     this.flag_upload = false;
+//   })
+//   .catch(e => console.log(e));
+// }
+
+
+
+
+image_data:any=[];
+
+
+fileChange(img)
+{
+  
+  this.image_data.push({"image":img});
+  console.log(this.image_data);
+  this.image = '';
+}
+
+remove_image(i:any)
+{
+  this.image_data.splice(i,1);
+}
+
+
+get_segment() {
+  this.db.addData({}, "AppCustomerNetwork/segmentList")
+  .then(resp => {
+    if (resp['statusCode'] == 200) {
+      this.segment_list = resp['data'];
+      console.log(this.segment_list);
+      
+    } else {
+      this.db.errorToast(resp['statusMsg'])
+    }
+  },
+  err => {
+  })
+}
+
+get_sub_segment(id) {
+  this.db.addData({'cat_id': id}, "AppCustomerNetwork/subSegmentList")
+  .then(resp => {
+    if (resp['statusCode'] == 200) {
+      this.segment_sub_list = resp['data'];
+      console.log(this.segment_sub_list);
+      
+    } else {
+      this.db.errorToast(resp['statusMsg'])
+    }
+  },
+  err => {
+  })
+}
+
+get_sub_segmentDetail(id) {
+  this.db.addData({'sub_cat_id':id}, "AppCustomerNetwork/segmentItems")
+  .then(resp => {
+    if (resp['statusCode'] == 200) {
+      this.segment_detail = resp['data'];
+      console.log(this.segment_detail);
+      
+    } else {
+      this.db.errorToast(resp['statusMsg'])
+    }
+  },
+  err => {
+  })
+}
+
+segmentItemsDetail(id)
+{
+  console.log(id);
+  
+  if(id){
+    let index= this.segment_detail.findIndex(d=> d.id==id);
+    if(index!=-1){
+      this.formData.product_name= this.segment_detail[index].product_name;
+      this.formData.product_code= this.segment_detail[index].product_code;
+    }
+    console.log(this.formData.product_name);
+    console.log(this.formData.product_code);
+    console.log(this.formData.warranty_period);
+  }
+}
+
+showSuccess(text)
+{
+  let alert = this.alertCtrl.create({
+    title:'Success!',
+    subTitle: text,
+    buttons: ['OK']
+  });
+  alert.present();
+}
+
+saveInspection(){
+
+
+  this.formData.complaint_id=this.id
+  this.formData.image = this.image_data?this.image_data:[];
+  console.log(this.formData);
+  
+  this.serve.addData( {"data": this.formData },'AppServiceTask/complaintInspection').then(result =>
+    {
+      if (result['statusCode'] == 200) {
+        this.serve.dismissLoading();
+        this.showSuccess("Inspection Successfully!");
+        this.navCtrl.setRoot(ComplaintDetailPage,{ id: this.id});
+      }
+      else {
+        this.serve.errorToast(result['statusMsg'])
+      }
+      console.log(result); 
+    });
+    
+  }
+  
+  presentLoading() 
+  {
+    this.loading = this.loadingCtrl.create({
+      content: "Please wait...",
+      dismissOnPageChange: true
+    });
+    this.loading.present();
   }
   
   
+  // submit()
+  // {
+  //   this.presentLoading();
+  //   this.saveInspection();
+  // }
   
   
 }
+
+
