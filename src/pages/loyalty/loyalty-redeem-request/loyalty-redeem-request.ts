@@ -35,10 +35,13 @@ export class LoyaltyRedeemRequestPage {
   info: any = {};
   gift_type: any;
   paymentMode:any;
+  upload_url: any = ''
 
   constructor(public navCtrl: NavController, public viewCtrl: ViewController, public navParams: NavParams, public service: MyserviceProvider,
     public loadingCtrl: LoadingController, private app: App, public storage: Storage,
     public db: DbserviceProvider, public constant: ConstantProvider, public toastCtrl: ToastController) {
+    this.upload_url = constant.retailer_doc;
+
     this.uploadUrl = constant.upload_url1 + 'gift_gallery/';
     this.gift_id = this.navParams.get('gift_id');
     this.gift_type = this.navParams.get('gift_type');
@@ -189,14 +192,15 @@ export class LoyaltyRedeemRequestPage {
       this.data.ifsc_code = this.karigar_detail.ifsc_code
       // this.data.point_range_value = this.gift_detail.point_range_value;
     }
-    if (!this.data.check) {
-      this.service.errorToast('Accept Cancellation Policy');
-      return;
-    }
+    // if (!this.data.check) {
+    //   this.service.errorToast('Accept Cancellation Policy');
+    //   return;
+    // }
+
     this.data.gift_id = this.gift_id,
       this.saveFlag = true;
     this.service.presentLoading();
-
+     this.data.payment_mode='bank';
     this.service.addData({ 'data': this.data }, 'AppGiftTracker/addRedeemRequest').then((result) => {
       if (result['statusCode'] == 200) {
         this.service.dismissLoading();

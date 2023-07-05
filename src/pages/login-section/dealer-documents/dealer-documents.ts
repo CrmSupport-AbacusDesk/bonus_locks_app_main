@@ -9,7 +9,9 @@ import { Storage } from '@ionic/storage';
 import * as jwt_decode from 'jwt-decode';
 import { LoginserviceProvider } from '../../../providers/loginservice/loginservice';
 import { Device } from '@ionic-native/device';
-import { DealerHomePage } from '../../dealer-home/dealer-home';
+import { Location } from '@angular/common'; 
+import { LoyaltyGiftGalleryDetailPage } from '../../loyalty/loyalty-gift-gallery-detail/loyalty-gift-gallery-detail';
+
 
 
 @IonicPage()
@@ -43,6 +45,9 @@ export class DealerDocumentsPage {
   doc: any = [];
   savingFlag: boolean = false;
   DistId:any;
+  dataPass:any;
+  gift_id: any = '';
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -57,9 +62,13 @@ export class DealerDocumentsPage {
     public storage: Storage,
     public events: Events,
     public serv: LoginserviceProvider,
+    public location:Location,
     ){
       console.log(this.navParams);
-      this.DistId = this.navParams.data.dr_id
+      this.gift_id = this.navParams.get('id');
+      this.dataPass = this.navParams
+      console.log(this.dataPass,'data 2')
+      this.DistId =this.navParams.data.dr_id
       console.log(this.DistId,'id')
       this.appVersion = navParams.get('app_version');
       this.data['device_unique_id']  = this.device.uuid;
@@ -135,28 +144,7 @@ export class DealerDocumentsPage {
     ionViewDidLoad() {
       console.log('ionViewDidLoad DealerDocumentsPage');
     }
-    
-    // getstatelist() {
-    //   this.myservice.addData({}, 'AppInfluencerSignup/getStates').then(result => {
-    //     if (result['statusCode'] == 200) {
-    //       this.state_list = result['all_state'];
-    //     }
-    //     else {
-    //       this.myservice.errorToast(result['statusMsg'])
-    //     }
-    //   });
-    // }
-    
-    // getDistrictList(state_name) {
-    //   this.service.post_rqst({ 'state_name': state_name }, 'AppInfluencerSignup/getDistrict').subscribe(result => {
-    //     if (result['statusCode'] == 200) {
-    //       this.district_list = result['all_district'];
-    //     }
-    //     else {
-    //       this.myservice.errorToast(result['statusMsg'])
-    //     }
-    //   });
-    // }
+   
     getDecodedAccessToken(token: string): any {
       try {
         return jwt_decode(token);
@@ -419,6 +407,7 @@ bankImage() {
     saveToPhotoAlbum: false
   }
   this.camera.getPicture(options).then((imageData) => {
+
     this.flag = false;
     this.data.bank_img_id = '';
     this.bankImageFlag = true
@@ -428,33 +417,17 @@ bankImage() {
   });
 }
 submit() {
-  // if (this.data.dob) {
-  //   this.data.dob = moment(this.data.dob).format('YYYY-MM-DD');
-  // }
-  // if (this.data.doa) {
-  //   this.data.doa = moment(this.data.doa).format('YYYY-MM-DD');
-  // }
+
   console.log(this.data);
   this.data.id=this.DistId
   this.savingFlag = true;
-  this.myservice.addData({ 'data': this.data }, 'AppCustomerNetwork/uploadDocuments').then(result => {
-    this.form.phone = this.data.mobile_no;
-    // this.form.registerType = "Other";
-    
-    this.form.device_info = this.data.device_info;
-    this.form.device_unique_id =this.data.device_unique_id;
-    this.form.app_version = this.data.app_version;
-    ;
-    if (result['statusCode'] == 200) {
-      this.serv.login_submit(this.form).then((result: any) => {
-        
+  this.myservice.addData({ 'data': this.data }, 'AppCustomerNetwork/uploadRetailerDocuments').then(result => {
+
+    if (result['statusCode'] == 200) {   
         this.myservice.successToast(result['statusMsg']);
         this.savingFlag = false;
-        this.constant.setData();
-        this.navCtrl.setRoot(DealerHomePage);
-        
-      })
-      
+    this.navCtrl.push(LoyaltyGiftGalleryDetailPage,{'id':this.gift_id})
+
     }
     else {
       this.myservice.errorToast(result['statusMsg'])
