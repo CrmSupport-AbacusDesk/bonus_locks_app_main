@@ -7,6 +7,7 @@ import { CancelComplaintPage } from '../../cancel-complaint/cancel-complaint';
 import { MyserviceProvider } from '../../../providers/myservice/myservice';
 import { InspectionPage } from '../../inspection/inspection';
 import { ConstantProvider } from '../../../providers/constant/constant';
+import { AddComplaintRemarkPage } from '../../add-complaint-remark/add-complaint-remark';
 /**
 * Generated class for the ComplaintDetailPage page.
 *
@@ -33,19 +34,13 @@ export class ComplaintDetailPage {
 
   
   
-  constructor( public sanitizer: DomSanitizer  , public navCtrl: NavController, public navParams: NavParams,public serve:DbserviceProvider,public loadingCtrl:LoadingController ,public modalCtrl: ModalController,public alertCtrl:AlertController,public db: MyserviceProvider, public constant: ConstantProvider) {
+  constructor( public sanitizer: DomSanitizer  , public navCtrl: NavController, public navParams: NavParams,public serve:DbserviceProvider,public loadingCtrl:LoadingController,public modalCtrl: ModalController,public alertCtrl:AlertController,public db: MyserviceProvider, public constant: ConstantProvider) {
 
     this.bannerURL = constant.upload_url1 + 'service_task/';
+    this.complaint_id = this.navParams.get('id');
+    this.getComplaintDetail(this.complaint_id);
 
-    
-    if (this.navParams.get("id")) {
-      this.complaint_id = this.navParams.get("id");
-      if (this.complaint_id) {
-        
-        
-        this.getComplaintDetail(this.complaint_id);
-      }
-    }
+
   }
   
   
@@ -54,10 +49,7 @@ export class ComplaintDetailPage {
   }
   
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ComplaintDetailPage');
-    this.presentLoading();
-    this.complaint_id = this.navParams.get('id');
-    this.getComplaintDetail(this.complaint_id);
+    
   }
   
   presentLoading() 
@@ -109,8 +101,11 @@ export class ComplaintDetailPage {
     {
 
     }
-    goToInspection() {
-      this.navCtrl.push(InspectionPage);
+    goToInspection(id) {
+      this.navCtrl.push(InspectionPage,{ "id": id });
+    }
+    goToRemark(id) {
+      this.navCtrl.push(AddComplaintRemarkPage,{ "id": id });
     }
 
     imageModal(src)

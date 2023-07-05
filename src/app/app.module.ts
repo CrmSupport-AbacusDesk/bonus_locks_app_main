@@ -265,6 +265,8 @@ import { InstallationDetailPageModule } from '../pages/installation/installation
 import { AddInstallationPageModule } from '../pages/installation/add-installation/add-installation.module';
 import { InspectionPageModule } from '../pages/inspection/inspection.module';
 import { InspectionPage } from '../pages/inspection/inspection';
+import { AddComplaintRemarkPageModule } from '../pages/add-complaint-remark/add-complaint-remark.module';
+import { AddComplaintRemarkPage } from '../pages/add-complaint-remark/add-complaint-remark';
 // import { GoogleMaps } from '@ionic-native/google-maps';
 @NgModule({
     declarations: [
@@ -504,7 +506,8 @@ import { InspectionPage } from '../pages/inspection/inspection';
         InstallationListPageModule,
         InstallationDetailPageModule,
         AddInstallationPageModule,
-        InspectionPageModule
+        InspectionPageModule,
+        AddComplaintRemarkPageModule
     ],
     bootstrap: [IonicApp],
     entryComponents: [
@@ -513,6 +516,7 @@ import { InspectionPage } from '../pages/inspection/inspection';
         TabsPage,
         CongratulationsPage,
         InspectionPage,
+        AddComplaintRemarkPage,
         // MobileLoginPage,
         // OtpPage,
         // SelectRegistrationTypePage,

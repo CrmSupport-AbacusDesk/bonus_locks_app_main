@@ -60,6 +60,27 @@
     
     <div class="detais mt16 ">
       <div class="border-container mt16">
+        <div class="summary-heading">Logs</div>
+        <ng-container>
+          <div class="padding16 scrollable-div">
+            
+            <ion-list *ngFor="let row of complaint_remark">
+              
+              <div class="remak-detail">
+                <p><span>Date:</span>{{row.date_created}}</p>
+                <p><span>Remark:</span>{{row.msg}}</p>
+              </div>
+              
+            </ion-list>
+            
+          </div>
+        </ng-container>
+      </div>        
+      
+    </div>
+    
+    <div class="detais mt16 ">
+      <div class="border-container mt16">
         <div class="summary-heading">Complaint Images</div>
         <ng-container>
           <div class="upload-doc mt10">
@@ -77,31 +98,48 @@
         </ng-container>
         
       </div>        
-    </div>   
-    <div class="detais mt16 ">
-      <div class="border-container mt16">
-        <div class="summary-heading">Logs</div>
-        <ng-container>
-          <div class="padding16 scrollable-div">
-            
-            <ion-list *ngFor="let row of complaint_remark">
-              
-              <div class="remak-detail">
-                <p><span>Date:</span>{{row.date_created}}</p>
-                <p><span>Remark:</span>{{row.msg}}</p>
-              </div>
-              
-            </ion-list>
-            
-          </div>
-        </ng-container>
-      </div>        
-    </div>   
+    </div> 
     
-    <div class="pl10 pr10">
-      <button ion-button full color="primary" (click)="goToInspection()">Inspection</button>
+    <div class="border-container mt16">
+      <div class="summary-heading">Inspection Details</div>
+      <ng-container>
+        
+        <div class="padding16">
+          
+          <table>
+            <tr>
+              <th class="w100">Complaint Id</th>
+              <td>{{complaint_detail.complain_no ? complaint_detail.complain_no : '---'}}</td>
+            </tr>
+            <tr>
+              <th>Inspection Date</th>
+              <td>{{complaint_detail.date_created ? complaint_detail.date_created :'---'}}</td>
+            </tr>
+            
+            <tr>
+              <th>Product Details</th>
+              <td>{{complaint_detail.customer_name ? complaint_detail.customer_name : '---'}}</td>
+            </tr>
+            <tr>
+              <th>Warranty Status</th>
+              <td>{{complaint_detail.customer_mobile ? complaint_detail.customer_mobile : '---'}}</td>
+            </tr>
+            <tr >
+              <th>Inspection Remark</th>
+              <td>{{complaint_detail.nature_of_problem ? complaint_detail.nature_of_problem : '---'}}</td>
+            </tr> 
+          </table>
+        </div>
+      </ng-container>
     </div>
   </div>
   
   
 </ion-content>
+<ion-fab right bottom>
+  <button ion-fab color="light"><ion-icon name="add"></ion-icon></button>
+  <ion-fab-list side="top">
+    <button ion-fab (click)="goToInspection(complaint_detail.id)">Inspection</button>
+    <button ion-fab (click)="goToRemark(complaint_detail.id)">Remark</button>
+  </ion-fab-list>
+</ion-fab>
