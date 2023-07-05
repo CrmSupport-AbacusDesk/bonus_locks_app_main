@@ -61,7 +61,7 @@
                 </ion-item> -->
             </ion-list>
         </div>
-        <ng-container *ngIf="data.payment_mode =='Bank' && !influencer_point.account_no && !influencer_point.ifsc_code">
+        <ng-container *ngIf="this.userTypeID != '3' && data.payment_mode =='Bank' && !influencer_point.account_no && !influencer_point.ifsc_code">
             <div class="error-bg kyc-pending">
                 <ng-container>
                     Your Bank Detail Is Not Updated. Please Update Bank Detail<a class="kyc-reject-text"
@@ -74,9 +74,9 @@
                 </ng-container> -->
             </div>
         </ng-container>
-        <ng-container *ngIf="this.userTypeID == '3'">
+        <ng-container *ngIf="this.userTypeID == '3' && gift_detail2.bank_name ==''">
             <div class="error-bg kyc-pending">
-                <ng-container *ngIf="this.userTypeID == '3'">
+                <ng-container>
                     Your Bank Detail Is Not Updated. Please Update Bank Detail<a class="kyc-reject-text"
                     (click)="updateDocs()"> Update Now</a>
                 </ng-container>
@@ -106,8 +106,12 @@
             Send Redeem Request
         </button> -->
 
-        <button ion-button round block color="secondary" [disabled]="userTypeID != '3' || !data.payment_mode || !influencer_point.account_no || !influencer_point.ifsc_code" (click)="SendRequest()">
+        <button ion-button round block color="secondary"  [disabled]="!data.payment_mode || !influencer_point.account_no || !influencer_point.ifsc_code " (click)="SendRequest()">
             Send Redeem Request
         </button>
+        <!-- [disabled]=" userTypeID == '3' ||  gift_detail2.adhar_no =='' || gift_detail2.bank_name == ''"
+        <button ion-button round block color="secondary"  [disabled]=" this.userTypeID == '3'" (click)="SendRequest()">
+            Send Redeem Request
+        </button> -->
     </div>
 </ion-content>

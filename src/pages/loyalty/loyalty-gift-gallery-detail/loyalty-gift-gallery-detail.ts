@@ -40,14 +40,10 @@ export class LoyaltyGiftGalleryDetailPage {
     this.uploadUrl = constant.upload_url1 + 'gift_gallery/';
     this.service.presentLoading();
     console.log(this.constant);
-    
     this.userTypeID = this.constant.UserLoggedInData.type;
     console.log('Retailer ID - ' , this.userTypeID);
-    
     this.getGiftDetail(this.gift_id);
-
-
-  
+      
   }
   
   ionViewDidLoad() {
@@ -149,7 +145,7 @@ export class LoyaltyGiftGalleryDetailPage {
         return
       }
       else {
-        this.navCtrl.push(LoyaltyRedeemRequestPage, { 'karigar_id': this.influencer_point.id, 'gift_id': this.gift_id, "mode": "reedeemPoint", 'offer_balance': this.offer_balance, 'cash_point': this.data.cash_point, 'gift_type': 'Cash', 'cash_value': this.data.cash_value, 'payment_mode': this.data.payment_mode || 'Khalti', 'wallet_no': this.data.wallet_no })
+        this.navCtrl.push(LoyaltyRedeemRequestPage, { 'karigar_id': this.influencer_point.id, 'gift_id': this.gift_id, "mode": "reedeemPoint", 'offer_balance': this.offer_balance, 'cash_point': this.data.cash_point, 'gift_type': 'Cash', 'cash_value': this.data.cash_value, 'payment_mode': this.data.payment_mode })
         // this.navCtrl.push(LoyaltyRedeemRequestPage, { 'karigar_id': this.influencer_point.id, 'gift_id': this.gift_id, "mode": "reedeemPoint", 'offer_balance': this.offer_balance, 'cash_point': this.data.cash_point, 'gift_type': 'Cash', 'cash_value': this.data.cash_value, 'payment_mode': this.data.payment_mode || 'Khalti', 'wallet_no': this.data.wallet_no })
       }
     }
@@ -161,7 +157,6 @@ export class LoyaltyGiftGalleryDetailPage {
     if (this.gift_detail.gift_type == 'Gift') {
       this.navCtrl.push(LoyaltyRedeemRequestPage, { 'karigar_id': this.influencer_point.id, 'gift_id': this.gift_id, "mode": "reedeemPoint", 'offer_balance': this.offer_balance, 'gift_type': 'Gift', 'payment_mode': this.data.payment_mode, 'wallet_no': this.data.wallet_no })
     }
-    // else{
     // }
   }
   
@@ -179,7 +174,7 @@ export class LoyaltyGiftGalleryDetailPage {
   
   updateDocs (){
     console.log('open Dealer Document uploader page')
-    this.navCtrl.push(DealerDocumentsPage, {'dr_id': this.dr_id ,'type':'3' })
+    this.navCtrl.push(DealerDocumentsPage,{'id':this.gift_id ,'dr_id':this.dr_id ,'dr_type':'3'} )
     
   }
   
