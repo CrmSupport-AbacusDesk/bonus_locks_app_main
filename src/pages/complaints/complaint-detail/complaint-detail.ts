@@ -8,6 +8,7 @@ import { MyserviceProvider } from '../../../providers/myservice/myservice';
 import { InspectionPage } from '../../inspection/inspection';
 import { ConstantProvider } from '../../../providers/constant/constant';
 import { AddComplaintRemarkPage } from '../../add-complaint-remark/add-complaint-remark';
+import { CloseComplaintPage } from '../../close-complaint/close-complaint';
 /**
 * Generated class for the ComplaintDetailPage page.
 *
@@ -106,6 +107,10 @@ export class ComplaintDetailPage {
     }
     goToRemark(id) {
       this.navCtrl.push(AddComplaintRemarkPage,{ "id": id });
+    }
+
+    goToClose(id,customer_mobile) {
+      this.navCtrl.push(CloseComplaintPage,{ "id": id ,"customer_mobile":customer_mobile});
     }
 
     imageModal(src)

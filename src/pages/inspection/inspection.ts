@@ -30,6 +30,15 @@ export class InspectionPage {
   isCameraEnabled:boolean= false;
   loading:any={};
   id: any;
+  flag: boolean = true;
+  bankImageFlag: boolean = false;
+  documentImageFlag: boolean = false;
+  documentBackImageFlag: boolean = false;
+  upl_file: any = "";
+  uploadurl: any
+  cam: any = "Camera";
+  gal: any = "Gallery";
+  cancl: any = "Cancel";
   
   constructor(public navCtrl: NavController,public db: MyserviceProvider,public actionSheetController: ActionSheetController, private camera: Camera,public alertCtrl:AlertController, private mediaCapture: MediaCapture,public diagnostic  : Diagnostic, public androidPermissions: AndroidPermissions,public dom:DomSanitizer,public serve : MyserviceProvider ,public loadingCtrl:LoadingController,public navParams: NavParams ) {
     this.get_segment();
@@ -327,9 +336,141 @@ showSuccess(text)
   alert.present();
 }
 
+onUploadChange(evt: any) {
+  let actionsheet = this.actionSheetController.create({
+    title: this.upl_file,
+    cssClass: 'cs-actionsheet',
+    buttons: [{
+      cssClass: 'sheet-m',
+      text: this.cam,
+      icon: 'camera',
+      handler: () => {
+        this.takeDocPhoto();
+      }
+    },
+    {
+      cssClass: 'sheet-m1',
+      text: this.gal,
+      icon: 'image',
+      handler: () => {
+        this.getDocImage();
+      }
+    },
+    {
+      cssClass: 'cs-cancel',
+      text: this.cancl,
+      role: 'cancel',
+      handler: () => {
+        this.formData.doc_edit_id = this.formData.id;
+      }
+    }
+  ]
+});
+actionsheet.present();
+}
+getDocImage() {
+  const options: CameraOptions = {
+    quality: 75,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+    saveToPhotoAlbum: false
+  }
+  this.camera.getPicture(options).then((imageData) => {
+    this.flag = false;
+    this.formData.doc_edit_id = '';
+    this.documentImageFlag = true
+    this.formData.docFrontBase64 = true
+    this.formData.document_image = 'data:image/jpeg;base64,' + imageData;
+  }, (err) => {
+  });
+}
+takeDocPhoto() {
+  const options: CameraOptions = {
+    quality: 75,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    targetWidth: 1050,
+    targetHeight: 1000
+  }
+  
+  this.camera.getPicture(options).then((imageData) => {
+    this.flag = false;
+    this.formData.doc_edit_id = '',
+    this.formData.docFrontBase64 = true
+    this.documentImageFlag = true
+    this.formData.document_image = 'data:image/jpeg;base64,' + imageData;
+  }, (err) => {
+  });
+}
+
+onUploadBackChange(evt: any) {
+  let actionsheet = this.actionSheetController.create({
+    title: this.upl_file,
+    cssClass: 'cs-actionsheet',
+    buttons: [{
+      cssClass: 'sheet-m',
+      text: this.cam,
+      icon: 'camera',
+      handler: () => {
+        this.backDocPhoto();
+      }
+    },
+    {
+      cssClass: 'sheet-m1',
+      text: this.gal,
+      icon: 'image',
+      handler: () => {
+        this.backDocImage();
+      }
+    },
+    {
+      cssClass: 'cs-cancel',
+      text: this.cancl,
+      role: 'cancel',
+      handler: () => {
+        this.formData.doc_back_edit_id = this.formData.id;
+      }
+    }
+  ]
+});
+actionsheet.present();
+}
+backDocPhoto() {
+  const options: CameraOptions = {
+    quality: 75,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    targetWidth: 1050,
+    targetHeight: 1000
+  }
+  
+  this.camera.getPicture(options).then((imageData) => {
+    this.flag = false;
+    this.formData.doc_back_edit_id = ''
+    this.documentBackImageFlag = true
+    this.formData.docBackBase64 = true
+    this.formData.document_image_back = 'data:image/jpeg;base64,' + imageData;
+  }, (err) => {
+  });
+}
+backDocImage() {
+  const options: CameraOptions = {
+    quality: 75,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+    saveToPhotoAlbum: false
+  }
+  this.camera.getPicture(options).then((imageData) => {
+    this.flag = false;
+    this.formData.doc_back_edit_id = '';
+    this.documentBackImageFlag = true
+    this.formData.docBackBase64 = true
+    this.formData.document_image_back = 'data:image/jpeg;base64,' + imageData;
+  }, (err) => {
+  });
+}
+
 saveInspection(){
-
-
+  
+  
   this.formData.complaint_id=this.id
   this.formData.image = this.image_data?this.image_data:[];
   console.log(this.formData);

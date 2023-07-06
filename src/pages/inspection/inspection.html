@@ -82,6 +82,17 @@
         <div *ngIf="f.submitted && warranty_status.invalid" class="eror">
           <p *ngIf="warranty_status.errors.required">{{'Field is Required'}}</p>
         </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && closing_type?.invalid}">
+          <ion-label floating>Closing Type<span>*</span></ion-label>
+          <ion-select name="closing_type" #closing_type="ngModel" [(ngModel)]="formData.closing_type">
+            <ion-option value="Service">Service</ion-option>
+            <ion-option value="Replacement">Replacement</ion-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="f.submitted && closing_type.invalid" class="eror">
+          <p *ngIf="closing_type.errors.required">{{'Field is Required'}}</p>
+        </div>
         
         <ion-item [ngClass]="{'error':f.submitted && type?.invalid}">
           <ion-label floating>Remark <strong>*</strong></ion-label>
@@ -91,21 +102,8 @@
           <p> {{ 'This field is required'}}</p>
         </div>
       </ion-list>
-      <div class="upload-doc mt0" >
-        <ul class="no-padding">
-          
-          <li class="image-upload" *ngFor="let pic of image_data;let i = index;">
-            <img src="{{pic}}">
-            <button class="del"><i class="material-icons" (click)="remove_image(i)">delete_sweep</i></button>
-          </li>
-          <li class="add_image mt0" (click)="image_data.length < 1 ?  captureMedia() : showLimit()">
-            <img src="assets/imgs/upload_imae_icon.png" alt="">
-            Upload Bill Image Here <span>here</span>
-          </li>
-        </ul>
-      </div>
 
-      <div class="upload-doc mt0" >
+      <!-- <div class="upload-doc mt0" >
         <ul class="no-padding">
           
           <li class="image-upload" *ngFor="let pic of image_data;let i = index;">
@@ -117,7 +115,24 @@
             Upload Invoice Image Here <span>here</span>
           </li>
         </ul>
-      </div>
+      </div> -->
+
+      <div class="outer-doc">
+        <div class="upload-document" (click)="onUploadChange()">
+            <p *ngIf="documentImageFlag == false">
+                <i class="material-icons">add_circle</i><br>{{'Upload  Invoice Image Here'}}
+            </p>
+            <img src="{{formData.doc_edit_id ? uploadurl+formData.document_image : formData.document_image}}"
+                *ngIf="documentImageFlag == true">
+        </div>
+        <div class="upload-document mt15" (click)="onUploadBackChange()">
+            <p *ngIf="documentBackImageFlag == false"><i
+                    class="material-icons">add_circle</i><br>{{'Upload Bill Image Here'}}
+            </p>
+            <img src="{{formData.doc_back_edit_id ? uploadurl+formData.document_image_back : formData.document_image_back}}"
+                *ngIf="documentBackImageFlag == true">
+        </div>
+    </div>
       
       <div class="enquiry-btn add-btns mt20">
         <button ion-button block class="h40 green-color" style="letter-spacing: 1px;">

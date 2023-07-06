@@ -132,6 +132,34 @@
         </div>
       </ng-container>
     </div>
+
+    <div class="border-container mt16">
+      <div class="summary-heading">Closing Details</div>
+      <ng-container>
+        
+        <div class="padding16">
+          
+          <table>
+            <tr>
+              <th class="w100">Complaint Id</th>
+              <td></td>
+            </tr>
+            <tr>
+              <th>New Serial No.</th>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Closing Date</th>
+              <td></td>
+            </tr>
+            <tr>
+              <th>Closing Remark</th>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+      </ng-container>
+    </div>
   </div>
   
   
@@ -141,5 +169,6 @@
   <ion-fab-list side="top">
     <button ion-fab (click)="goToInspection(complaint_detail.id)">Inspection</button>
     <button ion-fab (click)="goToRemark(complaint_detail.id)">Remark</button>
+    <button ion-fab (click)="goToClose(complaint_detail.id,complaint_detail.customer_mobile)">Close</button>
   </ion-fab-list>
 </ion-fab>
