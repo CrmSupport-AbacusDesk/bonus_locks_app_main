@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content>
-  <form #f="ngForm" (ngSubmit)="f.form.valid && closeComplaint()">
+  <form #f="ngForm">
     <div class="form">
       <ion-list no-lines class="padding10">
         
@@ -20,6 +20,7 @@
           <ion-label floating>Closing Type<span>*</span></ion-label>
           <ion-select name="closing_type" #closing_type="ngModel" [(ngModel)]="formData.closing_type">
             <ion-option value="Service">Service</ion-option>
+            <ion-option value="Spare Part Pending">Spare Part Pending</ion-option>
             <ion-option value="Replacement">Replacement</ion-option>
           </ion-select>
         </ion-item>
@@ -32,12 +33,12 @@
           {{'Scan'}}
         </div>
         
-        <ion-item [ngClass]="{'error':f.submitted && serial_no?.invalid}" *ngIf="formData.closing_type == 'Replacement'">
+        <ion-item *ngIf="formData.closing_type == 'Replacement'" [ngClass]="{'error':f.submitted && new_serial_nonew_serial_no?.invalid}" >
           <ion-label floating>Serial No.<span>*</span></ion-label>
-          <ion-input type="text" name="serial_no" #serial_no="ngModel" [(ngModel)]="formData.serial_no" required></ion-input>
+          <ion-input type="text" name="new_serial_nonew_serial_no" #new_serial_nonew_serial_no="ngModel" [(ngModel)]="formData.new_serial_nonew_serial_no" required></ion-input>
         </ion-item>
-        <div *ngIf="f.submitted && serial_no.invalid" class="eror">
-          <p *ngIf="serial_no.errors.required">{{'Field is Required'}}</p>
+        <div *ngIf="f.submitted && new_serial_nonew_serial_no.invalid" class="eror">
+          <p *ngIf="new_serial_nonew_serial_no.errors.required">{{'Field is Required'}}</p>
         </div>
         
         <!-- <ion-item [ngClass]="{'error':f.submitted && category?.invalid}">
@@ -77,11 +78,27 @@
         
         
         
-        <ion-item [ngClass]="{'error':f.submitted && type?.invalid}">
+        <ion-item [ngClass]="{'error':f.submitted && remarks ?.invalid}" *ngIf="formData.closing_type == 'Service'">
           <ion-label floating>Remark <strong>*</strong></ion-label>
           <ion-textarea name="remarks" #remarks="ngModel" [(ngModel)]="formData.remarks"></ion-textarea>
         </ion-item>
         <div class="eror" *ngIf="f.submitted && remarks?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && spare_pending_remark?.invalid}" *ngIf="formData.closing_type == 'Spare Part Pending'">
+          <ion-label floating>Spare Pending Remark <strong>*</strong></ion-label>
+          <ion-textarea name="spare_pending_remark" #spare_pending_remark="ngModel" [(ngModel)]="formData.spare_pending_remark"></ion-textarea>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && spare_pending_remark?.invalid">
+          <p> {{ 'This field is required'}}</p>
+        </div>
+
+        <ion-item [ngClass]="{'error':f.submitted && closing_remark ?.invalid}" *ngIf="formData.closing_type == 'Replacement'">
+          <ion-label floating>Closing Remark <strong>*</strong></ion-label>
+          <ion-textarea name="closing_remark" #closing_remark="ngModel" [(ngModel)]="formData.closing_remark"></ion-textarea>
+        </ion-item>
+        <div class="eror" *ngIf="f.submitted && closing_remark?.invalid">
           <p> {{ 'This field is required'}}</p>
         </div>
       </ion-list>
@@ -97,7 +114,7 @@
           </li>
           <li class="add_image mt0" (click)="image_data.length < 1 ?  captureMedia() : showLimit()">
             <img src="assets/imgs/upload_imae_icon.png" alt="">
-            Upload Image Here
+            Upload Image Here{{Otp_verify}}
           </li>
         </ul>
       </div>

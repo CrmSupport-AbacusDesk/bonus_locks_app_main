@@ -32,16 +32,22 @@ export class ComplaintDetailPage {
   star:any='';
   amount:any={};
   bannerURL: any;
-
+  complaint_type: any = 'Details'
+  id:any;
+  data:any={}
+  
   
   
   constructor( public sanitizer: DomSanitizer  , public navCtrl: NavController, public navParams: NavParams,public serve:DbserviceProvider,public loadingCtrl:LoadingController,public modalCtrl: ModalController,public alertCtrl:AlertController,public db: MyserviceProvider, public constant: ConstantProvider) {
 
+    console.log(this.navParams);
+    this.id  =this.navParams.data.id;
+    console.log(this.id);
     this.bannerURL = constant.upload_url1 + 'service_task/';
     this.complaint_id = this.navParams.get('id');
     this.getComplaintDetail(this.complaint_id);
-
-
+    
+    
   }
   
   
@@ -75,13 +81,13 @@ export class ComplaintDetailPage {
         this.complaint_images = response['result']['image'];
         console.log(this.complaint_remark);
         
-
         
-
+        
+        
         // this.complaint_media = response['complaintDetails']['image'] ;              
         // for (let i = 0; i < this.complaint_media.length; i++) {
         //   this.complaint_media[i].file_name =  this.sanitizer.bypassSecurityTrustResourceUrl( this.serve.url+'app/uploads/'+this.complaint_media[i].file_name  );
-          
+        
         // }
         
       });
@@ -97,10 +103,10 @@ export class ComplaintDetailPage {
       });
       alert.present();
     }
-
+    
     cancelComplaint(test)
     {
-
+      
     }
     goToInspection(id) {
       this.navCtrl.push(InspectionPage,{ "id": id });
@@ -108,17 +114,34 @@ export class ComplaintDetailPage {
     goToRemark(id) {
       this.navCtrl.push(AddComplaintRemarkPage,{ "id": id });
     }
-
+    
     goToClose(id,customer_mobile) {
       this.navCtrl.push(CloseComplaintPage,{ "id": id ,"customer_mobile":customer_mobile});
     }
-
+    
     imageModal(src)
     {
-        console.log(src);
-        
-        this.modalCtrl.create(ViewProfilePage, {"Image": src}).present();
+      console.log(src);
+      
+      this.modalCtrl.create(ViewProfilePage, {"Image": src}).present();
     }
     
-  }
-  
+    addRemark()
+    {  
+      this.db.addData( {"complaint_id":this.id,"msg": this.data.msg },'AppServiceTask/addComplaintRemark').then(result =>
+        {
+          if (result['statusCode'] == 200) {
+            this.db.dismissLoading();
+            this.showSuccess("Remark Added Successfully!");
+            this.navCtrl.setRoot(ComplaintDetailPage,{ id: this.id});
+          }
+          else {
+            this.db.errorToast(result['statusMsg'])
+          }
+          console.log(result); 
+          
+        });
+      }
+      
+    }
+    

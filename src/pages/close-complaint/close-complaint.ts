@@ -1,11 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
-import { AlertController, IonicPage, LoadingController, NavController, NavParams, Platform } from 'ionic-angular';
+import { ActionSheetController, AlertController, IonicPage, LoadingController, NavController, NavParams, Platform } from 'ionic-angular';
 import { MyserviceProvider } from '../../providers/myservice/myservice';
 import { BarcodeScanner ,BarcodeScannerOptions} from '@ionic-native/barcode-scanner';
 import { DbserviceProvider } from '../../providers/dbservice/dbservice';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { OpenNativeSettings } from '@ionic-native/open-native-settings';
 import { ComplaintDetailPage } from '../complaints/complaint-detail/complaint-detail';
+import { DomSanitizer } from '@angular/platform-browser';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { Camera ,CameraOptions} from '@ionic-native/camera';
+
 
 
 /**
@@ -33,9 +38,11 @@ export class CloseComplaintPage {
   id: any;
   customer_mobile: any;
   btndisable: boolean = false;
+  isCameraEnabled:boolean= false;
+
   
   
-  constructor(public navCtrl: NavController, public navParams: NavParams,public service: MyserviceProvider,public loadingCtrl: LoadingController,private barcodeScanner: BarcodeScanner,public alertCtrl: AlertController,public serve : MyserviceProvider,public platform: Platform,public openNativeSettings: OpenNativeSettings,) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,public service: MyserviceProvider,public loadingCtrl: LoadingController,private barcodeScanner: BarcodeScanner,public alertCtrl: AlertController,public serve : MyserviceProvider,public platform: Platform,public openNativeSettings: OpenNativeSettings,public actionSheetController: ActionSheetController, public diagnostic  : Diagnostic, public androidPermissions: AndroidPermissions,public dom:DomSanitizer,private camera: Camera) {
     console.log(this.navParams);
     this.id  =this.navParams.data.id;
     this.customer_mobile  =this.navParams.data.customer_mobile;
@@ -52,7 +59,9 @@ export class CloseComplaintPage {
         prompt: ""
       };
       this.barcodeScanner.scan(options).then(resp => {
-        this.formData.serial_no = resp.text;
+        console.log(resp.text);
+        
+        this.formData.new_serial_no = resp.text;
         
         
       }, err => {
@@ -318,15 +327,12 @@ send_otp(){
     // this.form.otp = 123456;
   }
   let data={'phone':this.customer_mobile,'otp':this.formData.otp}
-  this.service.addData(data, 'AppOrder/sendOrderOtp').then((response) => {
+  this.service.addData(data, 'AppServiceTask/sendOtp').then((response) => {
     
     if (response['statusCode'] == 200) {
-      this.service.successToast(response['statusMsg'])
       this.Otp_verify=true
       this.sendOTP=true
-      
-      
-      
+      this.service.successToast(response['statusMsg'])
     }
   })
   
@@ -368,7 +374,7 @@ closeComplaint(){
   this.formData.image = this.image_data?this.image_data:[];
   console.log(this.formData);
   
-  this.serve.addData( {"data": this.formData },'AppServiceTask/complaintInspection').then(result =>
+  this.serve.addData( {"data": this.formData },'AppServiceTask/complaintStatus').then(result =>
     {
       if (result['statusCode'] == 200) {
         this.serve.dismissLoading();

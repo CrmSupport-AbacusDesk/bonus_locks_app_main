@@ -29,7 +29,7 @@ export class ComplaintHistoryPage {
   start: any;
   dr_id: any;
   complaint_type: any = 'Pending'
-  
+  date_created:any;
   
   constructor(public navCtrl: NavController, public navParams: NavParams,public service:DbserviceProvider,public alertCtrl:AlertController,public loadingCtrl:LoadingController,public db: MyserviceProvider)
   {
@@ -70,13 +70,32 @@ export class ComplaintHistoryPage {
     this.getComplaintHistory(); 
     refresher.complete();
   }
+
+  getCatalogueData() {
+    this.db.presentLoading();
+    this.filter.limit = 20;
+    this.filter.start = 0;
+    this.db.addData({'filter':this.filter}, 'AppCustomerNetwork/segmentList').then((result) => {
+        if (result['statusCode'] == 200) {
+            this.db.dismissLoading();
+            // this.products = result['data'];
+        } else {
+            this.db.errorToast(result['statusMsg']);
+            this.db.dismissLoading();
+        }
+    }, error => {
+        this.db.Error_msg(error);
+        this.db.dismissLoading();
+    });
+}
   
   getComplaintHistory()
   {
     // console.log(type)
     this.flag=0;
-    this.filter.limit = 0;
-    this.db.addData( {'dr_id': this.dr_id, 'limit': this.filter, start: this.start,'Status': this.complaint_type},'AppServiceTask/serviceComplaintList').then((result) =>
+    this.filter.limit = 20;
+    this.filter.start=0;
+    this.db.addData( {'dr_id': this.dr_id, 'filter': this.filter, start: this.start,'status': this.complaint_type},'AppServiceTask/serviceComplaintList').then((result) =>
     {
       console.log(result);
       this.loading.dismiss();
@@ -87,14 +106,14 @@ export class ComplaintHistoryPage {
   }
   
   loadData(infiniteScroll) {
-    this.start = this.total_count.length
-    this.db.addData({ 'dr_id': this.dr_id, 'limit': this.filter, 'start': this.start, 'Status': this.complaint_type }, 'AppServiceTask/serviceComplaintList').then(resp => {
+    this.filter.start = this.complaint_list.length
+    this.db.addData({ 'dr_id': this.dr_id, 'filter': this.filter, 'start': this.start, 'status': this.complaint_type }, 'AppServiceTask/serviceComplaintList').then(resp => {
       if (['result']['tab_count'] == '') {
         this.flag = 1;
       }
       else {
         setTimeout(() => {
-          this.total_count = this.total_count.concat(resp['result']['tab_count']);
+          this.complaint_list = this.complaint_list.concat(resp['result']['tab_count']);
           infiniteScroll.complete();
         }, 1000);
       }

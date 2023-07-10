@@ -10,13 +10,25 @@
   </ion-navbar>
 </ion-header>
 <ion-content> 
-  <div class="detais mt16">
+  <div class="detais">
+    <div class="capsule-tabs" style="border-bottom: 0px;">
+      <ul>
+        <li [ngClass]="{'active':complaint_type == 'Details'}" (click)="complaint_type = 'Details';">
+          <p>Details</p>
+        </li>
+        <li [ngClass]="{'active':complaint_type == 'Inspection'}" (click)="complaint_type = 'Inspection';">
+          <p>Inspection</p>
+        </li>
+        <li [ngClass]="{'active':complaint_type == 'Close'}" (click)="complaint_type = 'Close';">
+          <p>Close</p>
+        </li>
+      </ul>
+    </div>
     
-    <div class="border-container mt16">
+    <div class="border-container mt16" *ngIf="complaint_type == 'Details'">
       <div class="summary-heading">Basic Details</div>
       <ng-container>
-        
-        <div class="padding16">
+        <div class="">
           
           <table>
             <tr>
@@ -55,56 +67,45 @@
             
           </table>
         </div>
+        <div class="upload-doc mt16">
+          <ul class="no-padding">
+            
+            <li class="image-upload" *ngFor="let row of complaint_images" (click)="imageModal(bannerURL + row.image)">
+              <img src="{{bannerURL + row.image}}">
+              
+            </li>
+          </ul>
+          
+        </div>
       </ng-container>
     </div> 
-    
-    <div class="detais mt16 ">
-      <div class="border-container mt16">
+    <div class="detais mt16" *ngIf="complaint_type == 'Details'">
+      <div class="border-container">
         <div class="summary-heading">Logs</div>
         <ng-container>
-          <div class="padding16 scrollable-div">
+          <div class="pb100">
+            <div class="remarkSent" *ngFor="let row of complaint_remark">
+              <p class="remarkMsg">{{row.msg}}</p>
+              <div class="dateCreated"><span>({{row.created_by_type}})</span> <span>{{row.date_created | date:'d MMM y'}}</span></div>
+            </div>
             
-            <ion-list *ngFor="let row of complaint_remark">
-              
-              <div class="remak-detail">
-                <p><span>Date:</span>{{row.date_created}}</p>
-                <p><span>Remark:</span>{{row.msg}}</p>
+            <div class="nothing-here" *ngIf="complaint_remark == 0">
+              <div class="outer">
+                <div class="innear">
+                  <img src="assets/imgs/no_found.svg" alt="">
+                  <p>Data Not Available</p>
+                </div>
               </div>
-              
-            </ion-list>
-            
+            </div>
           </div>
         </ng-container>
-      </div>        
-      
+      </div>
     </div>
-    
-    <div class="detais mt16 ">
-      <div class="border-container mt16">
-        <div class="summary-heading">Complaint Images</div>
-        <ng-container>
-          <div class="upload-doc mt10">
-            <ul class="no-padding">
-              
-              <li class="image-upload" *ngFor="let row of complaint_images" (click)="imageModal(bannerURL + row.image)">
-                <img src="{{bannerURL + row.image}}">
-                
-              </li>
-            </ul>
-            
-          </div>
-          
-          
-        </ng-container>
-        
-      </div>        
-    </div> 
-    
-    <div class="border-container mt16">
+    <div class="border-container mt16" *ngIf="complaint_type == 'Inspection'">
       <div class="summary-heading">Inspection Details</div>
       <ng-container>
         
-        <div class="padding16">
+        <div class="">
           
           <table>
             <tr>
@@ -130,14 +131,16 @@
             </tr> 
           </table>
         </div>
+        
       </ng-container>
+      
     </div>
-
-    <div class="border-container mt16">
+    
+    <div class="border-container mt16" *ngIf="complaint_type == 'Close'">
       <div class="summary-heading">Closing Details</div>
       <ng-container>
         
-        <div class="padding16">
+        <div class="">
           
           <table>
             <tr>
@@ -158,17 +161,25 @@
             </tr>
           </table>
         </div>
+        
       </ng-container>
     </div>
   </div>
-  
-  
 </ion-content>
-<ion-fab right bottom>
-  <button ion-fab color="light"><ion-icon name="add"></ion-icon></button>
-  <ion-fab-list side="top">
-    <button ion-fab (click)="goToInspection(complaint_detail.id)">Inspection</button>
-    <button ion-fab (click)="goToRemark(complaint_detail.id)">Remark</button>
-    <button ion-fab (click)="goToClose(complaint_detail.id,complaint_detail.customer_mobile)">Close</button>
-  </ion-fab-list>
-</ion-fab>
+
+<ion-footer>
+  <div class="footer-input-block" *ngIf="complaint_type == 'Details'">
+    <textarea type="text" placeholder="Add Remark" name="msg" #msg="ngModel" [(ngModel)]="data.msg"></textarea>
+    <button ion-button icon-start color="success" (click)="addRemark()"><ion-icon name="send"></ion-icon></button>
+  </div>
+  <div class="enquiry-btn add-btns mt20" *ngIf="complaint_type == 'Inspection'">
+    <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" (click)="goToInspection(complaint_detail.id)">
+      <p>Add Inspection</p>
+    </button>
+  </div>
+  <div class="enquiry-btn add-btns mt20" *ngIf="complaint_type == 'Close'">
+    <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" (click)="goToClose(complaint_detail.id,complaint_detail.customer_mobile)">
+      <p>Close Complaint</p>
+    </button>
+  </div>
+</ion-footer>

@@ -13,6 +13,14 @@
       </button>
     </ion-buttons>
   </ion-navbar>
+  <ion-toolbar>
+    <div class="search add-search">
+      <div class="filter">
+        <ion-searchbar type='text' name='search_key' [(ngModel)]="filter.search_key" (keyup.enter)="getCatalogueData()">
+        </ion-searchbar>
+      </div>
+    </div>
+  </ion-toolbar>
 </ion-header>
 
 
@@ -45,7 +53,7 @@
       <div class="attendance-list" *ngFor="let row of complaint_list; let i=index" (click)="goCompalintDetail(row.id)">
         <div class="slab slab-bg" style="display: flex; justify-content: space-between;">
           <div class="slab-day">
-            <p>{{row.date_created | date :  "dd.MM.y" }}</p>
+            <p>{{row.date_created | date :  "d MMM y" }}</p>
             <span>Date</span>
           </div>
           <div class="slab-day">
@@ -96,9 +104,9 @@
     </div>
   </ng-container>
 </ion-content>
-
+<!-- 
 <ion-fab right bottom>
   <button ion-fab color="primary" (click)="addComplaint()">
     <ion-icon name="add"></ion-icon>
   </button>
-</ion-fab>
+</ion-fab> -->
