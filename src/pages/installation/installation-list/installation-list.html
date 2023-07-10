@@ -7,7 +7,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Installation</ion-title>
-    <ion-buttons end *ngIf="">
+    <ion-buttons end>
       <button ion-button icon-only (click)="presentPopover($event)">
         <ion-icon name="more"></ion-icon>
       </button>
@@ -28,58 +28,55 @@
   <ng-container *ngIf="showRelatedTab!=false">
     <div class="capsule-tabs" style="border-bottom: 0px;">
       <ul>
-        <li [ngClass]="{'active':complaint_type == 'All'}" (click)="complaint_type = 'All';getComplaintHistory()">
-          <p>All<span>{{count.all_count}}</span></p>
+        <li [ngClass]="{'active':installtion_type == 'All'}" (click)="installtion_type = 'All';installationList()">
+          <p>All<span></span></p>
         </li>
-        <li [ngClass]="{'active':complaint_type == 'Pending'}" (click)="complaint_type = 'Pending';getComplaintHistory()">
-          <p>Pending<span>{{count.pending_count}}</span></p>
+        <li [ngClass]="{'active':installtion_type == 'Pending'}" (click)="installtion_type = 'Pending';installationList()">
+          <p>Pending<span></span></p>
         </li>
-        <li [ngClass]="{'active':complaint_type == 'Closed'}" (click)="complaint_type = 'Closed';getComplaintHistory()">
-          <p>Closed<span>{{count.closed_count}}</span></p>
+        <li [ngClass]="{'active':installtion_type == 'Done'}" (click)="installtion_type = 'Done';installationList()">
+          <p>Done<span></span></p>
         </li>
         
-        <li [ngClass]="{'active':complaint_type == 'Cancel'}" (click)="complaint_type = 'Cancel';getComplaintHistory()">
-          <p>Cancel<span>{{count.reject_count}}</span></p>
+        <li [ngClass]="{'active':installtion_type == 'Reject'}" (click)="installtion_type = 'Reject';installationList()">
+          <p>Reject<span></span></p>
         </li>
       </ul>
     </div>
-    
-    
-    
-    
     <div class="pl16 pr16 mt15 mb50">
       
-      <div class="attendance-list" *ngFor="let row of complaint_list; let i=index" (click)="goCompalintDetail(row.id)">
+      <div class="attendance-list" *ngFor="let row of installation_list; let i=index" (click)="goInstallationDetail(row.id)">
         <div class="slab slab-bg" style="display: flex; justify-content: space-between;">
           <div class="slab-day">
-            <p>{{row.date_created | date :  "dd.MM.y" }}</p>
+            <!-- <p>{{row.date_created | date :  "dd.MM.y" }}</p> -->
+            <p>test</p>
             <span>Date</span>
           </div>
           <div class="slab-day">
-            <p>#comp-{{row.id}}</p>
+            <!-- <p>#comp-{{row.id}}</p> -->
             <span>Complaint Id</span>
           </div>
           <div class="slab-day">
-            <p class="bold">{{row.complaint_status}}</p>
+            <!-- <p class="bold">{{row.complaint_status}}</p> -->
             <span>Complaint Status</span>
           </div>
         </div>
         
         <div class="center-block">
           <div class="circle">{{row.customer_name?.substring(0,1).toUpperCase()}}</div>
-          <span>{{row.customer_name}}</span>
-          <p>{{row.customer_mobile}}</p>
+          <!-- <span>{{row.customer_name}}</span> -->
+          <!-- <p>{{row.customer_mobile}}</p> -->
         </div>
         
         <div class="slab mt5">
           <div class="slab-day">
-            <p>{{ row.city | titlecase }} , {{row.district | titlecase }} , {{row.state | titlecase}} , {{row.pincode}}</p>
+            <!-- <p>{{ row.city | titlecase }} , {{row.district | titlecase }} , {{row.state | titlecase}} , {{row.pincode}}</p> -->
             <span>Customer Address</span>
           </div>
         </div>
         <div class="slab mt5">
           <div class="slab-day">
-            <p>{{row.nature_of_problem}}</p>
+            <!-- <p>{{row.nature_of_problem}}</p> -->
             <span>Nature Of Problem</span>
           </div>
         </div>
@@ -93,7 +90,7 @@
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
     
-    <div class="nothing-here" style="height: 60%;" *ngIf="!complaint_list.length">
+    <div class="nothing-here" style="height: 60%;" *ngIf="!installation_list.length">
       <div class="outer">
         <div class="innear">
           <img src="assets/imgs/no_found.svg" alt="">
@@ -104,8 +101,8 @@
   </ng-container>
 </ion-content>
 
-<!-- <ion-fab right bottom>
-  <button ion-fab color="primary" (click)="addComplaint()">
-    <ion-icon name="add"></ion-icon>
+<ion-footer>
+  <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" (click)="goInstallationDetail(2)">
+    <p>Close Complaint</p>
   </button>
-</ion-fab> -->
+</ion-footer>

@@ -18,8 +18,8 @@ import { InstallationDetailPage } from '../installation-detail/installation-deta
   templateUrl: 'installation-list.html',
 })
 export class InstallationListPage {
-
-  complaint_list : any=[];
+  
+  installation_list : any=[];
   loading:any;
   filter:any={};
   flag:any='';
@@ -28,7 +28,7 @@ export class InstallationListPage {
   data:any={};
   start: any;
   dr_id: any;
-  complaint_type: any = 'Pending'
+  installtion_type: any = 'Pending'
   
   constructor(public navCtrl: NavController, public navParams: NavParams,public service:DbserviceProvider,public alertCtrl:AlertController,public loadingCtrl:LoadingController,public db: MyserviceProvider) {
   }
@@ -39,54 +39,6 @@ export class InstallationListPage {
   add_page(){
     this.navCtrl.push(AddInstallationPage, { "type": '' });
   }
-  
-  getCatalogueData() {
-    this.db.presentLoading();
-    this.filter.limit = 20;
-    this.filter.start = 0;
-    this.db.addData({'filter':this.filter}, 'AppCustomerNetwork/segmentList').then((result) => {
-        if (result['statusCode'] == 200) {
-            this.db.dismissLoading();
-        } else {
-            this.db.errorToast(result['statusMsg']);
-            this.db.dismissLoading();
-        }
-    }, error => {
-        this.db.Error_msg(error);
-        this.db.dismissLoading();
-    });
-  }
-  
-  getComplaintHistory()
-  {
-    // console.log(type)
-    this.flag=0;
-    this.filter.limit = 0;
-    this.db.addData( {'dr_id': this.dr_id, 'limit': this.filter, start: this.start,'Status': this.complaint_type},'AppServiceTask/serviceComplaintList').then((result) =>
-    {
-      console.log(result);
-      this.loading.dismiss();
-      this.complaint_list = result['result'];
-      this.count = result['tab_count'];
-      this.total_count = result['tab_count'];
-    });
-  }
-  
-  loadData(infiniteScroll) {
-    this.start = this.total_count.length
-    this.db.addData({ 'dr_id': this.dr_id, 'limit': this.filter, 'start': this.start, 'Status': this.complaint_type }, 'AppServiceTask/serviceComplaintList').then(resp => {
-      if (['result']['tab_count'] == '') {
-        this.flag = 1;
-      }
-      else {
-        setTimeout(() => {
-          this.total_count = this.total_count.concat(resp['result']['tab_count']);
-          infiniteScroll.complete();
-        }, 1000);
-      }
-    });
-  }
-  
   
   
   showSuccess(text)
@@ -99,7 +51,57 @@ export class InstallationListPage {
     alert.present();
   }
   
-  goCompalintDetail(id) {
+  
+  installationList()
+  {
+    this.flag=0;
+    this.filter.limit = 20;
+    this.filter.start=0;
+    this.db.addData( {'dr_id': this.dr_id, 'filter': this.filter, start: this.start,'status': this.installtion_type},'AppServiceTask/serviceComplaintList').then((result) =>
+    {
+      console.log(result);
+      this.loading.dismiss();
+      this.installation_list = result['result'];
+      this.count = result['tab_count'];
+      this.total_count = result['tab_count'];
+    });
+  }
+  
+  loadData(infiniteScroll) {
+    this.filter.start = this.installation_list.length
+    this.db.addData({ 'dr_id': this.dr_id, 'filter': this.filter, 'start': this.start, 'status': this.installtion_type }, 'AppServiceTask/serviceComplaintList').then(resp => {
+      if (['result']['tab_count'] == '') {
+        this.flag = 1;
+      }
+      else {
+        setTimeout(() => {
+          this.installation_list = this.installation_list.concat(resp['result']['tab_count']);
+          infiniteScroll.complete();
+        }, 1000);
+      }
+    });
+  }
+  
+  getCatalogueData() {
+    this.db.presentLoading();
+    this.filter.limit = 20;
+    this.filter.start = 0;
+    this.db.addData({'filter':this.filter}, 'AppCustomerNetwork/segmentList').then((result) => {
+      if (result['statusCode'] == 200) {
+        this.db.dismissLoading();
+        // this.products = result['data'];
+      } else {
+        this.db.errorToast(result['statusMsg']);
+        this.db.dismissLoading();
+      }
+    }, error => {
+      this.db.Error_msg(error);
+      this.db.dismissLoading();
+    });
+  }
+  
+  
+  goInstallationDetail(id) {
     this.navCtrl.push(InstallationDetailPage,{ id: id})
   }
   
