@@ -38,8 +38,7 @@
     <div class="pb100">
         <div class="remarkSent" *ngFor="let row of activity_list">
             <p class="remarkMsg">{{row.msg ? row.msg : row.remark}}</p>
-            <div class="dateCreated"><span>({{row.changes_by_name}})</span> <span>{{row.date_created | date:'d MMM
-                    y'}}</span></div>
+            <div class="dateCreated"><span>({{row.changes_by_name}})</span> <span>{{row.date_created | date:'d MMM y'}}</span></div>
         </div>
 
         <div class="nothing-here" *ngIf="activity_list == 0">

@@ -1,96 +1,83 @@
 <!--
   Generated template for the InstallationListPage page.
-
+  
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
 <ion-header>
   <ion-navbar>
     <ion-title>Installation</ion-title>
-    <ion-buttons end *ngIf="">
+    <ion-buttons end>
       <button ion-button icon-only (click)="presentPopover($event)">
         <ion-icon name="more"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
-</ion-header>
-
-
-<ion-content>
-
-  <ng-container *ngIf="LoginType =='Employee'">
-    <div class="fix-container">
-      <div class="attendance-list flat-list">
-        <div class="center-block">
-          <div class="circle"></div>
-          <h1></h1>
-          <p></p>
-          <a class="cell-phone" href="tel:6876768767"><i class="material-icons">phone</i></a>
-        </div>
+  <ion-toolbar>
+    <div class="search add-search">
+      <div class="filter">
+        <ion-searchbar type='text' name='search_key' [(ngModel)]="filter.search_key" (keyup.enter)="getCatalogueData()">
+        </ion-searchbar>
       </div>
     </div>
-  </ng-container>
+  </ion-toolbar>
+</ion-header>
 
+<ion-content>
+  
   <ng-container *ngIf="showRelatedTab!=false">
     <div class="capsule-tabs" style="border-bottom: 0px;">
       <ul>
-        <li [ngClass]="{'active':complaint_type == 'Pending'}"
-          (click)="complaint_type = 'Pending';complaintList()">
-          <p>Pending<span>2</span></p>
+        <li [ngClass]="{'active':installtion_type == 'All'}" (click)="installtion_type = 'All';installationList()">
+          <p>All<span></span></p>
         </li>
-        <li [ngClass]="{'active':complaint_type == 'Approved'}"
-          (click)="complaint_type = 'Approved';complaintList()">
-          <p>Approved<span>2</span></p>
+        <li [ngClass]="{'active':installtion_type == 'Pending'}" (click)="installtion_type = 'Pending';installationList()">
+          <p>Pending<span></span></p>
         </li>
-
-        <li [ngClass]="{'active':complaint_type == 'Reject'}"
-          (click)="complaint_type = 'Reject';complaintList()">
-          <p>Rejected<span>3</span></p>
+        <li [ngClass]="{'active':installtion_type == 'Done'}" (click)="installtion_type = 'Done';installationList()">
+          <p>Done<span></span></p>
+        </li>
+        
+        <li [ngClass]="{'active':installtion_type == 'Reject'}" (click)="installtion_type = 'Reject';installationList()">
+          <p>Reject<span></span></p>
         </li>
       </ul>
     </div>
-
-
-
-
     <div class="pl16 pr16 mt15 mb50">
-
-      <div class="attendance-list" *ngFor="let row of total_order" (click)="goOnOrderDetailFromDrLogin(row.id)">
-        <div class="slab slab-bg">
+      
+      <div class="attendance-list" *ngFor="let row of installation_list; let i=index" (click)="goInstallationDetail(row.id)">
+        <div class="slab slab-bg" style="display: flex; justify-content: space-between;">
           <div class="slab-day">
-            <p></p>
+            <!-- <p>{{row.date_created | date :  "dd.MM.y" }}</p> -->
+            <p>test</p>
             <span>Date</span>
           </div>
           <div class="slab-day">
-            <p></p>
-            <span>Order Id</span>
+            <!-- <p>#comp-{{row.id}}</p> -->
+            <span>Complaint Id</span>
+          </div>
+          <div class="slab-day">
+            <!-- <p class="bold">{{row.complaint_status}}</p> -->
+            <span>Complaint Status</span>
           </div>
         </div>
-
+        
         <div class="center-block">
-          <div class="circle"></div>
-          <h1></h1>
-          <p>Created by</p>
+          <div class="circle">{{row.customer_name?.substring(0,1).toUpperCase()}}</div>
+          <!-- <span>{{row.customer_name}}</span> -->
+          <!-- <p>{{row.customer_mobile}}</p> -->
         </div>
-
-
-        <div class="center-block pl0 pr0">
-          <h1></h1>
-          <p>Dealer Name</p>
-        </div>
-
+        
         <div class="slab mt5">
           <div class="slab-day">
-            <p></p>
-            <span>Total Item</span>
+            <!-- <p>{{ row.city | titlecase }} , {{row.district | titlecase }} , {{row.state | titlecase}} , {{row.pincode}}</p> -->
+            <span>Customer Address</span>
           </div>
+        </div>
+        <div class="slab mt5">
           <div class="slab-day">
-            <p class="bold"></p>
-            <span>Total Item Qty</span>
-          </div>
-          <div class="slab-day">
-            <p class="bold"></p>
-            <span>Amount</span>
+            <!-- <p>{{row.nature_of_problem}}</p> -->
+            <span>Nature Of Problem</span>
           </div>
         </div>
         <div class="next-forword">
@@ -102,12 +89,8 @@
       <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
-    <ion-fab right bottom>
-      <button ion-fab color="primary" (click)="add_page()">
-        <ion-icon name="add"></ion-icon>
-      </button>
-    </ion-fab>
-    <div class="nothing-here" style="height: 60%;">
+    
+    <div class="nothing-here" style="height: 60%;" *ngIf="!installation_list.length">
       <div class="outer">
         <div class="innear">
           <img src="assets/imgs/no_found.svg" alt="">
@@ -117,3 +100,9 @@
     </div>
   </ng-container>
 </ion-content>
+
+<ion-footer>
+  <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" (click)="goInstallationDetail(2)">
+    <p>Close Complaint</p>
+  </button>
+</ion-footer>
