@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content>
-  <form #f="ngForm">
+  <form name="f" #f="ngForm">
     <div class="form">
       <ion-list no-lines class="padding10">
         
@@ -33,27 +33,13 @@
           {{'Scan'}}
         </div>
         
-        <ion-item *ngIf="formData.closing_type == 'Replacement'" [ngClass]="{'error':f.submitted && new_serial_nonew_serial_no?.invalid}" >
+        <ion-item *ngIf="formData.closing_type == 'Replacement'" [ngClass]="{'error':f.submitted && new_serial_no?.invalid}" >
           <ion-label floating>Serial No.<span>*</span></ion-label>
-          <ion-input type="text" name="new_serial_nonew_serial_no" #new_serial_nonew_serial_no="ngModel" [(ngModel)]="formData.new_serial_nonew_serial_no" required></ion-input>
+          <ion-input type="text" name="new_serial_no" #new_serial_no="ngModel" [(ngModel)]="formData.new_serial_no" required></ion-input>
         </ion-item>
-        <div *ngIf="f.submitted && new_serial_nonew_serial_no.invalid" class="eror">
-          <p *ngIf="new_serial_nonew_serial_no.errors.required">{{'Field is Required'}}</p>
+        <div *ngIf="f.submitted && new_serial_no?.invalid" class="eror">
+          <p *ngIf="new_serial_no.errors.required">{{'Field is Required'}}</p>
         </div>
-        
-        <!-- <ion-item [ngClass]="{'error':f.submitted && category?.invalid}">
-          <ion-label floating>Category<span>*</span></ion-label>
-          <ion-select name="category" #category="ngModel" [(ngModel)]="formData.category" (ngModelChange)="get_sub_segment(formData.category)" required>
-            <ion-option *ngFor="let row of segment_list"
-            value="{{row.id}}">{{row.category}}</ion-option>
-          </ion-select>
-        </ion-item>
-        <div *ngIf="f.submitted && category.invalid" class="eror">
-          <p *ngIf="category.errors.required">{{'Field is Required'}}</p>
-        </div> -->
-        
-        
-        
         <ion-item [ngClass]="{'error':f.submitted && replacement_type?.invalid}" *ngIf="formData.closing_type == 'Replacement'">
           <ion-label floating>Replacement Type<span>*</span></ion-label>
           <ion-select name="replacement_type" #replacement_type="ngModel" [(ngModel)]="formData.replacement_type">
@@ -61,7 +47,7 @@
             <ion-option value="Company">Company</ion-option>
           </ion-select>
         </ion-item>
-        <div *ngIf="f.submitted && replacement_type.invalid" class="eror">
+        <div *ngIf="f.submitted && replacement_type?.invalid" class="eror">
           <p *ngIf="replacement_type.errors.required">{{'Field is Required'}}</p>
         </div>
         
@@ -72,7 +58,7 @@
             <ion-option value="New">New</ion-option>
           </ion-select>
         </ion-item>
-        <div *ngIf="f.submitted && product_type.invalid" class="eror">
+        <div *ngIf="f.submitted && product_type?.invalid" class="eror">
           <p *ngIf="product_type.errors.required">{{'Field is Required'}}</p>
         </div>
         
@@ -85,7 +71,7 @@
         <div class="eror" *ngIf="f.submitted && remarks?.invalid">
           <p> {{ 'This field is required'}}</p>
         </div>
-
+        
         <ion-item [ngClass]="{'error':f.submitted && spare_pending_remark?.invalid}" *ngIf="formData.closing_type == 'Spare Part Pending'">
           <ion-label floating>Spare Pending Remark <strong>*</strong></ion-label>
           <ion-textarea name="spare_pending_remark" #spare_pending_remark="ngModel" [(ngModel)]="formData.spare_pending_remark"></ion-textarea>
@@ -93,7 +79,7 @@
         <div class="eror" *ngIf="f.submitted && spare_pending_remark?.invalid">
           <p> {{ 'This field is required'}}</p>
         </div>
-
+        
         <ion-item [ngClass]="{'error':f.submitted && closing_remark ?.invalid}" *ngIf="formData.closing_type == 'Replacement'">
           <ion-label floating>Closing Remark <strong>*</strong></ion-label>
           <ion-textarea name="closing_remark" #closing_remark="ngModel" [(ngModel)]="formData.closing_remark"></ion-textarea>
@@ -103,36 +89,41 @@
         </div>
       </ion-list>
       
-      
-      
-      <div class="upload-doc mt0" >
-        <ul class="no-padding">
-          
-          <li class="image-upload" *ngFor="let pic of image_data;let i = index;">
-            <img src="{{pic}}">
-            <button class="del"><i class="material-icons" (click)="remove_image(i)">delete_sweep</i></button>
-          </li>
-          <li class="add_image mt0" (click)="image_data.length < 1 ?  captureMedia() : showLimit()">
-            <img src="assets/imgs/upload_imae_icon.png" alt="">
-            Upload Image Here{{Otp_verify}}
-          </li>
-        </ul>
+      <div class="add-new padding0">
+        <div class="uplode-image">
+          <ul>
+            <li *ngFor="let pic of image_data;let i = index;">
+              <img src="{{pic.image}}">
+              <button><i class="material-icons" (click)="remove_image(i)">clear</i></button>
+            </li>
+            <li (click)="image_data.length < 5 ?  captureMedia() : showLimit()">
+              <label>
+                <input type="file" style="display: none;">
+                <div class="other">
+                  <a ><i class="material-icons" >camera_alt</i></a>
+                </div>
+              </label>
+            </li>
+          </ul>
+        </div>
       </div>
       
-      <div *ngIf="Otp_verify==true"> 
-        <ion-list class="mb20">
-          <ion-item class="cs-textarea">
-            <ion-input placeholder="Enter OTP" type="text"  (keypress)="MobileNumber($event)" (input)="verify_otp(formData.otp)"name="otp"  #otp="ngModel" [(ngModel)]="formData.otp" minLength="6" maxLength="6" required ></ion-input>
-          </ion-item>
-        </ion-list>
-      </div>
+      
       
       <div class="enquiry-btn add-btns mt20">
         <button ion-button  class="Buttons1" (click)="send_otp('Confirm');" *ngIf="sendOTP==false "><p>Confirm</p></button>
       </div>
       
+      <div *ngIf="Otp_verify==true"> 
+        <ion-list class="mb20">
+          <ion-item class="cs-textarea">
+            <ion-input placeholder="Enter OTP" type="text"  (keypress)="MobileNumber($event)" (input)="verify_otp(data.otp)"name="otp"  #otp="ngModel" [(ngModel)]="data.otp" minLength="6" maxLength="6" required ></ion-input>
+          </ion-item>
+        </ion-list>
+      </div>
+      
       <div class="enquiry-btn add-btns mt20"  *ngIf=" OTP_flag==true">
-        <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" >
+        <button ion-button block class="Buttons1 green-color" style="letter-spacing: 1px;" (click)="closeComplaint()">
           <p> Submit</p>
         </button>
       </div>

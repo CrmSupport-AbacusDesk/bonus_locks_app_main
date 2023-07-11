@@ -16,8 +16,7 @@
   <ion-toolbar>
     <div class="search add-search">
       <div class="filter">
-        <ion-searchbar type='text' name='search_key' [(ngModel)]="filter.search_key" (keyup.enter)="getCatalogueData()">
-        </ion-searchbar>
+        <ion-searchbar (ngModelChange)="getComplaintList()" [(ngModel)]="filter.master" name="master" ></ion-searchbar>
       </div>
     </div>
   </ion-toolbar>
@@ -29,18 +28,18 @@
   <ng-container *ngIf="showRelatedTab!=false">
     <div class="capsule-tabs" style="border-bottom: 0px;">
       <ul>
-        <li [ngClass]="{'active':complaint_type == 'All'}" (click)="complaint_type = 'All';getComplaintHistory()">
-          <p>All<span>{{count.all_count}}</span></p>
+        <li [ngClass]="{'active':complaint_type == 'All'}" (click)="complaint_type = 'All';getComplaintList()">
+          <p>All<span>{{total_count.all_count}}</span></p>
         </li>
-        <li [ngClass]="{'active':complaint_type == 'Pending'}" (click)="complaint_type = 'Pending';getComplaintHistory()">
-          <p>Pending<span>{{count.pending_count}}</span></p>
+        <li [ngClass]="{'active':complaint_type == 'Pending'}" (click)="complaint_type = 'Pending';getComplaintList()">
+          <p>Pending<span>{{total_count.pending_count}}</span></p>
         </li>
-        <li [ngClass]="{'active':complaint_type == 'Closed'}" (click)="complaint_type = 'Closed';getComplaintHistory()">
-          <p>Closed<span>{{count.closed_count}}</span></p>
+        <li [ngClass]="{'active':complaint_type == 'Closed'}" (click)="complaint_type = 'Closed';getComplaintList()">
+          <p>Closed<span>{{total_count.closed_count}}</span></p>
         </li>
         
-        <li [ngClass]="{'active':complaint_type == 'Cancel'}" (click)="complaint_type = 'Cancel';getComplaintHistory()">
-          <p>Cancel<span>{{count.reject_count}}</span></p>
+        <li [ngClass]="{'active':complaint_type == 'Cancel'}" (click)="complaint_type = 'Cancel';getComplaintList()">
+          <p>Cancel<span>{{total_count.reject_count}}</span></p>
         </li>
       </ul>
     </div>
@@ -57,7 +56,7 @@
             <span>Date</span>
           </div>
           <div class="slab-day">
-            <p>#comp-{{row.id}}</p>
+            <p>{{row.complain_no}}</p>
             <span>Complaint Id</span>
           </div>
           <div class="slab-day">
@@ -89,7 +88,7 @@
         </div>
       </div>
     </div>
-    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1">
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="flag!=1 && count>complaint_list.length">
       <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
@@ -105,8 +104,9 @@
   </ng-container>
 </ion-content>
 <!-- 
-<ion-fab right bottom>
-  <button ion-fab color="primary" (click)="addComplaint()">
-    <ion-icon name="add"></ion-icon>
-  </button>
-</ion-fab> -->
+  <ion-fab right bottom>
+    <button ion-fab color="primary" (click)="addComplaint()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab> -->
+  

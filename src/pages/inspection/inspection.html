@@ -57,7 +57,7 @@
         
         <ion-item [ngClass]="{'cs-error':f.submitted && date_of_purchase?.invalid}">
           <ion-label floating>Date of Purchase<span>*</span></ion-label>
-          <ion-datetime display-format="MMM DD, YYYY" name="date_of_purchase" [(ngModel)]="formData.date_of_purchase"></ion-datetime>
+          <ion-datetime display-format="MMM DD, YYYY" name="date_of_purchase" [(ngModel)]="formData.date_of_purchase" (ngModelChange)="calculateWarrantyEnd()"></ion-datetime>
         </ion-item>
         <div *ngIf="f.submitted && date_of_purchase.invalid" class="eror">
           <p *ngIf="date_of_purchase.errors.required">{{'Field is Required'}}</p>
@@ -95,11 +95,11 @@
           <p *ngIf="closing_type.errors.required">{{'Field is Required'}}</p>
         </div>
         
-        <ion-item [ngClass]="{'error':f.submitted && type?.invalid}" *ngIf="formData.closing_type == 'Service'">
+        <ion-item [ngClass]="{'error':f.submitted && inspection_remark?.invalid}" *ngIf="formData.closing_type == 'Service'">
           <ion-label floating>Remark <strong>*</strong></ion-label>
-          <ion-textarea name="remarks" #remarks="ngModel" [(ngModel)]="formData.remarks"></ion-textarea>
+          <ion-textarea name="inspection_remark" #inspection_remark="ngModel" [(ngModel)]="formData.inspection_remark"></ion-textarea>
         </ion-item>
-        <div class="eror" *ngIf="f.submitted && remarks?.invalid">
+        <div class="eror" *ngIf="f.submitted && inspection_remark?.invalid">
           <p> {{ 'This field is required'}}</p>
         </div>
 

@@ -37,7 +37,7 @@ export class ComplaintHistoryPage {
     this.data.type  =this.navParams.data.type;
     console.log(this.data.type);
     this.presentLoading();
-    this.getComplaintHistory()
+    this.getComplaintList()
     
     if (this.navParams.get('dr_id')) {
       this.dr_id = this.navParams.get('dr_id');
@@ -67,61 +67,43 @@ export class ComplaintHistoryPage {
   doRefresh(refresher) 
   {
     console.log('Begin async operation', refresher);
-    this.getComplaintHistory(); 
+    this.getComplaintList(); 
     refresher.complete();
   }
-
-  getCatalogueData() {
-    this.db.presentLoading();
-    this.filter.limit = 20;
-    this.filter.start = 0;
-    this.db.addData({'filter':this.filter}, 'AppCustomerNetwork/segmentList').then((result) => {
-        if (result['statusCode'] == 200) {
-            this.db.dismissLoading();
-            // this.products = result['data'];
-        } else {
-            this.db.errorToast(result['statusMsg']);
-            this.db.dismissLoading();
-        }
-    }, error => {
-        this.db.Error_msg(error);
-        this.db.dismissLoading();
-    });
-}
   
-  getComplaintHistory()
+  
+  
+  getComplaintList()
   {
-    // console.log(type)
     this.flag=0;
-    this.filter.limit = 20;
+    this.filter.limit = 10;
     this.filter.start=0;
-    this.db.addData( {'dr_id': this.dr_id, 'filter': this.filter, start: this.start,'status': this.complaint_type},'AppServiceTask/serviceComplaintList').then((result) =>
+    this.filter.master='';
+    this.db.addData({'filter': this.filter,'status': this.complaint_type},'AppServiceTask/serviceComplaintList').then((result) =>
     {
       console.log(result);
       this.loading.dismiss();
       this.complaint_list = result['result'];
-      this.count = result['tab_count'];
+      this.count = result['count'];
       this.total_count = result['tab_count'];
     });
   }
   
   loadData(infiniteScroll) {
+    this.filter.limit = 10;
     this.filter.start = this.complaint_list.length
-    this.db.addData({ 'dr_id': this.dr_id, 'filter': this.filter, 'start': this.start, 'status': this.complaint_type }, 'AppServiceTask/serviceComplaintList').then(resp => {
-      if (['result']['tab_count'] == '') {
+    this.db.addData({ 'filter':this.filter}, 'AppServiceTask/serviceComplaintList').then(resp => {
+      if (resp['result'] == '') {
         this.flag = 1;
       }
       else {
         setTimeout(() => {
-          this.complaint_list = this.complaint_list.concat(resp['result']['tab_count']);
+          this.complaint_list = this.complaint_list.concat(resp['result']);
           infiniteScroll.complete();
         }, 1000);
       }
     });
   }
-  
-  
-  
   showSuccess(text)
   {
     let alert = this.alertCtrl.create({

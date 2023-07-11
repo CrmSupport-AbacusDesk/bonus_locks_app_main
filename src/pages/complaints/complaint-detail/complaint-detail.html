@@ -16,6 +16,9 @@
         <li [ngClass]="{'active':complaint_type == 'Details'}" (click)="complaint_type = 'Details';">
           <p>Details</p>
         </li>
+        <li [ngClass]="{'active':complaint_type == 'Remark'}" (click)="complaint_type = 'Remark';">
+          <p>Remark</p>
+        </li>
         <li [ngClass]="{'active':complaint_type == 'Inspection'}" (click)="complaint_type = 'Inspection';">
           <p>Inspection</p>
         </li>
@@ -32,12 +35,16 @@
           
           <table>
             <tr>
+              <th class="w100">Created By</th>
+              <td>{{complaint_detail.created_name ? complaint_detail.created_name : '---'}}</td>
+            </tr>
+            <tr>
               <th class="w100">Complaint Id</th>
               <td>{{complaint_detail.complain_no ? complaint_detail.complain_no : '---'}}</td>
             </tr>
             <tr>
               <th>Date Created</th>
-              <td>{{complaint_detail.date_created ? complaint_detail.date_created :'---'}}</td>
+              <td>{{complaint_detail.date_created | date:'d MMM y'}}</td>
             </tr>
             
             <tr>
@@ -51,10 +58,6 @@
             <tr >
               <th>Nature Of Problem</th>
               <td>{{complaint_detail.nature_of_problem ? complaint_detail.nature_of_problem : '---'}}</td>
-            </tr>
-            <tr>
-              <th>Warranty Status</th>
-              <td>{{complaint_detail.warranty_status ? ( complaint_detail.warranty_status) :'---'}}</td>
             </tr>
             <tr>
               <th>Complaint Status</th>
@@ -79,28 +82,29 @@
         </div>
       </ng-container>
     </div> 
-    <div class="detais mt16" *ngIf="complaint_type == 'Details'">
-      <div class="border-container">
-        <div class="summary-heading">Logs</div>
-        <ng-container>
-          <div class="pb100">
-            <div class="remarkSent" *ngFor="let row of complaint_remark">
-              <p class="remarkMsg">{{row.msg}}</p>
-              <div class="dateCreated"><span>({{row.created_by_type}})</span> <span>{{row.date_created | date:'d MMM y'}}</span></div>
-            </div>
-            
-            <div class="nothing-here" *ngIf="complaint_remark == 0">
-              <div class="outer">
-                <div class="innear">
-                  <img src="assets/imgs/no_found.svg" alt="">
-                  <p>Data Not Available</p>
-                </div>
+    
+    <div class="border-container mt16" *ngIf="complaint_type == 'Remark'">
+      <div class="summary-heading">Remarks</div>
+      <ng-container>
+        <div class="pb100">
+          <div class="remarkSent" *ngFor="let row of complaint_remark">
+            <p class="remarkMsg">{{row.msg}}</p>
+            <div class="dateCreated"><span>({{row.created_by_type}})</span> <span>{{row.date_created | date:'d MMM y'}}</span></div>
+          </div>
+          
+          <div class="nothing-here" *ngIf="complaint_remark == 0">
+            <div class="outer">
+              <div class="innear">
+                <img src="assets/imgs/no_found.svg" alt="">
+                <p>Data Not Available</p>
               </div>
             </div>
           </div>
-        </ng-container>
-      </div>
+        </div>
+        
+      </ng-container>
     </div>
+    
     <div class="border-container mt16" *ngIf="complaint_type == 'Inspection'">
       <div class="summary-heading">Inspection Details</div>
       <ng-container>
@@ -114,22 +118,40 @@
             </tr>
             <tr>
               <th>Inspection Date</th>
-              <td>{{complaint_detail.date_created ? complaint_detail.date_created :'---'}}</td>
+              <td>{{complaint_detail.inspection_date | date:'d MMM y'}}</td>
             </tr>
-            
             <tr>
-              <th>Product Details</th>
-              <td>{{complaint_detail.customer_name ? complaint_detail.customer_name : '---'}}</td>
+              <th>Serial Number</th>
+              <td>{{complaint_detail.serial_no ? complaint_detail.serial_no :'---'}}</td>
+            </tr>
+            <tr>
+              <th>Product Name</th>
+              <td>{{complaint_detail.product_name ? complaint_detail.product_name : '---'}}</td>
+            </tr>
+            <tr>
+              <th>Product Code</th>
+              <td>{{complaint_detail.product_code ? complaint_detail.product_code : '---'}}</td>
             </tr>
             <tr>
               <th>Warranty Status</th>
-              <td>{{complaint_detail.customer_mobile ? complaint_detail.customer_mobile : '---'}}</td>
+              <td>{{complaint_detail.warranty_status ? complaint_detail.warranty_status : '---'}}</td>
             </tr>
             <tr >
               <th>Inspection Remark</th>
-              <td>{{complaint_detail.nature_of_problem ? complaint_detail.nature_of_problem : '---'}}</td>
+              <td>{{complaint_detail.inspection_remark ? complaint_detail.inspection_remark : '---'}}</td>
             </tr> 
           </table>
+        </div>
+
+        <div class="upload-doc mt16">
+          <ul class="no-padding">
+            
+            <li class="image-upload" *ngFor="let row of inspection_images" (click)="imageModal(bannerURL + row.image)">
+              <img src="{{bannerURL + row.image}}">
+              
+            </li>
+          </ul>
+          
         </div>
         
       </ng-container>
@@ -145,21 +167,39 @@
           <table>
             <tr>
               <th class="w100">Complaint Id</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>New Serial No.</th>
-              <td></td>
+              <td>{{complaint_detail.complain_no}}</td>
             </tr>
             <tr>
               <th>Closing Date</th>
-              <td></td>
+              <td>{{complaint_detail.closed_date | date:'d MMM y'}}</td>
+            </tr>
+            <tr *ngIf="closing_type == 'Replacement'">
+              <th>New Serial No.</th>
+              <td>{{complaint_detail.new_serial_no ? complaint_detail.new_serial_no : '---'}}</td>
+            </tr>
+            <tr *ngIf="closing_type == 'Replacement'">
+              <th>Replacement By Name<th>
+              <td>{{complaint_detail.replaced_by_name}}</td>
+            </tr>
+            <tr *ngIf="closing_type == 'Replacement'">
+              <th>Replaced By Mobile<th>
+              <td>{{complaint_detail.replaced_by_mobile}}</td>
             </tr>
             <tr>
               <th>Closing Remark</th>
-              <td></td>
+              <td>{{complaint_detail.closing_remark ? complaint_detail.closing_remark : '---'}}</td>
             </tr>
           </table>
+        </div>
+        <div class="upload-doc mt16">
+          <ul class="no-padding">
+            
+            <li class="image-upload" *ngFor="let row of inspection_images" (click)="imageModal(bannerURL + row.image)">
+              <img src="{{bannerURL + row.image}}">
+              
+            </li>
+          </ul>
+          
         </div>
         
       </ng-container>
@@ -168,16 +208,16 @@
 </ion-content>
 
 <ion-footer>
-  <div class="footer-input-block" *ngIf="complaint_type == 'Details'">
+  <div class="footer-input-block" *ngIf="complaint_type == 'Remark'">
     <textarea type="text" placeholder="Add Remark" name="msg" #msg="ngModel" [(ngModel)]="data.msg"></textarea>
     <button ion-button icon-start color="success" (click)="addRemark()"><ion-icon name="send"></ion-icon></button>
   </div>
-  <div class="enquiry-btn add-btns mt20" *ngIf="complaint_type == 'Inspection'">
+  <div class="enquiry-btn add-btns mt20" *ngIf="complaint_type == 'Inspection'  && complaint_detail.inspection_status == 'Pending'">
     <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" (click)="goToInspection(complaint_detail.id)">
       <p>Add Inspection</p>
     </button>
   </div>
-  <div class="enquiry-btn add-btns mt20" *ngIf="complaint_type == 'Close'">
+  <div class="enquiry-btn add-btns mt20" *ngIf="complaint_type == 'Close' && complaint_detail.complaint_status != 'Closed'">
     <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" (click)="goToClose(complaint_detail.id,complaint_detail.customer_mobile)">
       <p>Close Complaint</p>
     </button>
