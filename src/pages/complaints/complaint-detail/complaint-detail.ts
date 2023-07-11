@@ -26,6 +26,7 @@ export class ComplaintDetailPage {
   complaint_detail:any={};
   complaint_remark:any=[];
   complaint_images:any=[];
+  inspection_images:any=[];
   complaint_media:any=[];
   loading:Loading;
   rating_star:any='';
@@ -79,6 +80,7 @@ export class ComplaintDetailPage {
         console.log(this.complaint_detail);
         this.complaint_remark = response['result']['log'];
         this.complaint_images = response['result']['image'];
+        // this.inspection_images = response['result']['image'];
         console.log(this.complaint_remark);
         
         

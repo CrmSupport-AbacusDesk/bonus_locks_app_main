@@ -94,16 +94,6 @@
                             <img src="{{pic.image}}">
                             <button><i class="material-icons" (click)="remove_image(i)">clear</i></button>
                         </li>
-                        
-                        <!-- <li *ngIf='videoId'>
-                            <label>
-                                <div class="other">
-                                    <a ><img src="assets/imgs/videos.png"></a>
-                                    <button><i class="material-icons" (click)="remove_video()">clear</i></button>
-                                </div>
-                            </label>
-                        </li> -->
-                        
                         <li (click)="image_data.length < 5 ?  captureMedia() : showLimit()">
                             <label>
                                 <input type="file" style="display: none;">

@@ -27,6 +27,7 @@ export class InspectionPage {
   segment_detail:any=[]
   segment_sub_list:any=[]
   formData:any = {};
+  warranty_period:string;
   isCameraEnabled:boolean= false;
   loading:any={};
   id: any;
@@ -319,10 +320,11 @@ segmentItemsDetail(id)
     if(index!=-1){
       this.formData.product_name= this.segment_detail[index].product_name;
       this.formData.product_code= this.segment_detail[index].product_code;
+      this.warranty_period= this.segment_detail[index].warranty_period;
     }
     console.log(this.formData.product_name);
     console.log(this.formData.product_code);
-    console.log(this.formData.warranty_period);
+    console.log(this.warranty_period);
   }
 }
 
@@ -497,6 +499,13 @@ saveInspection(){
       dismissOnPageChange: true
     });
     this.loading.present();
+  }
+
+  calculateWarrantyEnd() {
+    const warrantyStartDate = new Date(this.formData.date_of_purchase);
+    const warrantyEnd = new Date(warrantyStartDate.getFullYear() , warrantyStartDate.getMonth() + parseInt(this.warranty_period), warrantyStartDate.getDate());
+    console.log(warrantyEnd);
+    this.formData.warranty_end_date=warrantyEnd;
   }
   
   

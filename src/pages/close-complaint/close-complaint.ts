@@ -28,6 +28,7 @@ import { Camera ,CameraOptions} from '@ionic-native/camera';
 export class CloseComplaintPage {
   @ViewChild('selectComponent') selectComponent: IonicSelectableComponent
   formData:any={}
+  data:any={}
   qr_code: any = '';
   sendOTP:boolean=false
   Otp_verify:boolean=false
@@ -327,12 +328,17 @@ send_otp(){
     // this.form.otp = 123456;
   }
   let data={'phone':this.customer_mobile,'otp':this.formData.otp}
-  this.service.addData(data, 'AppServiceTask/sendOtp').then((response) => {
-    
-    if (response['statusCode'] == 200) {
+  this.service.addData(data, 'AppServiceTask/sendOtp').then((result) => {
+    console.log(result);
+    if (result['statusCode'] == 200) {
+      console.log("inside the api")
       this.Otp_verify=true
+      console.log(this.Otp_verify);
+      this.OTP_flag=true
       this.sendOTP=true
-      this.service.successToast(response['statusMsg'])
+    }
+    else {
+      this.serve.errorToast(result['statusMsg'])
     }
   })
   
@@ -340,7 +346,7 @@ send_otp(){
 verify_otp(value){
   console.log('confirm otp',value)
   if(value.length ==6){
-    if(value==this.formData.otp){
+    if(value==this.data.otp){
       console.log('if case')
       
       this.service.successToast('OTP Verified Succesfully')
