@@ -31,6 +31,9 @@ export class InstallationListPage {
   installtion_type: any = 'Pending'
   
   constructor(public navCtrl: NavController, public navParams: NavParams,public service:DbserviceProvider,public alertCtrl:AlertController,public loadingCtrl:LoadingController,public db: MyserviceProvider) {
+
+    this.installationList()
+
   }
   
   ionViewDidLoad() {
@@ -50,55 +53,45 @@ export class InstallationListPage {
     });
     alert.present();
   }
-  
-  
   installationList()
   {
     this.flag=0;
     this.filter.limit = 20;
     this.filter.start=0;
-    this.db.addData( {'dr_id': this.dr_id, 'filter': this.filter, start: this.start,'status': this.installtion_type},'AppServiceTask/serviceComplaintList').then((result) =>
-    {
-      console.log(result);
-      this.loading.dismiss();
-      this.installation_list = result['result'];
-      this.count = result['tab_count'];
-      this.total_count = result['tab_count'];
+    this.filter.master='';
+    // this.filter.status= ActiveTab
+    this.db.addData( {'data':this.data.all_data ,'filter':this.filter},'AppServiceTask/serviceInstallationList').then(resp=>{
+      if(resp['statusCode'] == 200){
+        console.log(resp);
+        this.installation_list = resp['result'];
+        this.count = resp['tab_count'];
+        this.total_count = resp['tab_count'];;
+      }
+      else {
+        this.db.errorToast(resp['statusMsg'])
+      }
+    },
+    err => {
     });
   }
   
   loadData(infiniteScroll) {
+    this.filter.limit = 10;
     this.filter.start = this.installation_list.length
-    this.db.addData({ 'dr_id': this.dr_id, 'filter': this.filter, 'start': this.start, 'status': this.installtion_type }, 'AppServiceTask/serviceComplaintList').then(resp => {
-      if (['result']['tab_count'] == '') {
+    this.db.addData({ 'filter':this.filter}, 'AppServiceTask/serviceInstallationList').then(resp => {
+      if (resp['result'] == '') {
         this.flag = 1;
       }
       else {
         setTimeout(() => {
-          this.installation_list = this.installation_list.concat(resp['result']['tab_count']);
+          this.installation_list = this.installation_list.concat(resp['result']);
           infiniteScroll.complete();
         }, 1000);
       }
     });
   }
   
-  getCatalogueData() {
-    this.db.presentLoading();
-    this.filter.limit = 20;
-    this.filter.start = 0;
-    this.db.addData({'filter':this.filter}, 'AppCustomerNetwork/segmentList').then((result) => {
-      if (result['statusCode'] == 200) {
-        this.db.dismissLoading();
-        // this.products = result['data'];
-      } else {
-        this.db.errorToast(result['statusMsg']);
-        this.db.dismissLoading();
-      }
-    }, error => {
-      this.db.Error_msg(error);
-      this.db.dismissLoading();
-    });
-  }
+  
   
   
   goInstallationDetail(id) {
