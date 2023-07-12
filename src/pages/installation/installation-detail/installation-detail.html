@@ -11,33 +11,40 @@
 </ion-header>
 <ion-content> 
   <div class="detais">
-    <!-- <div class="capsule-tabs" style="border-bottom: 0px;">
+    <div class="capsule-tabs" style="border-bottom: 0px;">
       <ul>
         <li [ngClass]="{'active':installation_type == 'Details'}" (click)="installation_type = 'Details';">
           <p>Details</p>
         </li>
-        <li [ngClass]="{'active':installation_type == 'Inspection'}" (click)="installation_type = 'Inspection';">
-          <p>Inspection</p>
+        <li [ngClass]="{'active':installation_type == 'Remark'}" (click)="installation_type = 'Remark';">
+          <p>Remark</p>
         </li>
+        <!-- <li [ngClass]="{'active':installation_type == 'Inspection'}" (click)="installation_type = 'Inspection';">
+          <p>Inspection</p>
+        </li> -->
         <li [ngClass]="{'active':installation_type == 'Close'}" (click)="installation_type = 'Close';">
           <p>Close</p>
         </li>
       </ul>
-    </div> -->
+    </div>
     
-    <div class="border-container mt16">
+    <div class="border-container mt16" *ngIf="installation_type == 'Details'">
       <div class="summary-heading">Basic Details</div>
       <ng-container>
         <div class="">
           
           <table>
             <tr>
+              <th class="w100">Created By</th>
+              <td>{{installtion_detail.created_name ? installtion_detail.created_name : '---'}}</td>
+            </tr>
+            <tr>
               <th class="w100">Complaint Id</th>
               <td>{{installtion_detail.complain_no ? installtion_detail.complain_no : '---'}}</td>
             </tr>
             <tr>
               <th>Date Created</th>
-              <td>{{installtion_detail.date_created ? installtion_detail.date_created :'---'}}</td>
+              <td>{{installtion_detail.date_created | date:'d MMM y'}}</td>
             </tr>
             
             <tr>
@@ -51,10 +58,6 @@
             <tr >
               <th>Nature Of Problem</th>
               <td>{{installtion_detail.nature_of_problem ? installtion_detail.nature_of_problem : '---'}}</td>
-            </tr>
-            <tr>
-              <th>Warranty Status</th>
-              <td>{{installtion_detail.warranty_status ? ( installtion_detail.warranty_status) :'---'}}</td>
             </tr>
             <tr>
               <th>Complaint Status</th>
@@ -79,29 +82,30 @@
         </div>
       </ng-container>
     </div> 
-    <div class="detais mt16" *ngIf="installation_type == 'Details'">
-      <div class="border-container">
-        <div class="summary-heading">Logs</div>
-        <ng-container>
-          <div class="pb100">
-            <div class="remarkSent" *ngFor="let row of complaint_remark">
-              <p class="remarkMsg">{{row.msg}}</p>
-              <div class="dateCreated"><span>({{row.created_by_type}})</span> <span>{{row.date_created | date:'d MMM y'}}</span></div>
-            </div>
-            
-            <div class="nothing-here" *ngIf="complaint_remark == 0">
-              <div class="outer">
-                <div class="innear">
-                  <img src="assets/imgs/no_found.svg" alt="">
-                  <p>Data Not Available</p>
-                </div>
+    
+    <div class="border-container mt16" *ngIf="installation_type == 'Remark'">
+      <div class="summary-heading">Remarks</div>
+      <ng-container>
+        <div class="pb100">
+          <div class="remarkSent" *ngFor="let row of complaint_remark">
+            <p class="remarkMsg">{{row.msg}}</p>
+            <div class="dateCreated"><span>({{row.created_by_type}})</span> <span>{{row.date_created | date:'d MMM y'}}</span></div>
+          </div>
+          
+          <div class="nothing-here" *ngIf="complaint_remark == 0">
+            <div class="outer">
+              <div class="innear">
+                <img src="assets/imgs/no_found.svg" alt="">
+                <p>Data Not Available</p>
               </div>
             </div>
           </div>
-        </ng-container>
-      </div>
+        </div>
+        
+      </ng-container>
     </div>
-    <div class="border-container mt16" *ngIf="installation_type == 'Inspection'">
+    
+    <!-- <div class="border-container mt16" *ngIf="installation_type == 'Inspection'">
       <div class="summary-heading">Inspection Details</div>
       <ng-container>
         
@@ -114,27 +118,45 @@
             </tr>
             <tr>
               <th>Inspection Date</th>
-              <td>{{installtion_detail.date_created ? installtion_detail.date_created :'---'}}</td>
+              <td>{{installtion_detail.inspection_date | date:'d MMM y'}}</td>
             </tr>
-            
             <tr>
-              <th>Product Details</th>
-              <td>{{installtion_detail.customer_name ? installtion_detail.customer_name : '---'}}</td>
+              <th>Serial Number</th>
+              <td>{{installtion_detail.serial_no ? installtion_detail.serial_no :'---'}}</td>
+            </tr>
+            <tr>
+              <th>Product Name</th>
+              <td>{{installtion_detail.product_name ? installtion_detail.product_name : '---'}}</td>
+            </tr>
+            <tr>
+              <th>Product Code</th>
+              <td>{{installtion_detail.product_code ? installtion_detail.product_code : '---'}}</td>
             </tr>
             <tr>
               <th>Warranty Status</th>
-              <td>{{installtion_detail.customer_mobile ? installtion_detail.customer_mobile : '---'}}</td>
+              <td>{{installtion_detail.warranty_status ? installtion_detail.warranty_status : '---'}}</td>
             </tr>
             <tr >
               <th>Inspection Remark</th>
-              <td>{{installtion_detail.nature_of_problem ? installtion_detail.nature_of_problem : '---'}}</td>
+              <td>{{installtion_detail.inspection_remark ? installtion_detail.inspection_remark : '---'}}</td>
             </tr> 
           </table>
+        </div>
+
+        <div class="upload-doc mt16">
+          <ul class="no-padding">
+            
+            <li class="image-upload" *ngFor="let row of inspection_images" (click)="imageModal(bannerURL + row.image)">
+              <img src="{{bannerURL + row.image}}">
+              
+            </li>
+          </ul>
+          
         </div>
         
       </ng-container>
       
-    </div>
+    </div> -->
     
     <div class="border-container mt16" *ngIf="installation_type == 'Close'">
       <div class="summary-heading">Closing Details</div>
@@ -145,21 +167,31 @@
           <table>
             <tr>
               <th class="w100">Complaint Id</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>New Serial No.</th>
-              <td></td>
+              <td>{{installtion_detail.complain_no}}</td>
             </tr>
             <tr>
               <th>Closing Date</th>
-              <td></td>
+              <td>{{installtion_detail.closed_date | date:'d MMM y'}}</td>
+            </tr>
+            <tr *ngIf="closing_type == 'Replacement'">
+              <th>New Serial No.</th>
+              <td>{{installtion_detail.new_serial_no ? installtion_detail.new_serial_no : '---'}}</td>
             </tr>
             <tr>
               <th>Closing Remark</th>
-              <td></td>
+              <td>{{installtion_detail.closing_remark ? installtion_detail.closing_remark : '---'}}</td>
             </tr>
           </table>
+        </div>
+        <div class="upload-doc mt16">
+          <ul class="no-padding">
+            
+            <li class="image-upload" *ngFor="let row of inspection_images" (click)="imageModal(bannerURL + row.image)">
+              <img src="{{bannerURL + row.image}}">
+              
+            </li>
+          </ul>
+          
         </div>
         
       </ng-container>
@@ -167,25 +199,19 @@
   </div>
 </ion-content>
 
-<!-- <ion-footer>
-  <div class="footer-input-block" *ngIf="installation_type == 'Details'">
+<ion-footer>
+  <div class="footer-input-block" *ngIf="installation_type == 'Remark'">
     <textarea type="text" placeholder="Add Remark" name="msg" #msg="ngModel" [(ngModel)]="data.msg"></textarea>
     <button ion-button icon-start color="success" (click)="addRemark()"><ion-icon name="send"></ion-icon></button>
   </div>
-  <div class="enquiry-btn add-btns mt20" *ngIf="installation_type == 'Inspection'">
+  <!-- <div class="enquiry-btn add-btns mt20" *ngIf="installation_type == 'Inspection'  && installtion_detail.inspection_status == 'Pending'">
     <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" (click)="goToInspection(installtion_detail.id)">
       <p>Add Inspection</p>
     </button>
-  </div>
-  <div class="enquiry-btn add-btns mt20" *ngIf="installation_type == 'Close'">
+  </div> -->
+  <div class="enquiry-btn add-btns mt20" *ngIf="installation_type == 'Close' && installtion_detail.complaint_status != 'Closed'">
     <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" (click)="goToClose(installtion_detail.id,installtion_detail.customer_mobile)">
       <p>Close Complaint</p>
     </button>
   </div>
-</ion-footer>] -->
-
-<ion-footer>
-  <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" (click)="goToClose(installtion_detail.id,installtion_detail.customer_mobile)">
-    <p>Close Complaint</p>
-  </button>
 </ion-footer>
