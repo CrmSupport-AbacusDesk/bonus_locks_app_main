@@ -19,10 +19,10 @@
         <li [ngClass]="{'active':complaint_type == 'Remark'}" (click)="complaint_type = 'Remark';">
           <p>Remark</p>
         </li>
-        <li [ngClass]="{'active':complaint_type == 'Inspection'}" (click)="complaint_type = 'Inspection';">
+        <li [ngClass]="{'active':complaint_type == 'Inspection'}" (click)="complaint_type = 'Inspection';GotoInstallationPage(complaint_detail.id)">
           <p>Inspection</p>
         </li>
-        <li [ngClass]="{'active':complaint_type == 'Close'}" (click)="complaint_type = 'Close';">
+        <li [ngClass]="{'active':complaint_type == 'Close'}" (click)="complaint_type = 'Close';GotoClosePage(complaint_detail.id)" *ngIf="complaint_detail.inspection_status == 'Done'">
           <p>Close</p>
         </li>
       </ul>
@@ -105,7 +105,7 @@
       </ng-container>
     </div>
     
-    <div class="border-container mt16" *ngIf="complaint_type == 'Inspection'">
+    <div class="border-container mt16" *ngIf="complaint_type == 'Inspection' && showInsepction == true">
       <div class="summary-heading">Inspection Details</div>
       <ng-container>
         
@@ -118,7 +118,7 @@
             </tr>
             <tr>
               <th>Inspection Date</th>
-              <td>{{complaint_detail.inspection_date | date:'d MMM y'}}</td>
+              <td>{{complaint_detail.inspection_date != '0000-00-00 00:00:00' ? (complaint_detail.inspection_date | date:'d MMM y') :'--'}}</td>
             </tr>
             <tr>
               <th>Serial Number</th>
@@ -158,7 +158,7 @@
       
     </div>
     
-    <div class="border-container mt16" *ngIf="complaint_type == 'Close'">
+    <div class="border-container mt16" *ngIf="complaint_type == 'Close'  && showClose == true ">
       <div class="summary-heading">Closing Details</div>
       <ng-container>
         
@@ -171,7 +171,7 @@
             </tr>
             <tr>
               <th>Closing Date</th>
-              <td>{{complaint_detail.closed_date | date:'d MMM y'}}</td>
+              <td>{{complaint_detail.closed_date != '0000-00-00 00:00:00' ? (complaint_detail.closed_date | date:'d MMM y') :'--'}}</td>
             </tr>
             <tr *ngIf="closing_type == 'Replacement'">
               <th>New Serial No.</th>
@@ -212,14 +212,14 @@
     <textarea type="text" placeholder="Add Remark" name="msg" #msg="ngModel" [(ngModel)]="data.msg"></textarea>
     <button ion-button icon-start color="success" (click)="addRemark()"><ion-icon name="send"></ion-icon></button>
   </div>
-  <div class="enquiry-btn add-btns mt20" *ngIf="complaint_type == 'Inspection'  && complaint_detail.inspection_status == 'Pending'">
-    <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" (click)="goToInspection(complaint_detail.id)">
-      <p>Add Inspection</p>
+  <div class="enquiry-btn add-btns mt20" *ngIf="complaint_type == 'Inspection'  && complaint_detail.inspection_status == 'Done'">
+    <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" (click)="goToInspection(complaint_detail)">
+      <p>Edit Inspection</p>
     </button>
   </div>
-  <div class="enquiry-btn add-btns mt20" *ngIf="complaint_type == 'Close' && complaint_detail.complaint_status != 'Closed'">
+  <!-- <div class="enquiry-btn add-btns mt20" *ngIf="complaint_type == 'Close' && complaint_detail.complaint_status != 'Closed'">
     <button ion-button block class="h40 green-color" style="letter-spacing: 1px;" (click)="goToClose(complaint_detail.id,complaint_detail.customer_mobile)">
       <p>Close Complaint</p>
     </button>
-  </div>
+  </div> -->
 </ion-footer>

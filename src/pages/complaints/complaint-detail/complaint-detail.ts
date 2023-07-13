@@ -35,6 +35,8 @@ export class ComplaintDetailPage {
   bannerURL: any;
   complaint_type: any = 'Details'
   id:any;
+  showInsepction:any = false
+  showClose:any = false
   data:any={}
   
   
@@ -110,8 +112,9 @@ export class ComplaintDetailPage {
     {
       
     }
-    goToInspection(id) {
-      this.navCtrl.push(InspectionPage,{ "id": id });
+    goToInspection(detail) {
+
+      this.navCtrl.push(InspectionPage,{ "detail": detail });
     }
     goToRemark(id) {
       this.navCtrl.push(AddComplaintRemarkPage,{ "id": id });
@@ -143,6 +146,31 @@ export class ComplaintDetailPage {
           console.log(result); 
           
         });
+      }
+      GotoInstallationPage(id)
+      {
+        if (this.complaint_detail.inspection_status == 'Pending') {
+          
+          this.navCtrl.push(InspectionPage,{ "id": id });
+          this.showInsepction = false
+          this.complaint_type = 'Details'
+
+        }else{
+          this.showInsepction = true
+        }
+      }
+
+      GotoClosePage(id)
+      {
+        if (this.complaint_detail.inspection_status == 'Done') {
+          
+          this.navCtrl.push(CloseComplaintPage,{ "id": id });
+          this.showClose = false
+          this.complaint_type = 'Details'
+
+        }else{
+          this.showClose = true
+        }
       }
       
     }

@@ -30,7 +30,7 @@ export class InspectionPage {
   warranty_period:string;
   isCameraEnabled:boolean= false;
   loading:any={};
-  id: any;
+  detail: any;
   flag: boolean = true;
   bankImageFlag: boolean = false;
   documentImageFlag: boolean = false;
@@ -40,12 +40,20 @@ export class InspectionPage {
   cam: any = "Camera";
   gal: any = "Gallery";
   cancl: any = "Cancel";
+  id: any;
   
   constructor(public navCtrl: NavController,public db: MyserviceProvider,public actionSheetController: ActionSheetController, private camera: Camera,public alertCtrl:AlertController, private mediaCapture: MediaCapture,public diagnostic  : Diagnostic, public androidPermissions: AndroidPermissions,public dom:DomSanitizer,public serve : MyserviceProvider ,public loadingCtrl:LoadingController,public navParams: NavParams ) {
     this.get_segment();
     console.log(this.navParams);
     this.id  =this.navParams.data.id;
-    console.log(this.id);
+    this.detail  =this.navParams.data.detail;
+    // this.formData=this.detail
+    // this.formData.serial_no=this.detail.serial_no
+    // this.formData.date_of_purchase=this.detail
+    // this.formData.warranty_end_date=this.detail
+    // this.formData.warranty_status=this.detail.warranty_status
+    // this.formData.closing_type=this.detail.closing_type
+    console.log(this.detail);
   }
   ionViewDidLoad() {
     // this.getGeo();
@@ -471,8 +479,6 @@ backDocImage() {
 }
 
 saveInspection(){
-  
-  
   this.formData.complaint_id=this.id
   this.formData.image = this.image_data?this.image_data:[];
   console.log(this.formData);
@@ -500,7 +506,7 @@ saveInspection(){
     });
     this.loading.present();
   }
-
+  
   calculateWarrantyEnd() {
     const warrantyStartDate = new Date(this.formData.date_of_purchase);
     const warrantyEnd = new Date(warrantyStartDate.getFullYear() , warrantyStartDate.getMonth() + parseInt(this.warranty_period), warrantyStartDate.getDate());
