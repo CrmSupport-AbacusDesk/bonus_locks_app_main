@@ -6,7 +6,7 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>inspectionPage</ion-title>
+    <ion-title>Inspection</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content>
@@ -95,7 +95,7 @@
           <p *ngIf="closing_type.errors.required">{{'Field is Required'}}</p>
         </div>
         
-        <ion-item [ngClass]="{'error':f.submitted && inspection_remark?.invalid}" *ngIf="formData.closing_type == 'Service'">
+        <ion-item [ngClass]="{'error':f.submitted && inspection_remark?.invalid}">
           <ion-label floating>Remark <strong>*</strong></ion-label>
           <ion-textarea name="inspection_remark" #inspection_remark="ngModel" [(ngModel)]="formData.inspection_remark"></ion-textarea>
         </ion-item>
@@ -103,21 +103,21 @@
           <p> {{ 'This field is required'}}</p>
         </div>
 
-        <ion-item [ngClass]="{'error':f.submitted && spare_pending_remark?.invalid}" *ngIf="formData.closing_type == 'Spare Part Pending'">
+        <!-- <ion-item [ngClass]="{'error':f.submitted && spare_pending_remark?.invalid}" *ngIf="formData.closing_type == 'Spare Part Pending'">
           <ion-label floating>Spare Pending Remark <strong>*</strong></ion-label>
           <ion-textarea name="spare_pending_remark" #spare_pending_remark="ngModel" [(ngModel)]="formData.spare_pending_remark"></ion-textarea>
         </ion-item>
         <div class="eror" *ngIf="f.submitted && spare_pending_remark?.invalid">
           <p> {{ 'This field is required'}}</p>
-        </div>
+        </div> -->
 
-        <ion-item [ngClass]="{'error':f.submitted && closing_remark ?.invalid}" *ngIf="formData.closing_type == 'Replacement'">
+        <!-- <ion-item [ngClass]="{'error':f.submitted && closing_remark ?.invalid}" *ngIf="formData.closing_type == 'Replacement'">
           <ion-label floating>Closing Remark <strong>*</strong></ion-label>
           <ion-textarea name="closing_remark" #closing_remark="ngModel" [(ngModel)]="formData.closing_remark"></ion-textarea>
         </ion-item>
         <div class="eror" *ngIf="f.submitted && closing_remark?.invalid">
           <p> {{ 'This field is required'}}</p>
-        </div>
+        </div> -->
 
       </ion-list>
 

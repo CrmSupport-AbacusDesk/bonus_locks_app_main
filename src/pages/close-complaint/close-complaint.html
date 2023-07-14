@@ -16,7 +16,7 @@
       <ion-list no-lines class="padding10">
         
         
-        <ion-item [ngClass]="{'error':f.submitted && closing_type?.invalid}">
+        <!-- <ion-item [ngClass]="{'error':f.submitted && closing_type?.invalid}">
           <ion-label floating>Closing Type<span>*</span></ion-label>
           <ion-select name="closing_type" #closing_type="ngModel" [(ngModel)]="formData.closing_type">
             <ion-option value="Service">Service</ion-option>
@@ -26,7 +26,7 @@
         </ion-item>
         <div *ngIf="f.submitted && closing_type.invalid" class="eror">
           <p *ngIf="closing_type.errors.required">{{'Field is Required'}}</p>
-        </div>
+        </div> -->
         
         <div class="outline-btn scan" (click)="Scaning()" *ngIf="formData.closing_type == 'Replacement'">
           <div class="icons"><i class="material-icons">qr_code_scanner</i></div>
@@ -64,7 +64,7 @@
         
         
         
-        <ion-item [ngClass]="{'error':f.submitted && remarks ?.invalid}" *ngIf="formData.closing_type == 'Service'">
+        <ion-item [ngClass]="{'error':f.submitted && remarks ?.invalid}">
           <ion-label floating>Remark <strong>*</strong></ion-label>
           <ion-textarea name="remarks" #remarks="ngModel" [(ngModel)]="formData.remarks"></ion-textarea>
         </ion-item>
@@ -72,21 +72,21 @@
           <p> {{ 'This field is required'}}</p>
         </div>
         
-        <ion-item [ngClass]="{'error':f.submitted && spare_pending_remark?.invalid}" *ngIf="formData.closing_type == 'Spare Part Pending'">
+        <!-- <ion-item [ngClass]="{'error':f.submitted && spare_pending_remark?.invalid}" *ngIf="formData.closing_type == 'Spare Part Pending'">
           <ion-label floating>Spare Pending Remark <strong>*</strong></ion-label>
           <ion-textarea name="spare_pending_remark" #spare_pending_remark="ngModel" [(ngModel)]="formData.spare_pending_remark"></ion-textarea>
         </ion-item>
         <div class="eror" *ngIf="f.submitted && spare_pending_remark?.invalid">
           <p> {{ 'This field is required'}}</p>
-        </div>
+        </div> -->
         
-        <ion-item [ngClass]="{'error':f.submitted && closing_remark ?.invalid}" *ngIf="formData.closing_type == 'Replacement'">
+        <!-- <ion-item [ngClass]="{'error':f.submitted && closing_remark ?.invalid}" *ngIf="formData.closing_type == 'Replacement'">
           <ion-label floating>Closing Remark <strong>*</strong></ion-label>
           <ion-textarea name="closing_remark" #closing_remark="ngModel" [(ngModel)]="formData.closing_remark"></ion-textarea>
         </ion-item>
         <div class="eror" *ngIf="f.submitted && closing_remark?.invalid">
           <p> {{ 'This field is required'}}</p>
-        </div>
+        </div> -->
       </ion-list>
       
       <div class="add-new padding0">
