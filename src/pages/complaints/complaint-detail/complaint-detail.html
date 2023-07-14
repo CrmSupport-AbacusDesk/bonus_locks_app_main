@@ -22,7 +22,7 @@
         <li [ngClass]="{'active':complaint_type == 'Inspection'}" (click)="complaint_type = 'Inspection';GotoInstallationPage(complaint_detail.id)">
           <p>Inspection</p>
         </li>
-        <li [ngClass]="{'active':complaint_type == 'Close'}" (click)="complaint_type = 'Close';GotoClosePage(complaint_detail.id)" *ngIf="complaint_detail.inspection_status == 'Done'">
+        <li [ngClass]="{'active':complaint_type == 'Close'}" (click)="complaint_type = 'Close';GotoClosePage(complaint_detail.id)" *ngIf="complaint_detail.complaint_status=='Pending' || complaint_detail.complaint_status=='Closed'">
           <p>Close</p>
         </li>
       </ul>
@@ -49,7 +49,7 @@
             
             <tr>
               <th>Customer Name</th>
-              <td>{{complaint_detail.customer_name ? complaint_detail.customer_name : '---'}}</td>
+              <td>{{complaint_detail.customer_name ? (complaint_detail.customer_name  | titlecase) : '---'}}</td>
             </tr>
             <tr>
               <th>Customer Mobile</th>
@@ -57,7 +57,7 @@
             </tr>
             <tr >
               <th>Nature Of Problem</th>
-              <td>{{complaint_detail.nature_of_problem ? complaint_detail.nature_of_problem : '---'}}</td>
+              <td>{{complaint_detail.nature_of_problem ? (complaint_detail.nature_of_problem | titlecase) : '---'}}</td>
             </tr>
             <tr>
               <th>Complaint Status</th>
@@ -88,7 +88,7 @@
       <ng-container>
         <div class="pb100">
           <div class="remarkSent" *ngFor="let row of complaint_remark">
-            <p class="remarkMsg">{{row.msg}}</p>
+            <p class="remarkMsg">{{row.msg  | titlecase }}</p>
             <div class="dateCreated"><span>({{row.created_by_type}})</span> <span>{{row.date_created | date:'d MMM y'}}</span></div>
           </div>
           
@@ -138,7 +138,7 @@
             </tr>
             <tr >
               <th>Inspection Remark</th>
-              <td>{{complaint_detail.inspection_remark ? complaint_detail.inspection_remark : '---'}}</td>
+              <td>{{complaint_detail.inspection_remark ? (complaint_detail.inspection_remark | titlecase) : '---'}}</td>
             </tr> 
           </table>
         </div>
