@@ -31,6 +31,7 @@ export class InspectionPage {
   isCameraEnabled:boolean= false;
   loading:any={};
   detail: any;
+  warrantyDetail: any;
   flag: boolean = true;
   bankImageFlag: boolean = false;
   documentImageFlag: boolean = false;
@@ -47,13 +48,32 @@ export class InspectionPage {
     console.log(this.navParams);
     this.id  =this.navParams.data.id;
     this.detail  =this.navParams.data.detail;
-    // this.formData=this.detail
-    // this.formData.serial_no=this.detail.serial_no
-    // this.formData.date_of_purchase=this.detail
-    // this.formData.warranty_end_date=this.detail
-    // this.formData.warranty_status=this.detail.warranty_status
-    // this.formData.closing_type=this.detail.closing_type
+    if (this.detail) {
+      
+      this.warrantyDetail  =this.navParams.data.detail.warranty_detail;
+    }
     console.log(this.detail);
+    if(this.detail)
+    {
+    this.formData.serial_no=this.detail.serial_no
+    this.formData.date_of_purchase=this.detail
+    this.formData.warranty_end_date=this.detail
+    this.formData.warranty_status=this.detail.warranty_status
+    this.formData.closing_type=this.detail.closing_type
+    this.formData.inspection_remark=this.detail.inspection_remark
+    this.formData.warranty_status=this.detail.warranty_status
+    this.formData.date_of_purchase=this.warrantyDetail.date_of_purchase
+    this.formData.warranty_end_date=this.warrantyDetail.warranty_end_date
+    this.formData.category=this.warrantyDetail.segment_id
+    this.formData.sub_category=this.warrantyDetail.sub_segment_id
+    this.formData.product_id=this.warrantyDetail.product_id
+    this.get_sub_segment(this.formData.category);
+    this.get_sub_segmentDetail(this.formData.sub_category);
+    this.segmentItemsDetail(this.formData.product_id)
+  }
+
+    console.log(this.formData);
+    
   }
   ionViewDidLoad() {
     // this.getGeo();
